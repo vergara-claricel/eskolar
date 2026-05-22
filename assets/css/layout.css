@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* LAYOUT WRAPPER */
+.layout {
+    display: flex;
+    min-height: 100vh;   /* changed from height → prevents squishing */
+    background: #f6f6f6;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 230px;
+    background: #fafafa;
+    border-right: 1px solid #e5e5e5;
+    padding: 25px 0;
+}
+
+/* LOGO */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d4a017;
+    padding: 0 25px 35px;
+}
+
+/* MENU */
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu a {
+    padding: 14px 22px;
+    color: #444;
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.menu a:hover {
+    background: #ececec;
+}
+
+.menu .active {
+    background: #d4a017;
+    color: white;
+}
+
+/* MAIN AREA */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* prevents squishing */
+}
+
+/* TOP BAR (DO NOT TOUCH CENTERING HERE) */
+.topbar {
+    height: 60px;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    font-size: 16px;
+    flex-shrink: 0; /* prevents compression */
+}
+
+/* MAIN CONTENT */
+.main-content {
+    padding: 30px;
+    flex: 1;
+    overflow: auto;
+}

@@ -1,0 +1,85 @@
+/* ===================== WRAPPER ===================== */
+#activity_form {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ===================== FORM CARD ===================== */
+#activity_form form {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+}
+
+/* ===================== FULL WIDTH ===================== */
+.full {
+    grid-column: span 2;
+}
+
+/* ===================== LABELS ===================== */
+#activity_form label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 2px;
+}
+
+/* ===================== INPUTS ===================== */
+#activity_form input,
+#activity_form select,
+#activity_form textarea {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+/* focus */
+#activity_form input:focus,
+#activity_form select:focus,
+#activity_form textarea:focus {
+    border-color: #1e88e5;
+    outline: none;
+}
+
+/* ===================== TIME ROW (IMPORTANT) ===================== */
+.time-row {
+    display: flex;
+    gap: 10px;
+}
+
+.time-row > div {
+    flex: 1;
+}
+
+/* ===================== TEXTAREA ===================== */
+#activity_form textarea {
+    min-height: 70px;
+    resize: none;
+}
+
+/* ===================== BUTTON ===================== */
+#activity_form button {
+    grid-column: span 2;
+    padding: 9px;
+    background: #1e88e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* ===================== HIDDEN BARANGAY ===================== */
+.hidden {
+    display: none;
+}
