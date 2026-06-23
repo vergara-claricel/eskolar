@@ -1,16 +1,17 @@
 <?php
 require '../vendor/autoload.php';
-require '../classes/supa_semester.php';
-$config = require __DIR__ . "/../api/supabase.php";
+// require '../classes/supa_semester.php';
+// $config = require __DIR__ . "/../api/supabase.php";
 use Dompdf\Dompdf;
 
-include "../classes/supa_scholar.php";
-include "../classes/supa_activities.php";
-include "../classes/supa_scorecard.php";
+// include "../classes/supa_scholar.php";
+// include "../classes/supa_activities.php";
+// include "../classes/supa_scorecard.php";
 
-$api = new Supabase($config);
-$schoobj = new Scholar($api);
-$sembobj = new Semester($api);
+// $api = new Supabase($config);
+// $schoobj = new Scholar($api);
+// $sembobj = new Semester($api);
+require_once "../test.php";
 $scholarUserId = $_GET['scholarid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];

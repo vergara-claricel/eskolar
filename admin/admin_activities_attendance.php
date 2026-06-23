@@ -6,7 +6,7 @@ require_once "../test.php";
 include "../assets/layout.php";
 // $config = require __DIR__ . "/../api/supabase.php";
 
-$actobj = new Activities($api);
+// $actobj = new Activities($api);
 $activesem = $semobj->getActiveSemester();
 $activeSemId = $activesem['sem_id'];
 $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);

@@ -1,15 +1,15 @@
 <?php
 $title = "Dashboard";
 require_once "../test.php";
-include "../assets/layout.php";
 // include "../classes/supa_activities.php";
 
-$config = require __DIR__ . "esko/../api/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
 
-$api = new Supabase($config);
-$actobj = new Activities($api);
+// $api = new Supabase($config);
+// $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
 $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
+include "../assets/layout.php";
 ?>
 
 <style>
