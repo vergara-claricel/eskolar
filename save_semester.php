@@ -1,7 +1,7 @@
 <?php
 // require_once "../connection.php";
 require_once "../localcon.php";
-include "../classes/semester.php";
+// include "../classes/semester.php";
 
 //create new sem
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {

@@ -1,7 +1,7 @@
 <?php
 
-// require_once('../connection.php');
-require_once('../localcon.php');
+require_once('../connection.php');
+// require_once('../localcon.php');
 
 
 class Semester{
@@ -23,7 +23,14 @@ class Semester{
         $stmt2 = $this->db->prepare("SELECT * FROM semester WHERE semester_status = 'active' LIMIT 1");
         $stmt2->execute();
 
-        return $stmt2->fetch(PDO::FETCH_ASSOC);
+       $semester = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+    // handle false result
+    if ($semester === false) {
+        return null;
+    }
+
+    return $semester;
     }
 
     

@@ -1,4 +1,4 @@
-.table-container {
+/* .table-container {
     width: 100%;
     padding: 20px;
 }
@@ -8,7 +8,7 @@
     font-weight: bold;
     margin-bottom: 10px;
     color: #333;
-}
+} */
 
 /* ===== GLOBAL TABLE STYLE ===== */
 .table {
@@ -23,7 +23,7 @@
 }
 
 .table thead {
-    background: #1e88e5;
+    background: #1a0dab;
     color: white;
 }
 

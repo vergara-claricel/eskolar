@@ -1,8 +1,53 @@
 <?php
 
-require "../save_semester.php";
 $title = "Semester";
 include "../assets/layout.php";
+
+$config = require __DIR__ . "/../api/supabase.php";
+
+$api = new Supabase($config);
+
+$semobj = new Semester($api);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {
+
+    $semester_name = $_POST['semester_name'];
+    $semester_start = $_POST['semester_start'];
+    $semester_end = $_POST['semester_end'];
+    $semester_status = $_POST['semester_status'];
+
+       try {
+        $result = $semobj->saveSemester(
+            $semester_name,
+            $semester_start,
+            $semester_end,
+            $semester_status
+        );
+        header("location: /esko/admin/admin_sem.php");
+        exit;
+
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+// change active sem
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem'])){
+    $sem_id = $_POST['activesem'];
+
+    try {
+        $newsem = $semobj->updateActiveSem($sem_id);
+         if ($newsem) {
+            echo "Active semester updated!";
+            header("location: /esko/admin/admin_sem.php");
+            exit;
+        } else {
+            echo "Update failed.";
+        }
+    } catch(Exception $e){
+        echo "Error: " . $e->getMessage();
+    }
+}
 ?>
 
 <h2>Semester</h2>
@@ -27,7 +72,7 @@ include "../assets/layout.php";
                     <?php endforeach; ?>
                 </select>
 
-                <button type="submit" name="update_sem">Update</button>
+                <button type="submit" name="update_sem" id="update_sem">Update</button>
             </form>
         </div>
 
@@ -54,8 +99,8 @@ include "../assets/layout.php";
                         </td>
                         <td><?= $row['semester_status'] ?></td>
                         <td>
-                            <button>Edit</button>
-                            <button>Delete</button>
+                            <!-- <button>Edit</button> -->
+                            <button>Archive</button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -75,17 +120,17 @@ include "../assets/layout.php";
 
                 <div class="semform-item">
                     <label>Semester Name</label>
-                <input type="text" name="semester_name">
+                <input type="text" name="semester_name" required>
                 </div>
 
                 <div class="semform-item">
                     <label>Start Date</label>
-                <input type="date" name="semester_start">
+                <input type="date" name="semester_start" required>
                 </div>
 
                 <div class="semform-item">
                     <label>End Date</label>
-                <input type="date" name="semester_end">
+                <input type="date" name="semester_end" required>
                 </div>
 
                 <div class="semform-item">
@@ -104,4 +149,26 @@ include "../assets/layout.php";
     </div>
 
 </div>
+<script>
+    const select = document.getElementById('activesem');
+    let originalValue = select.value;
+
+    // store original value when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        originalValue = select.value;
+    });
+
+    document.getElementById('update_sem').addEventListener('click', function(e) {
+        const selectedText = select.options[select.selectedIndex].text;
+
+        const confirmMsg = `Change active semester to "${selectedText}"?`;
+
+        if (!confirm(confirmMsg)) {
+            e.preventDefault();
+
+            // revert to original selection
+            select.value = originalValue;
+        }
+    });
+</script>
 <?php include "../assets/layout_end.php"; ?>

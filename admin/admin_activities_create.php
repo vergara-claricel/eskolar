@@ -1,12 +1,44 @@
 <?php
-
-include __DIR__ . "/../save_activity.php";
 // $upd = $actobj->updateStatuses();
 $title = "Activities & Attendance";
 include "../assets/layout.php";
+require_once "../classes/supabase.php";
+$config = require __DIR__ . "esko/../api/supabase.php";
+include "../classes/supa_activities.php";
+
+$api = new Supabase($config);
+$actobj = new Activities($api);
+$activeSem = $semobj->getActiveSemester();
+
+if (isset($_POST['create_activity'])) {
+
+    $name = $_POST['activityname'];
+    $status = $_POST['activity_status'];
+    $date = $_POST['activitydate'];
+    $start = $_POST['start_time'];
+    $end = $_POST['end_time'];
+    $venue = $_POST['venue'];
+    $classification = $_POST['classification'];
+    $barangay = $_POST['barangay'] ?? null;
+    $info = $_POST['activityinfo'];
+
+    if ($classification !== "Barangay") {
+        $barangay = null; // force null
+    }
+    try {
+        $semid = $activeSem['sem_id'];
+
+        $result = $actobj->createActivity($name, $status, $date, $start, $end, $venue, $classification, $barangay, $info, $semid);
+        echo $result ? "Activity created successfully!" : "Failed to create activity.";
+        header("location: /esko/admin/admin_activities_attendance.php");
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 ?>
 
-
+<h2>Create Activity</h2>
 <div id="activity_form">
     <form method="POST" class="activity-form">
         <label for="activityname">Activity Name</label>

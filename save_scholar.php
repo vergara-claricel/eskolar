@@ -1,6 +1,13 @@
 <?php
-include "../classes/activities.php";
-include "../classes/scholar.php";
+include "../classes/supa_activities.php";
+include "../classes/supa_scholar.php";
+require_once "../classes/supabase.php";
+$config = require __DIR__ . "/esko/../api/supabase.php";
+
+$api = new Supabase($config);
+$schoobj = new Scholar($api);
+$activeSem = $semobj->getActiveSemester();
+$semId = $activeSem['sem_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -15,12 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    try { 
 
         $result = $schoobj->addScholar($first_name, $last_name, $barangay, $phone, $email, $iskolarno, $password);
-        echo $result ? "Scholar created successfully!" : "Failed to add scholar.";
 
    } catch(Exception $e) {
      //    $pdo->rollBack();
         echo "Error: " . $e->getMessage();
         }
-     header("location: /esko/admin/admin_scholars.php");
+     header("location: /esko/admin/admin_scholars_view.php?semid=$semId&scholarid=$result");
 }
 ?>

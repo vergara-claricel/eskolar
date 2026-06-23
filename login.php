@@ -1,26 +1,69 @@
 <?php
-session_start();
+// session_start();
 // require __DIR__ . "/connection.php"; // your DB connection
-require __DIR__ . "/localcon.php";
+// require __DIR__ . "/localcon.php";
 
+// if (isset($_POST['login'])) {
+//     $username = trim($_POST['username']);
+//     $password = trim($_POST['password']);
+
+//     $sql = "SELECT id, username, password, role FROM users WHERE username = :username LIMIT 1";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute(['username' => $username]);
+//     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//     if ($user && $password == $user["password"]) {
+//         $_SESSION["userid"] = $user["id"];
+//         $_SESSION["role"] = $user["role"];
+//         header("Location: /esko/admin/admin_dashboard.php");
+//         exit;
+//     } else {
+//         $error = "Invalid username or password";
+//     }
+// }
+session_start();
 if (isset($_POST['login'])) {
+
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    $sql = "SELECT id, username, password, role FROM users WHERE username = :username LIMIT 1";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['username' => $username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $apiKey = "sb_publishable_JVZTWW0Ld8XJ_HQz7LGXkA_iLUkpN7c";
+    $url = "https://yaksrweqnidfpvceoqzo.supabase.co/rest/v1/users"
+         . "?username=eq." . urlencode($username)
+         . "&select=*";
 
-    if ($user && $password == $user["password"]) {
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "apikey: $apiKey",
+        "Authorization: Bearer $apiKey"
+    ]);
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $users = json_decode($response, true);
+
+    $user = $users[0] ?? null;
+    var_dump($user);
+
+    if ($user && $password === $user["password"]) {
+
         $_SESSION["userid"] = $user["id"];
-        $_SESSION["role"] = $user["admin"];
-        header("Location: /esko/admin/admin_dashboard.php");
+        $_SESSION["role"] = $user["role"];
+
+        // role-based redirect
+        if ($user["role"] === "admin") {
+            header("Location: /esko/admin/admin_dashboard.php");
+        }
         exit;
+
     } else {
         $error = "Invalid username or password";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,12 +111,12 @@ if (isset($_POST['login'])) {
             text-align: center;
         }
 
-        .logo {
+        /* .logo {
             width: 85px;
             margin-bottom: 15px;
             opacity: 0;
             animation: fadeInUp 0.8s ease-out forwards;
-        }
+        } */
 
         h2 {
             margin-bottom: 20px;
@@ -151,9 +194,9 @@ if (isset($_POST['login'])) {
 <div class="bg-shape"></div>
 
 <div class="login-container">
-    <img src="assets/logo.png" alt="eSkolar Logo" class="logo">
+    <!-- <img src="assets/logo.png" alt="eSkolar Logo" class="logo"> -->
 
-    <h2>Welcome to eSkolar</h2>
+    <h2>eSkolar</h2>
 
     <?php if (!empty($error)): ?>
         <div class="error"><?= $error ?></div>

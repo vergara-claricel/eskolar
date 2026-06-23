@@ -1,8 +1,17 @@
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/RobotoMono-Regular.ttf') format('truetype');
+    font-weight: 400; /* Regular */
+    font-style: normal;
+}
+
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
 }
 
 /* LAYOUT WRAPPER */
@@ -24,7 +33,7 @@
 .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #d4a017;
+    color: #FFC857;
     padding: 0 25px 35px;
 }
 
@@ -49,7 +58,7 @@
 }
 
 .menu .active {
-    background: #d4a017;
+    background: #FFC857;
     color: white;
 }
 
@@ -79,4 +88,17 @@
     padding: 30px;
     flex: 1;
     overflow: auto;
+}
+
+#currentsem{
+    background-color:
+     #b7c1e4; 
+    color: #0909ae;
+    padding: 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+#logout{
+    text-decoration: none;
 }
