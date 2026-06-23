@@ -1,14 +1,15 @@
 <?php
 $title = "Dashboard";
-include "../assets/layout.php";
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
-$api = new Supabase($config);
-include "../classes/supa_officers.php";
+// include "../assets/layout.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
+// $api = new Supabase($config);
+// include "../classes/supa_officers.php";
 
-
-$offobj = new Officer($api);
+require_once "../test.php";
+// $offobj = new Officer($api);
 $officers = $offobj->getOfficers();
+include "../assets/layout.php";
 
 
 ?>

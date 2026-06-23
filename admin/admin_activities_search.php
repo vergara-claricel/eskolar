@@ -1,12 +1,13 @@
 <?php
 
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
-include "../classes/supa_activities.php";
-include "../classes/supa_semester.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
+// include "../classes/supa_activities.php";
+// include "../classes/supa_semester.php";
 
-$api = new Supabase($config);
-$actobj = new Activities($api);
+// $api = new Supabase($config);
+// $actobj = new Activities($api);
+require_once "../test.php";
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 
@@ -31,7 +32,7 @@ if(empty($allacts)){
     }
     echo "
         <tr>
-            <td>{$s['date']}</td>
+            <td>{$s['activitydate']}</td>
             <td>{$s['activityname']}</td>
             <td>{$s['status']}</td>
             <td>{$classification}</td>

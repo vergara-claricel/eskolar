@@ -1,16 +1,21 @@
 <?php
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
 
-$api = new Supabase($config);
-include "../classes/supa_scholar.php";
-$schoobj = new Scholar($api);
+// $api = new Supabase($config);
+// include "../classes/supa_scholar.php";
+// $schoobj = new Scholar($api);
+
 $title = "Scholars";
+require_once "../test.php";
+include "../assets/layout.php";
+
 
 $allscho = $schoobj->getAllActiveScholars();
 // print_r($allscho);
+$activeSem = $semobj->getActiveSemester();
+// include "../assets/layout.php";
 
-include "../assets/layout.php"; // HEADER + SIDEBAR + TOPBAR
 ?>
 
 <style>

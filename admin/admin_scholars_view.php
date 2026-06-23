@@ -3,19 +3,21 @@ $title = "View Scholar";
 // include "../classes/scholar.php";
 // include "../classes/activities.php";
 // include "../classes/scorecard.php";
+require_once "../test.php";
+include "../assets/layout.php";
 
-  include "../assets/layout.php";
+//   include "../assets/layout.php";
 
-require_once "../classes/supabase.php";
-include "../classes/supa_scholar.php";
-include "../classes/supa_scorecard.php";
-include "../classes/supa_activities.php";
+// require_once "../classes/supabase.php";
+// include "../classes/supa_scholar.php";
+// include "../classes/supa_scorecard.php";
+// include "../classes/supa_activities.php";
 
-$config = require __DIR__ . "esko/../api/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
 
-$api = new Supabase($config);
-$schoobj = new Scholar($api);
-$scObj = new Scorecard($api);
+// $api = new Supabase($config);
+// $schoobj = new Scholar($api);
+// $scObj = new Scorecard($api);
 $actobj = new Activities($api);
 
 $adminId = $_SESSION['userid'];

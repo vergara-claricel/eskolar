@@ -10,8 +10,8 @@ use chillerlan\QRCode\Common\EccLevel;
 
 $GLOBALS['connection'] = $pdo;
 
-class Scholar
-{
+// class Scholar
+// {
     private $db;
 
     function __construct()
@@ -439,4 +439,4 @@ function filterScholars($search = '', $status = '', $barangay = '')
 
 }
 
-$schoobj = new Scholar();
+// $schoobj = new Scholar();

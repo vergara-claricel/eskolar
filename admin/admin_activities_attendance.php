@@ -1,9 +1,10 @@
 <?php
-include "../classes/supa_activities.php";
+// include "../classes/supa_activities.php";
 // include "../classes/semester.php";
 $title = "Dashboard";
+require_once "../test.php";
 include "../assets/layout.php";
-$config = require __DIR__ . "/../api/supabase.php";
+// $config = require __DIR__ . "/../api/supabase.php";
 
 $actobj = new Activities($api);
 $activesem = $semobj->getActiveSemester();

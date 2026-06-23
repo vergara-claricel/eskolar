@@ -1,13 +1,8 @@
 <?php
-include "../classes/supa_activities.php";
-include "../classes/supa_scholar.php";
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "/esko/../api/supabase.php";
-
-$api = new Supabase($config);
-$schoobj = new Scholar($api);
-$activeSem = $semobj->getActiveSemester();
-$semId = $activeSem['sem_id'];
+// include "../classes/supa_activities.php";
+// include "../test.php";
+// $activeSem = $semobj->getActiveSemester();
+// $semId = $activeSem['sem_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 

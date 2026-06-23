@@ -1,18 +1,23 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-require_once "../classes/supa_semester.php";
+require "../classes/supa_semester.php";
 require_once "../classes/supa_officers.php";
 require_once "../classes/supa_activities.php";
 require_once "../classes/supabase.php";
+require_once "../classes/supa_scholar.php";
+require_once "../classes/supa_scorecard.php";
 
 $config = require __DIR__ . "../api/supabase.php";
 
 $api = new Supabase($config);
-
 $semobj = new Semester($api);
 $offobj = new Officer($api);
 $actobj = new Activities($api);
+$scObj = new Scorecard($api);
+$schoobj = new Scholar($api);
 
 $adminId = $_SESSION["userid"] ?? null;
 

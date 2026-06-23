@@ -1,7 +1,7 @@
 <?php
 // require_once "../connection.php";
-include "../classes/semester.php";
-include "../classes/activities.php";
+// include "../classes/semester.php";
+// include "../classes/activities.php";
 
 
 if (isset($_POST['create_activity'])) {

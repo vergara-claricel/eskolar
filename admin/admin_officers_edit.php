@@ -1,13 +1,15 @@
 <?php
 $title = "Edit";
-include "../assets/layout.php";
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
-$api = new Supabase($config);
-include "../classes/supa_officers.php";
+// include "../assets/layout.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
+// $api = new Supabase($config);
+// include "../classes/supa_officers.php";
+
+require_once "../test.php";
 
 $officerId = $_GET['officerId'] ?? null;
-$offobj = new Officer($api);
+// $offobj = new Officer($api);
 $officer = $offobj->getOfficerInfo($officerId);
 
 // handle update
@@ -46,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
+    
+    include "../assets/layout.php";
 }
 ?>
 <style>

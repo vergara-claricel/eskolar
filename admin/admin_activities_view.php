@@ -1,11 +1,14 @@
 <?php
 // session_start();
 $title = "View Activity";
-include "../assets/layout.php";
-include "../classes/supa_activities.php";
-$config = require __DIR__ . "/../api/supabase.php";
-$adminId = $_SESSION["userid"];
-$actobj = new Activities($api);
+// include "../assets/layout.php";
+// include "../classes/supa_activities.php";
+// $config = require __DIR__ . "/../api/supabase.php";
+// $adminId = $_SESSION["userid"];
+// $actobj = new Activities($api);
+require_once "../test.php";
+$adminId = $adminId ?? null;
+
 $activeSem = $semobj->getActiveSemester();
 $actId = $_GET['actId'];
 $actDetails = $actobj->getActivityDetails($actId);
@@ -92,6 +95,7 @@ if (isset($_POST['updateActivityDetails'])) {
         echo "Error: " . $e->getMessage();
     }
 }
+include "../assets/layout.php";
 ?>
 
 <style>

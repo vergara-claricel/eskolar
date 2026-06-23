@@ -1,18 +1,20 @@
 <?php
-session_start();
-include "../classes/supa_semester.php";
-require_once "../classes/supa_officers.php";
+// session_start();
+// include "../classes/supa_semester.php";
+// require_once "../classes/supa_officers.php";
 
-// Active menu highlighter
-$activeSem = $semobj->getActiveSemester();
+// // Active menu highlighter
+// $activeSem = $semobj->getActiveSemester();
 
-$adminId = $_SESSION["userid"];
-$offobj = new Officer($api);
-$adminName = $offobj->getAdminName($adminId);
-function active($keyword){
-    $current = basename($_SERVER['PHP_SELF']);
-    return (strpos($current, $keyword) !== false) ? 'active' : '';
-}
+// $adminId = $_SESSION["userid"];
+// $offobj = new Officer($api);
+// $adminName = $offobj->getAdminName($adminId);
+// function active($keyword){
+//     $current = basename($_SERVER['PHP_SELF']);
+//     return (strpos($current, $keyword) !== false) ? 'active' : '';
+// }
+$activeSem = $activeSem ?? null;
+$adminName = $adminName ?? 'Admin';
 ?>
 <!DOCTYPE html>
 <html lang="en">

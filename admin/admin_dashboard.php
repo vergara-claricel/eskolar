@@ -1,7 +1,8 @@
 <?php
 $title = "Dashboard";
+require_once "../test.php";
 include "../assets/layout.php";
-include "../classes/supa_activities.php";
+// include "../classes/supa_activities.php";
 
 $config = require __DIR__ . "esko/../api/supabase.php";
 

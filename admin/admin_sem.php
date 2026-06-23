@@ -1,13 +1,16 @@
 <?php
 
 $title = "Semester";
-include "../assets/layout.php";
+// include "../assets/layout.php";
 
-$config = require __DIR__ . "/../api/supabase.php";
+// $config = require __DIR__ . "/../api/supabase.php";
 
-$api = new Supabase($config);
+// $api = new Supabase($config);
 
-$semobj = new Semester($api);
+// $semobj = new Semester($api);
+
+require_once "../test.php";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {
 
@@ -48,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem'])){
         echo "Error: " . $e->getMessage();
     }
 }
+include "../assets/layout.php";
 ?>
 
 <h2>Semester</h2>

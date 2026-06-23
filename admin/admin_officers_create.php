@@ -1,14 +1,16 @@
 <?php
 $title = "Officer";
-include "../assets/layout.php";
-include "../classes/supa_officers.php";
+// include "../assets/layout.php";
+// include "../classes/supa_officers.php";
 
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
 
-$api = new Supabase($config);
+// $api = new Supabase($config);
 
-$offobj = new Officer($api);
+// $offobj = new Officer($api);
+require_once "../test.php";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -30,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      //    $pdo->rollBack();
         echo "Error: " . $e->getMessage();
     }
-    
+    include "../assets/layout.php";
 }
 ?>
 <style>

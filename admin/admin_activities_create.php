@@ -1,13 +1,13 @@
 <?php
 // $upd = $actobj->updateStatuses();
 $title = "Activities & Attendance";
-include "../assets/layout.php";
-require_once "../classes/supabase.php";
-$config = require __DIR__ . "esko/../api/supabase.php";
-include "../classes/supa_activities.php";
+// require_once "../classes/supabase.php";
+// $config = require __DIR__ . "esko/../api/supabase.php";
+// include "../classes/supa_activities.php";
+require_once "../test.php";
 
-$api = new Supabase($config);
-$actobj = new Activities($api);
+// $api = new Supabase($config);
+// $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
 
 if (isset($_POST['create_activity'])) {
@@ -35,6 +35,8 @@ if (isset($_POST['create_activity'])) {
         echo "Error: " . $e->getMessage();
     }
 }
+
+include "../assets/layout.php";
 
 ?>
 
