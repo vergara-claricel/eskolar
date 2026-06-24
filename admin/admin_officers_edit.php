@@ -48,9 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-    
-    include "../assets/layout.php";
 }
+
+    include "../assets/layout.php";
 ?>
 <style>
     /* FORM GRID */

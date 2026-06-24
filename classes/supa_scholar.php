@@ -234,17 +234,17 @@ class Scholar
 
         if ($search) {
             $q = "*$search*";
-            $filters[] = "or=(username.ilike.$q,barangay.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
+            $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
         }
 
         if ($status !== '') {
             $filters[] = "is_active=eq.$status";
         }
 
-        if ($barangay) {
-            $brgy = urlencode($barangay);
-            $filters[] = "barangay=eq.$brgy";
-        }
+        // if ($barangay) {
+        //     $brgy = urlencode($barangay);
+        //     $filters[] = "barangay=eq.$brgy";
+        // }
 
         if ($filters) {
             $query .= "&" . implode("&", $filters);
@@ -253,48 +253,5 @@ class Scholar
         return $this->api->get($query);
     }
 
-    function updateAttendance($ar_id, $activity_id, $user_id, $iskolarno, $date, $timein, $timeout, $scanned_by)
-{
-    // 1. CHECK if record exists
-    $check = $this->db
-        ->from('attendance_record')
-        ->select('ar_id')
-        ->eq('ar_id', $ar_id)
-        ->single()
-        ->execute();
-
-    $exists = $check->data ?? null;
-
-    if ($exists) {
-
-        // 2. UPDATE
-        return $this->db
-            ->from('attendance_record')
-            ->update([
-                "timein" => $timein,
-                "timeout" => $timeout,
-                "scanned_by" => $scanned_by
-            ])
-            ->eq('ar_id', $ar_id)
-            ->execute();
-
-    } else {
-
-        // 3. INSERT
-        return $this->db
-            ->from('attendance_record')
-            ->insert([
-                "activity_id" => $activity_id,
-                "user_id" => $user_id,
-                "iskolarno" => $iskolarno,
-                "scanned_date" => $date,
-                "timein" => $timein,
-                "timeout" => $timeout,
-                "scanned_by" => $scanned_by,
-                "sync_status" => "manual override"
-            ])
-            ->execute();
-    }
-}
 }
 

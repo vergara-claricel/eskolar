@@ -92,10 +92,11 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
         </tr>
     </thead>
 
-    <tbody id="activitiesTable">
+<tbody id="activitiesTable">
+    <?php if (!empty($allacts)): ?>
         <?php foreach ($allacts as $s): ?>
             <tr>
-                <td><?= $s['activitydate']?></td>
+                <td><?= $s['activitydate'] ?></td>
                 <td><?= $s['activityname'] ?></td>
                 <td><?= $s['status'] ?></td>
                 <td>
@@ -105,13 +106,20 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a href="/esko/admin/admin_activities_view.php?actId=<?= $s['activity_id'] ?>">View</a>
+                    <a href="/esko/admin/admin_activities_view.php?actId=<?= $s['activity_id'] ?>">
+                        View
+                    </a>
                 </td>
-                
-
             </tr>
         <?php endforeach; ?>
-    </tbody>
+    <?php else: ?>
+        <tr>
+            <td colspan="5" style="text-align:center; padding: 12px;">
+                No activities found.
+            </td>
+        </tr>
+    <?php endif; ?>
+</tbody>
 </table>
 </div>
 

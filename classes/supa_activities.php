@@ -116,12 +116,13 @@ class Activities
         );
     }
 
-        function getAttendanceRecords($actId)
-    {
-        return $this->api->get(
-            "attendance_view?activityid=eq.$actId"
-        );
-    }
+function getAttendanceRecords($actId)
+{
+    return $this->api->get(
+        "scholar_attendance_view?activityid=eq.$actId&is_active=eq.true&order=last_name.asc"
+    );
+
+}
 
     function getEligibleScholars($classification, $barangay = null)
 {
@@ -134,53 +135,48 @@ class Activities
     return $this->api->get($query);
 }
 
-    // function updateAttendance($ar_id,
-    //         $activity_id,
-    //         $user_id,
-    //         $date,
-    //         $timein,
-    //         $timeout,
-    //         $scanned_by)
-    // {
+function getActivityAttendanceReport($actId, $classification, $barangay, $search = null)
+{
+    $scholars = $this->getEligibleScholars($classification, $barangay);
+    $logs = $this->getAttendanceRecords($actId);
 
-    //     $ar_id = (int)$ar_id;
+    $logMap = [];
+    foreach ($logs as $log) {
+        $logMap[$log['user_id']] = $log;
+    }
 
-    //     $data = [
-    //              'activityid' => $activity_id,
-    //             'user_id' => $user_id,
-    //             'date' => $date,
-    //             'timein' => $timein,
-    //             'timeout' => $timeout,
-    //             'scanned_by' => $scanned_by,
-    //     ];
+    $result = [];
 
-    
-    //     return $this->api->patch(
-    //         "attendance_record?ar_id=eq.$ar_id",
-    //         $data
-    //     );
-    // }
+    // MERGE (no reference usage)
+    foreach ($scholars as $s) {
+        $log = $logMap[$s['user_id']] ?? null;
 
+        $s['ar_id'] = $log['ar_id'] ?? null;
+        $s['timein'] = $log['timein'] ?? null;
+        $s['timeout'] = $log['timeout'] ?? null;
+        $s['scanned_by'] = $log['scanned_by'] ?? null;
+        $s['attendance_status'] = $log['attendance_status'] ?? 'absent';
+        $s['officer_fullname'] = $log['officer_fullname'] ?? null;
 
-//     function updateAttendance($ar_id, $activity_id, $user_id, $date, $timein, $timeout, $scanned_by)
-// {
-//     $ar_id = (int)$ar_id;
+        $result[] = $s;
+    }
 
-//     $data = [
-//         "activityid" => $activity_id,
-//         "user_id" => $user_id,
-//         "date" => $date,
-//         "timein" => $timein ?: null,
-//         "timeout" => $timeout ?: null,
-//         "scanned_by" => $scanned_by
-//     ];
+    if (!empty($search)) {
+        $search = strtolower(trim($search));
 
-//     return $this->api->patch(
-//     "attendance_record",
-//     "?ar_id=eq.$ar_id",
-//     $data
-// );
-// }
+        $result = array_filter($result, function ($s) use ($search) {
+            return
+                str_contains(strtolower($s['username'] ?? ''), $search) ||
+                str_contains(strtolower($s['first_name'] ?? ''), $search) ||
+                str_contains(strtolower($s['last_name'] ?? ''), $search);
+        });
+
+        $result = array_values($result); 
+    }
+
+    return $result;
+}
+
 
 function upsertAttendance(
     $ar_id,
@@ -191,6 +187,7 @@ function upsertAttendance(
     $timeout,
     $scanned_by
 ) {
+    $ar_id = (int)$ar_id;
     // 1. Check if record exists
     $check = $this->api->get(
         "attendance_record?select=ar_id&ar_id=eq.$ar_id"
@@ -220,34 +217,32 @@ function upsertAttendance(
         "attendance_record",
         $data
     );
+
 }
 
-    function getActivityAttendanceReport($actId,
-    $classification,
-    $barangay){
-    $scholars = $this->getEligibleScholars($classification, $barangay);
-    $logs = $this->getAttendanceRecords($actId);
+//     function searchAttendanceRecords($keyword, $actId)
+//     {
+//         $query = "attendance_view?select=*";
 
-    $logMap = [];
-    foreach ($logs as $log) {
-        $logMap[$log['user_id']] = $log;
-    }
+//         $filters = [];
 
-    // merge
-    foreach ($scholars as &$s) {
-        $log = $logMap[$s['user_id']] ?? null;
+//         if ($keyword) {
+//             $q = "*$keyword*";
+//             $filters[] = "or=(activityname.ilike.$q,barangay.ilike.$q)";
+//         }
 
-        $s['ar_id'] = $log['ar_id'] ?? null;
-        $s['iskolarno'] = $log['username'] ?? null;
-        $s['timein'] = $log['timein'] ?? null;
-        $s['timeout'] = $log['timeout'] ?? null;
-        $s['scanned_by'] = $log['scanned_by'] ?? null;
-        $s['attendance_status'] = $log['attendance_status'] ?? 'absent';
-        $s['officer_fullname'] = $log['officer_fullname'] ?? null;
-    }
+//         if ($barangay) {
+//             $brgy = urlencode($barangay);
+//             $filters[] = "barangay=eq.$brgy";
+//         }
 
-    return $scholars;
-    }
+//         if ($filters) {
+//             $query .= "&" . implode("&", $filters);
+//         }
+
+//         return $this->api->get($query);
+//     }
+
 
 }
 

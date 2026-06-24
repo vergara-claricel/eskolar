@@ -160,6 +160,7 @@ $activeSem = $semobj->getActiveSemester();
                                 value="<?= $s['user_id'] ?>">
                             <button type="button"
                                 class="action-btn"
+                                data-action="<?= $s['is_active'] ? 'deactivate' : 'reactivate' ?>"
                                 data-name="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
                                 data-barangay="<?= $s['barangay'] ?>"
                                 data-iskolarno="<?= $s['username'] ?>">
@@ -192,20 +193,34 @@ $activeSem = $semobj->getActiveSemester();
 </div>
 
 <script>
-    function loadScholars() {
-        let search = document.getElementById('search').value;
+let timer;
+
+        const tableBody = document.getElementById('scholarsTable');
+         const originalHTML = tableBody.innerHTML;
+
+function loadScholars() {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        let search = document.getElementById('search').value.trim();
         let status = document.getElementById('statusFilter').value;
         let barangay = document.getElementById('barangayFilter').value;
-        console.log(barangay);
-        fetch(`admin_scholars_filter.php?search=${search}&status=${status}&barangay=${barangay}`)
+        if (search === "") {
+           tableBody.innerHTML = originalHTML;
+            return;
+        }
+
+        fetch(`admin_scholars_filter.php?search=${encodeURIComponent(search)}&status=${status}&barangay=${encodeURIComponent(barangay)}`)
             .then(res => res.text())
             .then(data => {
-                document.getElementById('scholarsTable').innerHTML = data;
+                tableBody.innerHTML = data;
             });
-    }
+
+    }, 300);
+}
 
     // live search
-    document.getElementById('search').addEventListener('keyup', loadScholars);
+    document.getElementById('search').addEventListener('input', loadScholars);
     document.getElementById('statusFilter').addEventListener('change', loadScholars);
     document.getElementById('barangayFilter').addEventListener('change', loadScholars);
 
@@ -217,7 +232,6 @@ $activeSem = $semobj->getActiveSemester();
     searchInput.addEventListener('keydown', e => {
         if (e.key === 'Enter') e.preventDefault();
     });
-
 
     let currentForm;
     let modal = document.getElementById("myModal");

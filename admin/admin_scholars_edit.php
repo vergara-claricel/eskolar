@@ -10,7 +10,6 @@ $title = "Edit";
 require_once "../test.php";
 $scholarId = $_GET['scholarid'] ?? null;
 $scholar = $schoobj->getScholarInfo($scholarId);
-
 // handle update
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_scholar'])) {
 
@@ -48,8 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_scholar'])) {
         echo "Error: " . $e->getMessage();
     }
 
-    include "../assets/layout.php";
 }
+
+include "../assets/layout.php";
 ?>
 <style>
     /* FORM GRID */

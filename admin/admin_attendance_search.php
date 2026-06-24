@@ -12,13 +12,19 @@ $actId = $_GET['actId'];
 // if ($keyword === '') {
 //     exit; // return no rows
 // }
-$ar = $actobj->searchAttendanceRecords($keyword, $actId);
-var_dump($actId);
+$actDetails = $actobj->getActivityDetails($actId);
+$ar = $actobj->getActivityAttendanceReport(
+    $actId,
+    $actDetails['classification'],
+    $actDetails['barangay'], $keyword
+);
+
+var_dump($ar);
 
 foreach ($ar as $s) {
     echo "
         <tr>
-             <td>{$s['iskolarno']}</td>
+             <td>{$s['username']}</td>
             <td>{$s['last_name']}, {$s['first_name']}</td>
             <td>" . ($s['timein'] ?: '-') . "</td>
             <td>" . ($s['timeout'] ?: '-') . "</td>
@@ -29,7 +35,7 @@ foreach ($ar as $s) {
                     class='edit-btn'
                     data-ar_id='{$s['ar_id']}'
                     data-user_id='" . ($s['user_id'] ?? '') . "'
-                    data-iskolarno='" . ($s['iskolarno'] ?? '') . "'
+                    data-username='" . ($s['username'] ?? '') . "'
                     data-fullname='{$s['last_name']}, {$s['first_name']}'
                     data-timein='" . ($s['timein'] ?? '') . "'
                     data-timeout='" . ($s['timeout'] ?? '') . "'

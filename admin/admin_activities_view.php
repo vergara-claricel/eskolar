@@ -11,15 +11,13 @@ $adminId = $adminId ?? null;
 
 $activeSem = $semobj->getActiveSemester();
 $actId = $_GET['actId'];
+$keyword = $_GET['search'] ?? '';
 $actDetails = $actobj->getActivityDetails($actId);
-
 $ar = $actobj->getActivityAttendanceReport(
     $actId,
     $actDetails['classification'],
-    $actDetails['barangay']
+    $actDetails['barangay'], $keyword
 );
-// print_r($ar);
-// exit;
 
 
 if (isset($_POST['updateAttendanceRecord'])) {
@@ -86,6 +84,8 @@ if (isset($_POST['updateActivityDetails'])) {
 
 
         if ($result) {
+            // print_r($result);
+            // exit;
             header("Location: /esko/admin/admin_activities_view.php?actId=$actId");
             exit;
         } else {
@@ -299,7 +299,7 @@ include "../assets/layout.php";
                 data-classification="<?= $actDetails['classification'] ?>"
                 data-barangay="<?= $actDetails['barangay'] ?? '' ?>"
                 data-venue="<?= htmlspecialchars($actDetails['venue'] ?? '', ENT_QUOTES) ?>"
-                data-date="<?= $actDetails['acytivitydate'] ?? '' ?>"
+                data-date="<?= $actDetails['activitydate'] ?? '' ?>"
                 data-start_time="<?= $actDetails['start_time'] ?? '' ?>"
                 data-end_time="<?= $actDetails['end_time'] ?? '' ?>"
                 data-info="<?= htmlspecialchars($actDetails['info'] ?? '', ENT_QUOTES) ?>"
@@ -563,15 +563,29 @@ include "../assets/layout.php";
         }
 
         // search logic as user types
-    document.getElementById('searchAttendance').addEventListener('keyup', function() {
-        let keyword = this.value;
-        let actId = "<?= $actId ?>";
-        fetch(`admin_attendance_search.php?actId=${actId}&search=${encodeURIComponent(keyword)}`)
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('attendanceRecordsTable').innerHTML = data;
-            });
-    });
+        let timer;
+        const tableBody = document.getElementById('attendanceRecordsTable');
+        const originalHTML = tableBody.innerHTML;
+
+        document.getElementById('searchAttendance').addEventListener('input', function () {
+            clearTimeout(timer);
+
+            const keyword = this.value.trim();
+            const actId = "<?= $actId ?>";
+
+            if (keyword === "") {
+                tableBody.innerHTML = originalHTML;
+                return;
+            }
+
+            timer = setTimeout(() => {
+                fetch(`admin_attendance_search.php?actId=${actId}&search=${encodeURIComponent(keyword)}`)
+                    .then(res => res.text())
+                    .then(data => {
+                        document.getElementById('attendanceRecordsTable').innerHTML = data;
+                    });
+            }, 300);
+        });
 
     
     // prevent reload
