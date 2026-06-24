@@ -8,6 +8,8 @@ require_once "../test.php";
 // $api = new Supabase($config);
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
+$totalscholars = $schoobj->getAllActiveScholars();
+$totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
 $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
 include "../assets/layout.php";
 ?>
@@ -167,11 +169,11 @@ include "../assets/layout.php";
     <div class="metrics-row">
         <div class="metric-card">
             <div class="metric-label">Total Scholars</div>
-            <div class="metric-value">1,240</div>
+            <div class="metric-value"><?= count($totalscholars) ?></div>
         </div>
         <div class="metric-card">
-            <div class="metric-label">Active Events</div>
-            <div class="metric-value">12</div>
+            <div class="metric-label">Total Activities</div>
+            <div class="metric-value"><?= count($totalevents) ?></div>
         </div>
         <div class="metric-card">
             <div class="metric-label">Overall Attendance</div>

@@ -205,7 +205,7 @@ function loadScholars() {
         let search = document.getElementById('search').value.trim();
         let status = document.getElementById('statusFilter').value;
         let barangay = document.getElementById('barangayFilter').value;
-        if (search === "") {
+        if (search === "" && status == "" && barangay == "") {
            tableBody.innerHTML = originalHTML;
             return;
         }

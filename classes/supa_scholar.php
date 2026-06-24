@@ -164,7 +164,7 @@ class Scholar
         return $this->api->get(
             "attendance_view_logs?select=*"
                 . "&user_id=eq.$user_id"
-                . "&semester=eq.$semId"
+                . "&semester=eq.$semId&attendance_status=eq.present"
         );
     }
 
@@ -241,10 +241,10 @@ class Scholar
             $filters[] = "is_active=eq.$status";
         }
 
-        // if ($barangay) {
-        //     $brgy = urlencode($barangay);
-        //     $filters[] = "barangay=eq.$brgy";
-        // }
+        if ($barangay) {
+            $brgy = urlencode($barangay);
+            $filters[] = "barangay=eq.$brgy";
+        }
 
         if ($filters) {
             $query .= "&" . implode("&", $filters);
