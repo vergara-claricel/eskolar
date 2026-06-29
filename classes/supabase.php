@@ -18,7 +18,8 @@ class Supabase
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "apikey: {$this->key}",
-            "Authorization: Bearer {$this->key}"
+            "Authorization: Bearer {$this->key}",
+            "Content-Type: application/json"
         ]);
 
         $response = curl_exec($ch);
