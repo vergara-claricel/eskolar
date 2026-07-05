@@ -14,7 +14,7 @@ $semId = $activeSem['sem_id'];
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $barangay = $_GET['barangay'] ?? '';
-$allacts = $actobj->filterActivities($search, $status, $barangay);
+$allacts = $actobj->filterActivities($search, $status, $barangay, $semId);
 
 if(empty($allacts)){
     echo"
@@ -34,7 +34,7 @@ if(empty($allacts)){
         <tr>
             <td>{$s['activitydate']}</td>
             <td>{$s['activityname']}</td>
-            <td>{$s['status']}</td>
+            <td>{$s['computed_status']}</td>
             <td>{$classification}</td>
             <td>
                 <a href='/esko/admin/admin_activities_view.php?actId={$s['activity_id']}'>View</a>

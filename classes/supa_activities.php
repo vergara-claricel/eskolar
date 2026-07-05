@@ -13,11 +13,10 @@ class Activities
         $this->api = $api;
     }
 
-    function createActivity($name, $status, $date, $start, $end, $venue, $classification, $barangay, $info, $semid)
+    function createActivity($name, $date, $start, $end, $venue, $classification, $barangay, $info, $semid)
     {
     $data = [
                 'activityname' => $name,
-                'status' => $status,
                 'activitydate' => $date,
                 'start_time' => $start,
                 'end_time' => $end,
@@ -34,14 +33,14 @@ class Activities
     function getActivitiesOfActiveSem($semid)
     {
         return $this->api->get(
-            "activities_current_sem_view",
+            "activities_with_status",
             "?semester=eq.$semid&order=activitydate.desc"
         );
     }
 
-    function filterActivities($search = '', $status = '', $barangay = '')
+    function filterActivities($search = '', $status = '', $barangay = '',$semid)
     {
-        $query = "activities_current_sem_view?select=*";
+        $query = "activities_with_status?select=*&semester=eq.$semid";
 
         $filters = [];
 
@@ -51,7 +50,7 @@ class Activities
         }
 
         if ($status !== '') {
-            $filters[] = "status=eq.$status";
+            $filters[] = "computed_status=eq.$status";
         }
 
         if ($barangay) {
@@ -111,8 +110,8 @@ class Activities
     {
 
         return $this->api->get(
-            "activities",
-            "?semester=eq.$semId&status=eq.Upcoming"
+            "activities_with_status",
+            "?semester=eq.$semId&computed_status=eq.Upcoming"
         );
     }
 

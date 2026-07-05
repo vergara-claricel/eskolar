@@ -59,7 +59,7 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     <option value="">All Events</option>
     <option value="Upcoming">Upcoming</option>
     <option value="Active">Active</option>
-    <option value="Done">Done</option>
+    <option value="Ended">Ended</option>
 </select>
 
 <select name="barangay" id="barangayFilter">
@@ -98,7 +98,7 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
                     <tr>
                         <td><?= $s['activitydate'] ?></td>
                         <td><?= $s['activityname'] ?></td>
-                        <td><?= $s['status'] ?></td>
+                        <td><?= $s['computed_status'] ?></td>
                         <td>
                             <?= $s['classification'] ?>
                             <?php if ($s['classification'] === 'Barangay' && !empty($s['barangay'])): ?>

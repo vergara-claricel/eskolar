@@ -13,7 +13,6 @@ $activeSem = $semobj->getActiveSemester();
 if (isset($_POST['create_activity'])) {
 
     $name = $_POST['activityname'];
-    $status = $_POST['activity_status'];
     $date = $_POST['activitydate'];
     $start = $_POST['start_time'];
     $end = $_POST['end_time'];
@@ -28,7 +27,7 @@ if (isset($_POST['create_activity'])) {
     try {
         $semid = $activeSem['sem_id'];
 
-        $result = $actobj->createActivity($name, $status, $date, $start, $end, $venue, $classification, $barangay, $info, $semid);
+        $result = $actobj->createActivity($name, $date, $start, $end, $venue, $classification, $barangay, $info, $semid);
         echo $result ? "Activity created successfully!" : "Failed to create activity.";
         header("location: /esko/admin/admin_activities_attendance.php");
     } catch (PDOException $e) {
@@ -46,11 +45,6 @@ include "../assets/layout.php";
         <label for="activityname">Activity Name</label>
         <input type="text" name="activityname" id="activityname">
         <label for="last_name">Last Name</label>
-        <select name="activity_status">
-            <option value="Upcoming">Upcoming</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
-        </select>
 
         <label for="activitydate">Activity Date</label>
         <input type="date" name="activitydate" id="activitydate">
