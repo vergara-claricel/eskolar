@@ -14,8 +14,10 @@ if (isset($_POST['create_activity'])) {
 
     $name = $_POST['activityname'];
     $date = $_POST['activitydate'];
-    $start = $_POST['start_time'];
-    $end = $_POST['end_time'];
+    $timeinStart = $_POST['timein_start'];
+    $timeinEnd = $_POST['timein_end'];
+    $timeoutStart = $_POST['timeout_start'];
+    $timeoutEnd = $_POST['timeout_end'];
     $venue = $_POST['venue'];
     $classification = $_POST['classification'];
     $barangay = $_POST['barangay'] ?? null;
@@ -27,7 +29,7 @@ if (isset($_POST['create_activity'])) {
     try {
         $semid = $activeSem['sem_id'];
 
-        $result = $actobj->createActivity($name, $date, $start, $end, $venue, $classification, $barangay, $info, $semid);
+        $result = $actobj->createActivity($name, $date, $timeinStart, $timeinEnd, $timeoutStart, $timeoutEnd, $venue, $classification, $barangay, $info, $semid);
         echo $result ? "Activity created successfully!" : "Failed to create activity.";
         header("location: /esko/admin/admin_activities_attendance.php");
     } catch (PDOException $e) {
@@ -51,13 +53,26 @@ include "../assets/layout.php";
 
         <div class="time-row full">
             <div>
-                <label for="start_time">Start Time</label>
-                <input type="time" name="start_time" id="start_time">
+                <label for="timein_start">TIMEIN START</label>
+                <input type="time" name="timein_start" id="timein_start">
             </div>
 
             <div>
-                <label for="end_time">End Time</label>
-                <input type="time" name="end_time" id="end_time">
+                <label for="timein_end">TIMEIN END</label>
+                <input type="time" name="timein_end" id="timein_end">
+            </div>
+        </div>
+
+
+        <div class="time-row full">
+            <div>
+                <label for="timeout_start">TIMEOUT START</label>
+                <input type="time" name="timeout_start" id="timeout_start">
+            </div>
+
+            <div>
+                <label for="timeout_end">TIMEOUT END</label>
+                <input type="time" name="timeout_end" id="timeout_end">
             </div>
         </div>
 
@@ -66,7 +81,7 @@ include "../assets/layout.php";
 
         <label for="classification">Classification</label>
         <select name="classification">
-    
+
             <option name="clas" value="Municipal">Municipal</option>
             <option value="Barangay">Barangay</option>
         </select>
@@ -100,21 +115,21 @@ include "../assets/layout.php";
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const classification = document.querySelector('[name="classification"]');
-    const barangayField = document.getElementById("barangayField");
+    document.addEventListener("DOMContentLoaded", function() {
+        const classification = document.querySelector('[name="classification"]');
+        const barangayField = document.getElementById("barangayField");
 
-    function toggleBarangay() {
-        if (classification.value === "Barangay") {
-            barangayField.classList.remove("hidden");
-        } else {
-            barangayField.classList.add("hidden");
+        function toggleBarangay() {
+            if (classification.value === "Barangay") {
+                barangayField.classList.remove("hidden");
+            } else {
+                barangayField.classList.add("hidden");
+            }
         }
-    }
 
-    classification.addEventListener("change", toggleBarangay);
-    toggleBarangay(); // run on load
-});
+        classification.addEventListener("change", toggleBarangay);
+        toggleBarangay(); // run on load
+    });
 </script>
 
 

@@ -4,8 +4,6 @@ $title = "View Scholar";
 // include "../classes/activities.php";
 // include "../classes/scorecard.php";
 require_once "../test.php";
-include "../assets/layout.php";
-
 //   include "../assets/layout.php";
 
 // require_once "../classes/supabase.php";
@@ -19,17 +17,19 @@ include "../assets/layout.php";
 // $schoobj = new Scholar($api);
 // $scObj = new Scorecard($api);
 $actobj = new Activities($api);
+$offObj = new Officer($api);
+
 
 $adminId = $_SESSION['userid'];
+$adminName = $offObj->getAdminName($adminId);
 $scholarUserId = $_GET['scholarid'];
+
 
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 
 $scholar_info = $schoobj->getScholarInfo($scholarUserId);
 $scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
-
-// var_dump($scholar_ar);
 
 $scholarBrgy = $scholar_info['barangay'];
 $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
@@ -43,7 +43,7 @@ if (isset($_POST['updateAttendanceRecord'])) {
 
         $ar_id = $_POST['ar_id'];
         $activity_id = $_POST['activityid'];
-        $user_id = $_POST['user_id'];
+        $user_id = $scholarUserId;
         $date = date('Y-m-d');
         $timein = !empty($_POST['timein']) && $_POST['timein'] !== '00:00' 
         ? $_POST['timein'] 
@@ -77,6 +77,9 @@ if (isset($_POST['updateAttendanceRecord'])) {
             echo "Error: " . $e->getMessage();
         }
     }
+
+include "../assets/layout.php";
+
 ?>
 
 <style>
@@ -318,33 +321,33 @@ if (isset($_POST['updateAttendanceRecord'])) {
 
     <tbody>
         <?php foreach ($scholar_ar as $s):  ?>
-            <?php
+            <!-- <?php
                 $officerName =
-            isset($s['scanner']['first_name'])
-            ? $s['scanner']['first_name'] . ' ' . $s['scanner']['last_name']
+            isset($s['first_name'])
+            ? $s['first_name'] . ' ' . $s['last_name']
             : '-';
-                ?>
+                ?> -->
             <tr>
-                <td><?= $s['activities']['activityname'] ?></td>
+                <td><?= $s['activityname'] ?></td>
                 <!-- date directly from attendance record -->
-                <td><?= $s['date'] ?></td> 
-                <td><?= $s['activities']['classification'] ?></td>
+                <td><?= $s['activitydate'] ?></td> 
+                <td><?= $s['classification'] ?></td>
                 <td><?= $s['timein'] .' / ' . $s['timeout'] ?></td>
                 <td><?= $s['attendance_status'] ?></td>
-                <td><?= $officerName ?></td>
+                <td><?= $s['officer_fullname'] ?: '-' ?></td>
                 <td>
                     <!-- <a href="/esko/admin/admin_activities_view.php?Id=<?= $s['ar_id'] ?>">Edit</a> -->
                      <a href="javascript:void(0)"
                             class="edit-btn"
                             data-ar_id="<?= $s['ar_id'] ?>"
-                            data-user_id="<?= $s['user_id'] ?? ''?>"
-                            data-activityid="<?= $s['activityid'] ?? ''?>"
-                            data-activityname="<?= $s['activities']['activityname'] ?? ''?>"
-                            data-scanned_date="<?= $s['date'] ?? ''?>"
+                            data-user_id="<?= $s['user_id'] ?: $_GET['scholarid']?>"
+                            data-activityid="<?= $s['activity_id'] ?? ''?>"
+                            data-activityname="<?= $s['activityname'] ?? ''?>"
+                            data-scanned_date="<?= $s['activitydate'] ?? ''?>"
                             data-timein="<?= $s['timein'] ?? '' ?>"
                             data-timeout="<?= $s['timeout'] ?? '' ?>"
                             data-scanned_by="<?= $s['scanned_by'] ?? ''?>"
-                            data-officer_fullname="<?= $officerName ?? '' ?>">
+                            data-officer_fullname="<?= trim($s['officer_fullname'] ?? '') !== '' ? $s['officer_fullname'] : $adminName ?>">
                             Edit
                             </a>
                 </td>
@@ -398,6 +401,7 @@ if (isset($_POST['updateAttendanceRecord'])) {
         document.getElementById('scanned_date').value = this.dataset.scanned_date;
         document.getElementById('timein').value = this.dataset.timein.substring(0,5) || '';
         document.getElementById('timeout').value = this.dataset.timeout.substring(0,5) || '';
+        document.getElementById('scanned_by').value = this.dataset.scanned_by;
         document.getElementById('officer_fullname').value = this.dataset.officer_fullname;
     });
 });

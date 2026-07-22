@@ -52,10 +52,10 @@ class Supabase
 
         curl_close($ch);
 
-        echo "HTTP CODE: " . $httpCode;
-        echo "<pre>";
-        echo $response;
-        echo "</pre>";
+        // echo "HTTP CODE: " . $httpCode;
+        // echo "<pre>";
+        // echo $response;
+        // echo "</pre>";
 
 
         return json_decode($response, true);

@@ -16,27 +16,28 @@ $actDetails = $actobj->getActivityDetails($actId);
 $ar = $actobj->getActivityAttendanceReport(
     $actId,
     $actDetails['classification'],
-    $actDetails['barangay'], $keyword
+    $actDetails['barangay'],
+    $keyword
 );
 
 
 if (isset($_POST['updateAttendanceRecord'])) {
 
-        $ar_id = $_POST['ar_id'];
-        $activity_id = $actId;
-        $user_id = $_POST['user_id'];
-        $date = date('Y-m-d');
-        $timein = !empty($_POST['timein']) && $_POST['timein'] !== '00:00' 
-        ? $_POST['timein'] 
+    $ar_id = $_POST['ar_id'];
+    $activity_id = $actId;
+    $user_id = $_POST['user_id'];
+    $date = date('Y-m-d');
+    $timein = !empty($_POST['timein']) && $_POST['timein'] !== '00:00'
+        ? $_POST['timein']
         : null;
 
-        $timeout = !empty($_POST['timeout']) && $_POST['timeout'] !== '00:00' 
-            ? $_POST['timeout'] 
-            : null;
-        $scanned_by = $adminId;
+    $timeout = !empty($_POST['timeout']) && $_POST['timeout'] !== '00:00'
+        ? $_POST['timeout']
+        : null;
+    $scanned_by = $adminId;
 
-        try {
-            $result = $actobj->upsertAttendance(
+    try {
+        $result = $actobj->upsertAttendance(
             $ar_id,
             $activity_id,
             $user_id,
@@ -45,17 +46,17 @@ if (isset($_POST['updateAttendanceRecord'])) {
             $timeout,
             $scanned_by
         );
-            if ($result) {   
-                // echo "success";
-                header("Location: /esko/admin/admin_activities_view.php?actId=$actId");
-                exit;
-            } else {
-                echo "Update failed.";
-            }
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+        if ($result) {
+            // echo "success";
+            header("Location: /esko/admin/admin_activities_view.php?actId=$actId");
+            exit;
+        } else {
+            echo "Update failed.";
         }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
+}
 
 
 if (isset($_POST['updateActivityDetails'])) {
@@ -64,8 +65,10 @@ if (isset($_POST['updateActivityDetails'])) {
     $classification = $_POST['classification'];
     $barangay = $_POST['barangay'] ?? null;
     $date = $_POST['date'];
-    $start_time = $_POST['start_time'];
-    $end_time = $_POST['end_time'];
+    $timeinStart = $_POST['timein_start'];
+    $timeinEnd = $_POST['timein_end'];
+    $timeoutStart = $_POST['timeout_start'];
+    $timeoutEnd = $_POST['timeout_end'];
     $venue = $_POST['venue'];
     $info = $_POST['info'];
 
@@ -76,8 +79,10 @@ if (isset($_POST['updateActivityDetails'])) {
             $classification,
             $barangay,
             $date,
-            $start_time,
-              $end_time,
+            $timeinStart,
+            $timeinEnd,
+            $timeoutStart,
+            $timeoutEnd,
             $venue,
             $info
         );
@@ -288,7 +293,7 @@ include "../assets/layout.php";
                 </div>
 
                 <span class="activity-status">
-                    <?= htmlspecialchars($actDetails['status']) ?>
+                    <?= htmlspecialchars($actDetails['computed_status']) ?>
                 </span>
             </div>
 
@@ -300,8 +305,10 @@ include "../assets/layout.php";
                 data-barangay="<?= $actDetails['barangay'] ?? '' ?>"
                 data-venue="<?= htmlspecialchars($actDetails['venue'] ?? '', ENT_QUOTES) ?>"
                 data-date="<?= $actDetails['activitydate'] ?? '' ?>"
-                data-start_time="<?= $actDetails['start_time'] ?? '' ?>"
-                data-end_time="<?= $actDetails['end_time'] ?? '' ?>"
+                data-timein-start="<?= $actDetails['timein_start'] ?? '' ?>"
+                data-timein-end="<?= $actDetails['timein_end'] ?? '' ?>"
+                data-timeout-start="<?= $actDetails['timeout_start'] ?? '' ?>"
+                data-timeout-end="<?= $actDetails['timeout_end'] ?? '' ?>"
                 data-info="<?= htmlspecialchars($actDetails['info'] ?? '', ENT_QUOTES) ?>"
                 onclick="openDrawerFromElement(this)">
                 Edit
@@ -312,12 +319,18 @@ include "../assets/layout.php";
         <!-- DETAILS GRID -->
         <div class="activity-grid">
 
-            <div class="label">Date / Time </div>
-            <div class="value"><?= htmlspecialchars($actDetails['activitydate']) . ' / ' . htmlspecialchars($actDetails['start_time']) . ' - ' . htmlspecialchars($actDetails['end_time'])?></div>
+            <div class="label">Date </div>
+            <div class="value"><?= htmlspecialchars($actDetails['activitydate']) ?></div>
 
 
             <div class="label">Venue</div>
             <div class="value"><?= htmlspecialchars($actDetails['venue']) ?></div>
+
+            <div class="label">TIMEIN CUTOFF</div>
+            <div class="value"><?= htmlspecialchars($actDetails['timein_start']) . " - " . htmlspecialchars($actDetails['timein_end'])  ?></div>
+
+            <div class="label">TIMEOUT CUTOFF</div>
+            <div class="value"><?= htmlspecialchars($actDetails['timeout_start']) . " - " . htmlspecialchars($actDetails['timeout_end'])  ?></div>
 
             <div class="label">Info</div>
 
@@ -332,8 +345,8 @@ include "../assets/layout.php";
     <h3>Attendance Records</h3>
 
     <form method="GET" id="searchForm">
-    <input type="text" name="search" id="searchAttendance" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
-    <button type="submit">search</button>
+        <input type="text" name="search" id="searchAttendance" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
+        <button type="submit">search</button>
     </form>
     <div class="table-container">
         <table class="table">
@@ -361,16 +374,16 @@ include "../assets/layout.php";
                         <td>
                             <!-- <a href="/esko/admin/admin_activities_view.php?Id=<?= $s['ar_id'] ?>">Edit</a> -->
                             <a href="javascript:void(0)"
-                            class="edit-btn"
-                            data-ar_id="<?= $s['ar_id'] ?>"
-                            data-user_id="<?= $s['user_id'] ?? '' ?>"
-                            data-iskolarno="<?= $s['username'] ?? ''?>"
-                            data-fullname="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
-                            data-timein="<?= $s['timein'] ?? '' ?>"
-                            data-timeout="<?= $s['timeout'] ?? '' ?>"
-                            data-scanned_by="<?= $s['scanned_by']?>"
-                            data-officer_fullname="<?= $s['officer_fullname'] ?? '' ?>">
-                            Edit
+                                class="edit-btn"
+                                data-ar_id="<?= $s['ar_id'] ?>"
+                                data-user_id="<?= $s['user_id'] ?? '' ?>"
+                                data-iskolarno="<?= $s['username'] ?? '' ?>"
+                                data-fullname="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
+                                data-timein="<?= $s['timein'] ?? '' ?>"
+                                data-timeout="<?= $s['timeout'] ?? '' ?>"
+                                data-scanned_by="<?= $s['scanned_by'] ?>"
+                                data-officer_fullname="<?= $s['officer_fullname'] ?? '' ?>">
+                                Edit
                             </a>
                         </td>
                     </tr>
@@ -424,7 +437,7 @@ include "../assets/layout.php";
 
             <form method="POST">
 
-                <input type="hidden" id="page_activity_id" value="<?= $actId?>">
+                <input type="hidden" id="page_activity_id" value="<?= $actId ?>">
 
                 <div class="drawer-grid">
 
@@ -466,15 +479,25 @@ include "../assets/layout.php";
                         <label>Date</label>
                         <input type="date" name="date" id="date">
                     </div>
-                
+
                     <div class="field">
-                        <label>Start Time</label>
-                        <input type="time" name="start_time" id="start_time">
+                        <label>Timein Start</label>
+                        <input type="time" name="timein_start" id="timein_start">
                     </div>
 
                     <div class="field">
-                        <label>End Time</label>
-                        <input type="time" name="end_time" id="end_time">
+                        <label>Timein End</label>
+                        <input type="time" name="timein_end" id="timein_end">
+                    </div>
+
+                    <div class="field">
+                        <label>Timeout Start</label>
+                        <input type="time" name="timeout_start" id="timeout_start">
+                    </div>
+
+                    <div class="field">
+                        <label>Timeout End</label>
+                        <input type="time" name="timeout_end" id="timeout_end">
                     </div>
 
                     <div class="field">
@@ -506,10 +529,10 @@ include "../assets/layout.php";
             document.getElementById('fullname').value = e.target.dataset.fullname;
 
             document.getElementById('timein').value =
-                e.target.dataset.timein ? e.target.dataset.timein.substring(0,5) : '';
+                e.target.dataset.timein ? e.target.dataset.timein.substring(0, 5) : '';
 
             document.getElementById('timeout').value =
-                e.target.dataset.timeout ? e.target.dataset.timeout.substring(0,5) : '';
+                e.target.dataset.timeout ? e.target.dataset.timeout.substring(0, 5) : '';
 
             document.getElementById('officer_fullname').value =
                 e.target.dataset.officer_fullname;
@@ -517,7 +540,7 @@ include "../assets/layout.php";
             document.getElementById('scanned_by').value =
                 e.target.dataset.scanned_by;
         });
-    
+
         function closeDrawer() {
             document.getElementById('editDrawer').classList.remove('open');
         }
@@ -531,8 +554,10 @@ include "../assets/layout.php";
             document.getElementById('barangay').value = el.dataset.barangay;
             document.getElementById('venue').value = el.dataset.venue;
             document.getElementById('date').value = el.dataset.date;
-            document.getElementById('start_time').value = el.dataset.start_time;
-            document.getElementById('end_time').value = el.dataset.end_time;
+            document.getElementById('timein_start').value = el.dataset.timeinStart;
+            document.getElementById('timein_end').value = el.dataset.timeinEnd;
+            document.getElementById('timeout_start').value = el.dataset.timeoutStart;
+            document.getElementById('timeout_end').value = el.dataset.timeoutEnd;
             document.getElementById('info').value = el.dataset.info;
 
             toggleBarangayField();
@@ -567,7 +592,7 @@ include "../assets/layout.php";
         const tableBody = document.getElementById('attendanceRecordsTable');
         const originalHTML = tableBody.innerHTML;
 
-        document.getElementById('searchAttendance').addEventListener('input', function () {
+        document.getElementById('searchAttendance').addEventListener('input', function() {
             clearTimeout(timer);
 
             const keyword = this.value.trim();
@@ -587,8 +612,8 @@ include "../assets/layout.php";
             }, 300);
         });
 
-    
-    // prevent reload
+
+        // prevent reload
         const searchInput = document.getElementById('searchAttendance');
         const form = document.getElementById('searchForm');
 

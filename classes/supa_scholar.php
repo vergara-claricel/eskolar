@@ -138,7 +138,7 @@ class Scholar
         )[0] ?? null;
     }
 
-    
+
     function getScholarInfos($user_id)
     {
         return $this->api->get(
@@ -150,17 +150,26 @@ class Scholar
 
     function getScholarRecord($user_id, $semId)
     {
-        return $this->api->get(
-            "attendance_record?select=*,"
-                . "activities!inner(*),"
-                . "scholar:users!fk_attendance_user(first_name,last_name),"
-                . "scanner:users!fk_scanned_by_user(first_name,last_name)"
-                . "&user_id=eq.$user_id"
-                . "&activities.semester=eq.$semId"
+        // return $this->api->get(
+        //     "attendance_record?select=*,"
+        //         . "activities!inner(*),"
+        //         . "scholar:users!fk_attendance_user(first_name,last_name),"
+        //         . "scanner:users!fk_scanned_by_user(first_name,last_name)"
+        //         . "&user_id=eq.$user_id"
+        //         . "&activities.semester=eq.$semId"
+        // );
+
+        return $this->api->post(
+        "rpc/get_activities_attendance_scholar",
+        [
+            "p_user_id" => $user_id,
+            "p_semester" => $semId
+        ]
         );
     }
 
-    function getScholarRecords($user_id, $semId){
+    function getScholarRecords($user_id, $semId)
+    {
         return $this->api->get(
             "attendance_view_logs?select=*"
                 . "&user_id=eq.$user_id"
@@ -252,6 +261,4 @@ class Scholar
 
         return $this->api->get($query);
     }
-
 }
-

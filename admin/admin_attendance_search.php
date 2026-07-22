@@ -19,8 +19,6 @@ $ar = $actobj->getActivityAttendanceReport(
     $actDetails['barangay'], $keyword
 );
 
-var_dump($ar);
-
 foreach ($ar as $s) {
     echo "
         <tr>

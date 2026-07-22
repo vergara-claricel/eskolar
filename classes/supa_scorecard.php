@@ -17,7 +17,8 @@ class Scorecard
     function getAttendedEventsPerScholar($scholarUserId, $semId)
     {
         $res = $this->api->get(
-            "attendance_record?select=timein,timeout,activities(semester)&user_id=eq.$scholarUserId&activities.semester=eq.$semId"
+            // "attendance_record?select=timein,timeout,activities(semester)&user_id=eq.$scholarUserId&activities.semester=eq.$semId"
+            "attendance_view_logs?select=timein,timeout,semester&user_id=eq.$scholarUserId&semester=eq.$semId"
         );
 
         if (!$res) return 0;
@@ -69,7 +70,7 @@ class Scorecard
         }
 
         $percent = ($totalAttended / $totalEvents) * 100;
-        return min($percent, 100);
+        return round(min($percent, 100), 2);
     }
 
     // 🔥 6. Remark logic (fixed ordering)

@@ -13,13 +13,15 @@ class Activities
         $this->api = $api;
     }
 
-    function createActivity($name, $date, $start, $end, $venue, $classification, $barangay, $info, $semid)
+    function createActivity($name, $date, $timeinStart, $timeinEnd, $timeoutStart, $timeoutEnd, $venue, $classification, $barangay, $info, $semid)
     {
     $data = [
                 'activityname' => $name,
                 'activitydate' => $date,
-                'start_time' => $start,
-                'end_time' => $end,
+                'timein_start' => $timeinStart,
+                'timein_end' => $timeinEnd,
+                'timeout_start' => $timeoutStart,
+                'timeout_end' => $timeoutEnd,
                 'venue' => $venue,
                 'classification' => $classification,
                 'barangay' => $barangay,
@@ -69,7 +71,7 @@ class Activities
     {
 
         $res = $this->api->get(
-            "activities",
+            "activities_with_status",
             "?activity_id=eq.$actId"
         );
 
@@ -80,8 +82,10 @@ class Activities
             $classification,
             $barangay,
             $date,
-            $start_time,
-            $end_time,
+            $timeinStart,
+            $timeinEnd,
+            $timeoutStart,
+            $timeoutEnd,
             $venue,
             $info)
     {
@@ -93,8 +97,10 @@ class Activities
             'classification' =>$classification,
             'barangay' =>$barangay,
             'activitydate' =>$date,
-            'start_time' =>$start_time,
-            'end_time' =>$end_time,
+            'timein_start' => $timeinStart,
+                'timein_end' => $timeinEnd,
+                'timeout_start' => $timeoutStart,
+                'timeout_end' => $timeoutEnd,
             'venue' =>$venue,
             'info' =>$info
         ];
