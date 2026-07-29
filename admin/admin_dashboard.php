@@ -175,10 +175,6 @@ include "../assets/layout.php";
             <div class="metric-label">Total Activities</div>
             <div class="metric-value"><?= count($totalevents) ?></div>
         </div>
-        <div class="metric-card">
-            <div class="metric-label">Overall Attendance</div>
-            <div class="metric-value">84%</div>
-        </div>
     </div>
 
     <div class="activities-card">

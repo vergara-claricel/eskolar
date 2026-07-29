@@ -30,7 +30,7 @@ if (isset($_POST['login'])) {
     $apiKey = "sb_publishable_JVZTWW0Ld8XJ_HQz7LGXkA_iLUkpN7c";
     $url = "https://yaksrweqnidfpvceoqzo.supabase.co/rest/v1/users"
          . "?username=eq." . urlencode($username)
-         . "&select=*";
+         . "&select=id,role,password";
 
     $ch = curl_init($url);
 

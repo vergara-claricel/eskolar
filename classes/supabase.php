@@ -13,6 +13,7 @@ class Supabase
 
     function get($table, $query = "")
     {
+        $start = microtime(true);
         $ch = curl_init("{$this->url}/rest/v1/{$table}{$query}");
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -24,6 +25,7 @@ class Supabase
 
         $response = curl_exec($ch);
         curl_close($ch);
+         echo $table . " took " . round((microtime(true) - $start) * 1000) . " ms<br>";
 
         return json_decode($response, true);
     }
