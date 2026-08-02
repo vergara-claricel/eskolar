@@ -14,12 +14,12 @@ $scholar = $schoobj->getScholarInfo($scholarId);
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_scholar'])) {
 
     $user_id = $_POST['user_id'];
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
+    $first_name = strtoupper(trim($_POST['first_name']));
+    $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phonenumber = $_POST['phonenumber'];
     $email = $_POST['email'];
-    $iskolarno = $_POST['iskolarno'];
+    $iskolarno = strtoupper(trim($_POST['iskolarno']));
     $password = $_POST['password'] ?? null;
 
     try {

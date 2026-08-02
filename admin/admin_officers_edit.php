@@ -16,12 +16,12 @@ $officer = $offobj->getOfficerInfo($officerId);
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
 
     $officer_id = $officerId;
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
+    $first_name = strtoupper(trim($_POST['first_name']));
+    $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phonenumber = $_POST['phonenumber'];
     $email = $_POST['email'];
-    $officerno = $_POST['officerno'];
+    $officerno = strtoupper(trim($_POST['officerno']));
     $password = $_POST['password'] ?? null;
 
     try {

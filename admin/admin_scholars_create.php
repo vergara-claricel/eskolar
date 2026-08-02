@@ -7,12 +7,12 @@ $semId = $activeSem['sem_id'];
 
 if (isset($_POST['create_scholar'])) {
 
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
+    $first_name = strtoupper(trim($_POST['first_name']));
+    $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phone = $_POST['phonenumber'];
     $email = $_POST['email'];
-    $iskolarno = $_POST['iskolarno'];
+    $iskolarno = strtoupper(trim($_POST['iskolarno']));
     $password = $_POST['password'];
 
    try { 
@@ -174,7 +174,7 @@ h2 {
          <h4>Account Details</h4>
          <br>
         <label for="iskolarno">Iskolar No. </label>
-        <input type="text" name="iskolarno" id="iskolarno">
+        <input type="text" name="iskolarno" id="iskolarno" oninput="c">
 
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
@@ -184,6 +184,7 @@ h2 {
 
     </form>
 </div>
+
 
 <?php
 include "../assets/layout_end.php";
