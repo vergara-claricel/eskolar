@@ -25,7 +25,7 @@ class Supabase
 
         $response = curl_exec($ch);
         curl_close($ch);
-         echo $table . " took " . round((microtime(true) - $start) * 1000) . " ms<br>";
+        //  echo $table . " took " . round((microtime(true) - $start) * 1000) . " ms<br>";
 
         return json_decode($response, true);
     }

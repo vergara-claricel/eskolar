@@ -83,7 +83,7 @@ include "../assets/layout.php";
         <!-- SEM LIST -->
         <div id="semlist">
             <table class="table">
-                <thead>
+                <thead style="background: rgb(64, 188, 64);">
                     <tr>
                         <th>Semester Name</th>
                         <th>Duration</th>
@@ -104,7 +104,17 @@ include "../assets/layout.php";
                         <td><?= $row['semester_status'] ?></td>
                         <td>
                             <!-- <button>Edit</button> -->
-                            <button>Archive</button>
+                            <div class="action-group">
+                                <button
+                                 class="action-icon"
+                                title="Edit Semester">
+                             <i class="fa-solid fa-pen-to-square"></i></a>
+                            </button>
+                                <button class="action-icon"
+                                title="Archive Semester Records">
+                             <i class="fa-solid fa-box-archive"></i></a>
+                            </button>
+                            </div>
                         </td>
                     </tr>
                     <?php endforeach; ?>

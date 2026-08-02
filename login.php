@@ -120,7 +120,7 @@ if (isset($_POST['login'])) {
 
         h2 {
             margin-bottom: 20px;
-            color: #1e4da8;
+            color: rgb(64, 188, 64);;
             font-weight: 700;
         }
 
@@ -145,14 +145,14 @@ if (isset($_POST['login'])) {
         }
 
         input:focus {
-            border-color: #1e4da8;
+            border-color: rgb(64, 188, 64);;
         }
 
         .btn {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
-            background: #1e4da8;
+            background: rgb(64, 188, 64);;
             border: none;
             color: white;
             border-radius: 6px;
@@ -162,7 +162,7 @@ if (isset($_POST['login'])) {
         }
 
         .btn:hover {
-            background: #163d85;
+            background: rgb(64, 188, 64);;
         }
 
         .error {
@@ -179,7 +179,7 @@ if (isset($_POST['login'])) {
             position: absolute;
             width: 500px;
             height: 500px;
-            background: #1e4da8;
+            background:rgb(64, 188, 64);;
             border-radius: 50%;
             top: -150px;
             right: -150px;

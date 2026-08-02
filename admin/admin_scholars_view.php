@@ -307,7 +307,7 @@ include "../assets/layout.php";
 </a>
     <div class="table-container">
         <table class="table">
-    <thead>
+    <thead style="background: rgb(64, 188, 64);">
         <tr>
             <th>Activity Name</th>
             <th>Date</th>

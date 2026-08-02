@@ -127,7 +127,7 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
 
 <div class="table-container">
     <table class="table">
-        <thead>
+        <thead style="background: rgb(64, 188, 64);">
             <tr>
                 <th>Date</th>
                 <th>Activity Name </th>
@@ -151,9 +151,13 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="/esko/admin/admin_activities_view.php?actId=<?= $s['activity_id'] ?>">
-                                View
-                            </a>
+                            <a href="/esko/admin/admin_activities_view.php?actId=<?= $s['activity_id'] ?>"
+                            class="action-icon"
+                             title="View Activity Information">
+                             <i class="fa-solid fa-eye"></i></a>
+                            <a href="" class="action-icon"
+                             title="Delete Activity">
+                             <i class="fa-solid fa-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

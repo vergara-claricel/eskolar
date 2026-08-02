@@ -350,7 +350,7 @@ include "../assets/layout.php";
     </form>
     <div class="table-container">
         <table class="table">
-            <thead>
+            <thead style="background: rgb(64, 188, 64);">
                 <tr>
                     <th>Iskolar No.</th>
                     <th>Full Name</th>

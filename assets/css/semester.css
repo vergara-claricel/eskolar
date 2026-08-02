@@ -4,26 +4,24 @@
     padding: 20px;
 }
 
-
-/* LEFT SIDE */
 .sem-left {
     flex: 2;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    
 }
 
-/* RIGHT SIDE */
 .sem-right {
     flex: 1;
 }
 
-/* SET SEM SECTION */
+/* ---------- SET ACTIVE SEM ---------- */
 
-#setsem{
-    background: white;
-    padding: 15px;
+#setsem,
+#semlist,
+#semform {
+    background: #fff;
+    padding: 20px;
     border-radius: 8px;
 }
 
@@ -33,97 +31,84 @@
     align-items: center;
 }
 
-/* dropdown */
 #setsem select {
     flex: 1;
     padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 13px;
-    outline: none;
 }
 
-/* button */
 #setsem button {
     padding: 8px 14px;
-    background: #1e88e5;
-    color: white;
     border: none;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
+    background: #1e88e5;
+    color: #fff;
     cursor: pointer;
-    white-space: nowrap;
 }
 
-#setsem button:hover {
-    background: #156dc2;
-}
+/* ---------- CREATE FORM ---------- */
 
-
-
-/* TABLE AREA */
-#semlist {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-/* FORM BOX */
-#semform {
+.sem-form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
+    gap: 15px;
 }
 
-/* labels */
-#semform label {
-    font-size: 12px;
+.semform-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.semform-item label {
+    font-size: 13px;
     font-weight: 600;
-    color: #333;
 }
 
-/* inputs */
-#semform input {
-    padding: 8px 10px;
+.sem-form input[type="text"],
+.sem-form input[type="date"] {
+    width: 100%;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 13px;
-    outline: none;
+    box-sizing: border-box;
 }
 
-#semform input:focus {
+.sem-form input:focus {
+    outline: none;
     border-color: #1e88e5;
 }
 
-/* radio group */
 #rb-sem {
     display: flex;
-    gap: 15px;
-    font-size: 13px;
+    gap: 20px;
 }
 
-/* button */
-#semform button {
+#rb-sem label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+}
+
+.sem-form button {
     padding: 10px;
-    background: #1e88e5;
-    color: white;
     border: none;
     border-radius: 6px;
-    font-size: 13px;
+    background: #1e88e5;
+    color: white;
     font-weight: 600;
     cursor: pointer;
 }
 
-#semform button:hover {
+.sem-form button:hover {
     background: #156dc2;
 }
 
-/* MOBILE RESPONSIVE */
-@media (max-width: 768px) {
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width:768px) {
     .sem-page {
         flex-direction: column;
     }

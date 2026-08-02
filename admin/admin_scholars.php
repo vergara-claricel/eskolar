@@ -97,13 +97,89 @@ $activeSem = $semobj->getActiveSemester();
         text-decoration: none;
         cursor: pointer;
     }
+
+    .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+#searchForm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#search {
+    width: 250px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#searchForm button {
+    padding: 8px 16px;
+    border: none;
+    background: #2d8cff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchForm button:hover {
+    background: #1f73d8;
+}
+
+#statusFilter,
+#barangayFilter {
+    min-width: 170px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-group form {
+    margin: 0;
+}
+
+.action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    background: none;
+    border: none;
+    color: #555;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.action-icon:hover {
+    color: #1e88e5;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+}
 </style>
 <div class="scholar-header">
     <h2>Scholars</h2>
     <a href="admin_scholars_create.php" id="nav_addscholar">Add Scholar</a>
 </div>
 
-<form method="GET" id="searchForm">
+<div class="filter-bar">
+    <form method="GET" id="searchForm">
     <input type="text" name="search" id="search" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
     <button type="submit">search</button>
 </form>
@@ -131,11 +207,12 @@ $activeSem = $semobj->getActiveSemester();
     <option value="Saysain">Saysain</option>
     <option value="Tabing-Ilog">Tabing-Ilog</option>
 </select>
+</div>
 
 
 <div class="table-container">
     <table class="table">
-        <thead>
+        <thead style="background: rgb(64, 188, 64);">
             <tr>
                 <th>Iskolar No. </th>
                 <th>Full Name</th>
@@ -152,21 +229,30 @@ $activeSem = $semobj->getActiveSemester();
                     <td><?= $s['last_name'] . ', ' . $s['first_name'] ?></td>
                     <td><?= $s['barangay'] ?></td>
                     <td>
-                        <a href="/esko/admin/admin_scholars_view.php?semid=<?= urlencode($activeSem['sem_id']) ?>&scholarid=<?= urlencode($s['user_id']) ?>">View</a>
-                        <a href="/esko/admin/admin_scholars_edit.php?scholarid=<?= urlencode($s['user_id']) ?>">Edit</a>
+                        <div class="action-group">
+                            <a href="/esko/admin/admin_scholars_view.php?semid=<?= urlencode($activeSem['sem_id']) ?>&scholarid=<?= urlencode($s['user_id']) ?>"
+                        class="action-icon"
+                        title="View Scholar Records">
+                        <i class="fa-solid fa-eye"></i></a>
+                        <a href="/esko/admin/admin_scholars_edit.php?scholarid=<?= urlencode($s['user_id']) ?>"
+                        class="action-icon" 
+                        title="Edit Scholar Details">
+                        <i class="fa-solid fa-pen-to-square"></i></a>
                         <form method="POST" action="/esko/admin/admin_scholars_deactivate.php" name="deleteForm">
                             <input type="hidden"
                                 name="scholarid"
                                 value="<?= $s['user_id'] ?>">
                             <button type="button"
-                                class="action-btn"
+                                class="action-icon action-btn"
+                                title="<?= $s['is_active'] ? 'Deactivate' : 'Reactivate' ?>"
                                 data-action="<?= $s['is_active'] ? 'deactivate' : 'reactivate' ?>"
                                 data-name="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
                                 data-barangay="<?= $s['barangay'] ?>"
                                 data-iskolarno="<?= $s['username'] ?>">
-                                Delete
+                                <i class="fa-solid <?= $s['is_active'] ? 'fa-trash' : 'fa-rotate-left' ?>"></i>
                             </button>
                         </form>
+                        </div>
                     </td>
                 </tr>
             <?php endforeach; ?>

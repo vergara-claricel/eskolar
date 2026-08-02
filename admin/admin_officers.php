@@ -100,7 +100,7 @@ include "../assets/layout.php";
 </div>
 <div class="table-container">
         <table class="table">
-    <thead>
+    <thead style="background: rgb(64, 188, 64);">
         <tr>
             <th>Id</th>
             <th>Full Name</th>
