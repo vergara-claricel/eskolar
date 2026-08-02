@@ -68,9 +68,9 @@ include "../assets/layout.php";
 }
 
 /* Specific accent borders for the metrics to match your vibe */
-.metric-card:nth-child(1) { border-left: 5px solid #0909ae; }
-.metric-card:nth-child(2) { border-left: 5px solid #0909ae; }
-.metric-card:nth-child(3) { border-left: 5px solid #0909ae }
+.metric-card:nth-child(1) { border-left: 5px solid  rgb(64, 188, 64) }
+.metric-card:nth-child(2) { border-left: 5px solid  rgb(64, 188, 64) }
+.metric-card:nth-child(3) { border-left: 5px solid  rgb(64, 188, 64) }
 
 /* Activities Section */
 .activities-card {
@@ -93,10 +93,10 @@ include "../assets/layout.php";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #FBF0D2;
+    background:  rgb(222, 241, 222);;
     padding: 20px 25px;
     border-radius: 20px;
-    border: 2px solid #F2E2B8;
+    border: 2px solid  rgb(146, 189, 146);;
     margin-bottom: 18px;
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -115,7 +115,7 @@ include "../assets/layout.php";
 .activity-info h3 {
     margin: 0;
     font-size: 16px;
-    color: #333;
+    color: green;
 }
 
 .activity-info p {
@@ -131,7 +131,7 @@ include "../assets/layout.php";
 }
 
 .activity-date {
-    background: #E4E0FF;
+    background:  rgb(142, 203, 142);;
     padding: 12px 18px;
     border-radius: 18px;
     text-align: center;
@@ -153,7 +153,7 @@ include "../assets/layout.php";
 .view-link {
     display: inline-block;
     margin-top: 10px;
-    color: #1a0dab;
+    color:  rgb(64, 188, 64);
     font-weight: 500;
     text-decoration: none;
 }

@@ -43,6 +43,49 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     #nav_addscholar:hover {
         background: #1565c0;
     }
+
+    .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+#searchForm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#searchActs {
+    width: 250px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#searchForm button {
+    padding: 8px 16px;
+    border: none;
+    background: #2d8cff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchForm button:hover {
+    background: #1f73d8;
+}
+
+#statusFilter,
+#barangayFilter {
+    min-width: 170px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
 </style>
 
 <div class="scholar-header">
@@ -50,7 +93,8 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     <a href="/esko/admin/admin_activities_create.php" id="create_activitybtn">Create Activity</a>
 </div>
 
-<form method="GET" id="searchForm">
+<div class="filter-bar">
+    <form method="GET" id="searchForm">
     <input type="text" name="search" id="searchActs" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
     <button type="submit">search</button>
 </form>
@@ -79,6 +123,7 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     <option value="Saysain">Saysain</option>
     <option value="Tabing-Ilog">Tabing-Ilog</option>
 </select>
+</div>
 
 <div class="table-container">
     <table class="table">
