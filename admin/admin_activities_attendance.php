@@ -86,12 +86,61 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     border-radius: 5px;
     cursor: pointer;
 }
+
+.success-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    border-left: 5px solid #43a047;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.close-notif {
+    background: none;
+    border: none;
+    color: #2e7d32;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.close-notif:hover {
+    color: #1b5e20;
+}
 </style>
 
 <div class="scholar-header">
     <h2>Activities & Attendance</h2>
     <a href="/esko/admin/admin_activities_create.php" id="create_activitybtn">Create Activity</a>
 </div>
+
+<?php if (isset($_GET['success']) && $_GET['success'] === 'deleted'): ?>
+<div class="success-box" id="successBox">
+    <div class="success-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Activity deleted successfully.</span>
+    </div>
+
+    <button class="close-notif" onclick="document.getElementById('successBox').remove()">
+        &times;
+    </button>
+</div>
+<?php endif; ?>
 
 <div class="filter-bar">
     <form method="GET" id="searchForm">
@@ -155,7 +204,8 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
                             class="action-icon"
                              title="View Activity Information">
                              <i class="fa-solid fa-eye"></i></a>
-                            <a href="" class="action-icon"
+                            <a href="/esko/admin/admin_delete_activity.php?actId=<?= $s['activity_id'] ?>" class="action-icon"
+                             onclick="return confirm('Are you sure you want to delete this activity?');"
                              title="Delete Activity">
                              <i class="fa-solid fa-trash"></i></a>
                         </td>

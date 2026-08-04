@@ -200,20 +200,6 @@ include "../assets/layout.php";
 
         <label for="barangay">Barangay</label>
         <select name="barangay">
-            <!-- <option value="Atilano Ricardo">Atilano Ricardo</option>
-            <option value="Bagumbayan">Bagumbayan</option>
-            <option value="Banawang">Banawang</option>
-            <option value="Binuangan">Binuangan</option>
-            <option value="Binukawan">Binukawan</option>
-            <option value="Ibis">Ibis</option>
-            <option value="Ibaba">Ibaba</option>
-            <option value="Pag-asa">Pag-asa</option>
-            <option value="Parang">Parang</option>
-            <option value="Paysawan">Paysawan</option>
-            <option value="Quinawan">Quinawan</option>
-            <option value="San Antonio">San Antonio</option>
-            <option value="Saysain">Saysain</option>
-            <option value="Tabing-Ilog">Tabing-Ilog</option> -->
 
             <?php foreach ($barangays as $b): ?>
                 <option value="<?= $b ?>"

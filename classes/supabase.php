@@ -84,4 +84,22 @@ class Supabase
 
         return json_decode($response, true);
     }
+
+        public function delete($table, $query = "")
+        {
+            $ch = curl_init("{$this->url}/rest/v1/{$table}{$query}");
+
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "apikey: {$this->key}",
+                "Authorization: Bearer {$this->key}",
+                "Content-Type: application/json"
+            ]);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return json_decode($response, true);
+        }
 }

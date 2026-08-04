@@ -222,7 +222,13 @@ function upsertAttendance(
         "attendance_record",
         $data
     );
-
+}
+public function deleteActivity($activity_id)
+{
+    return $this->api->delete(
+        "activities",
+        "?activity_id=eq.$activity_id"
+    );
 }
 
 //     function searchAttendanceRecords($keyword, $actId)
