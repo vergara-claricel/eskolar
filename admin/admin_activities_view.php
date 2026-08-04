@@ -20,6 +20,8 @@ $ar = $actobj->getActivityAttendanceReport(
     $keyword
 );
 
+$totalRecords = count($ar);
+
 
 if (isset($_POST['updateAttendanceRecord'])) {
 
@@ -270,6 +272,62 @@ include "../assets/layout.php";
         border: none;
         border-radius: 6px;
     }
+
+.ar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin: 30px 0 18px;
+    gap: 20px;
+}
+
+.ar-title h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #222;
+}
+
+.ar-title p {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+#searchForm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#searchAttendance {
+    width: 260px;
+    padding: 9px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+#searchAttendance:focus {
+    border-color: #1e88e5;
+}
+
+#searchForm button {
+    padding: 9px 16px;
+    border: none;
+    background: #1e88e5;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#searchForm button:hover {
+    background: #1565c0;
+}
 </style>
 
 <div class="activity-view">
@@ -342,12 +400,18 @@ include "../assets/layout.php";
 
 
 
-    <h3>Attendance Records</h3>
+    <div class="ar-header">
+        <div class="ar-title">
+            <h4>Attendance Records</h4>
+            <p>View and manage the activity's attendance records.</p>
+        </div>
 
-    <form method="GET" id="searchForm">
-        <input type="text" name="search" id="searchAttendance" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
-        <button type="submit">search</button>
-    </form>
+        <form method="GET" id="searchForm">
+            <input type="text" name="search" id="searchAttendance" placeholder="Search scholar.." value="<?= $_GET['search'] ?? '' ?>">
+            <button type="submit">search</button>
+        </form>
+    </div>
+
     <div class="table-container">
         <table class="table">
             <thead style="background: rgb(64, 188, 64);">
