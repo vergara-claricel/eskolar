@@ -72,8 +72,35 @@ class Scholar
         return $qrToken;
     }
 
+    function getNextScholarNumber(){
+        $users = $this->api->get(
+            "users?role=eq.scholar&order=username.desc&limit=1"
+        );
+
+        if (empty($users)) {
+            return "INB-0001"; // first scholar
+        }
+
+        $last = $users[0]['username']; // e.g. 2026-0042
+
+        preg_match('/(\d+)$/', $last, $matches);
+        $next = (int)$matches[1] + 1;
+
+        return "INB-" . str_pad($next, 4, "0", STR_PAD_LEFT);
+    }
+
     function addScholar($firstname, $lastname, $brgy, $phonenumber, $email, $iskolarno, $password)
     {
+
+        $existing = $this->api->get("users?username=eq.$iskolarno");
+
+            if (!empty($existing)) {
+                return [
+                    "success" => false,
+                    "message" => "Scholar number already exists."
+                ];
+            }
+
         // 1. create user
         $user = $this->api->post("users", [
             "first_name" => $firstname,
