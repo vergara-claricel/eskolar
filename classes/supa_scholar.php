@@ -93,14 +93,13 @@ class Scholar
     {
 
         $existing = $this->api->get("users?username=eq.$iskolarno");
-
             if (!empty($existing)) {
                 return [
                     "success" => false,
                     "message" => "Scholar number already exists."
                 ];
             }
-
+        
         // 1. create user
         $user = $this->api->post("users", [
             "first_name" => $firstname,
@@ -133,16 +132,37 @@ class Scholar
         return $userId;
     }
 
-    function getAllActiveScholars()
-    {
-        $data = $this->api->get(
-            "scholar_view?select=*&order=last_name.asc"
-        );
+    // function getAllActiveScholars()
+    // {
+    //     $data = $this->api->get(
+    //         "scholar_view?select=*&order=last_name.asc"
+    //     );
 
-        return array_values(array_filter($data, function ($row) {
-            return isset($row['is_active']) && $row['is_active'] === true;
-        }));
-    }
+    //     return array_values(array_filter($data, function ($row) {
+    //         return isset($row['is_active']) && $row['is_active'] === true;
+    //     }));
+    // }
+
+    function getAllActiveScholars($page, $limit)
+{
+    $offset = ($page - 1) * $limit;
+
+    $query = "?select=*&is_active=eq.true"
+           . "&order=last_name.asc"
+           . "&limit=$limit"
+           . "&offset=$offset";
+
+    return $this->api->get("scholar_view", $query);
+}
+
+function getActiveScholarCount()
+{
+    $data = $this->api->get(
+        "scholar_view?select=user_id&is_active=eq.true"
+    );
+
+    return count($data);
+}
 
     function searchScholars($keyword)
     {
@@ -262,7 +282,34 @@ class Scholar
         );
     }
 
-    function filterScholars($search = '', $status = '', $barangay = '')
+    // function filterScholars($search = '', $status = '', $barangay = '')
+    // {
+    //     $query = "scholar_view?select=*";
+
+    //     $filters = [];
+
+    //     if ($search) {
+    //         $q = "*$search*";
+    //         $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
+    //     }
+
+    //     if ($status !== '') {
+    //         $filters[] = "is_active=eq.$status";
+    //     }
+
+    //     if ($barangay) {
+    //         $brgy = urlencode($barangay);
+    //         $filters[] = "barangay=eq.$brgy";
+    //     }
+
+    //     if ($filters) {
+    //         $query .= "&" . implode("&", $filters);
+    //     }
+
+    //     return $this->api->get($query);
+    // }
+
+        function filterScholars($search = '', $status = '', $barangay = '', $limit= null, $offset= null)
     {
         $query = "scholar_view?select=*";
 
@@ -286,6 +333,39 @@ class Scholar
             $query .= "&" . implode("&", $filters);
         }
 
+         if ($limit !== null) {
+        $query .= "&limit=$limit&offset=$offset";
+        }
+
         return $this->api->get($query);
     }
+
+    function countFilteredScholars($search = '', $status = '', $barangay = '')
+{
+    $query = "scholar_view?select=count";
+
+    $filters = [];
+
+    if ($search) {
+        $q = "*$search*";
+        $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
+    }
+
+    if ($status !== '') {
+        $filters[] = "is_active=eq.$status";
+    }
+
+    if ($barangay) {
+        $filters[] = "barangay=eq." . urlencode($barangay);
+    }
+
+    if ($filters) {
+        $query .= "&" . implode("&", $filters);
+    }
+
+    $result = $this->api->get($query);
+
+    return (int)$result[0]['count'];
+    
+}
 }

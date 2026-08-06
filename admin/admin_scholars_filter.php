@@ -12,7 +12,20 @@ $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $barangay = $_GET['barangay'] ?? '';
 
-$scholars = $schoobj->filterScholars($search, $status, $barangay);
+// $scholars = $schoobj->filterScholars($search, $status, $barangay);
+
+$page = $_GET['page'] ?? 1;
+
+$limit = 3;
+$offset = ($page-1) * $limit;
+
+$scholars = $schoobj->filterScholars(
+    $search,
+    $status,
+    $barangay,
+    $limit,
+    $offset
+);
 
 if(empty($scholars)){
     echo "
