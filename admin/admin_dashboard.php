@@ -8,7 +8,7 @@ require_once "../test.php";
 // $api = new Supabase($config);
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
-$totalscholars = $schoobj->getAllActiveScholars();
+$totalscholars = $schoobj->activeScholarsCount();
 $totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
 $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
 include "../assets/layout.php";

@@ -13,12 +13,35 @@ $activeSem = $semobj->getActiveSemester();
 $actId = $_GET['actId'];
 $keyword = $_GET['search'] ?? '';
 $actDetails = $actobj->getActivityDetails($actId);
+
+// pagination limit
+$page = max(1, (int)($_GET['page'] ?? 1));
+$limit =5;
+$search = $_GET['search'] ?? '';
+
 $ar = $actobj->getActivityAttendanceReport(
     $actId,
-    $actDetails['classification'],
+$actDetails['classification'],
     $actDetails['barangay'],
-    $keyword
+    $search,
+    $page,
+    $limit
 );
+
+$totalRows = $actobj->countActivityAttendanceReport(
+    $actId,
+$actDetails['classification'],
+    $actDetails['barangay'],
+    $search
+);
+
+$totalPages = ceil($totalRows / $limit);
+// $ar = $actobj->getActivityAttendanceReport(
+//     $actId,
+//     $actDetails['classification'],
+//     $actDetails['barangay'],
+//     $keyword
+// );
 
 $totalRecords = count($ar);
 
@@ -328,6 +351,28 @@ include "../assets/layout.php";
 #searchForm button:hover {
     background: #1565c0;
 }
+
+
+    .pagination{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.pagination a{
+    padding:8px 14px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    text-decoration:none;
+    color:#333;
+}
+
+.pagination a.active{
+    background:#2d8cff;
+    color:white;
+    border-color:#2d8cff;
+}
 </style>
 
 <div class="activity-view">
@@ -472,6 +517,31 @@ include "../assets/layout.php";
             </tbody>
         </table>
     </div>
+
+    <div class="pagination">
+
+<?php if ($page > 1): ?>
+<a href="?actId=<?= $actId ?>&page=<?= $page-1 ?>&search=<?= urlencode($search) ?>">
+    Previous
+</a>
+<?php endif; ?>
+
+<?php for($i=1;$i<=$totalPages;$i++): ?>
+
+<a href="?actId=<?= $actId ?>&page=<?= $i ?>&search=<?= urlencode($search) ?>"
+   class="<?= $i==$page ? 'active' : '' ?>">
+    <?= $i ?>
+</a>
+
+<?php endfor; ?>
+
+<?php if ($page < $totalPages): ?>
+<a href="?actId=<?= $actId ?>&page=<?= $page+1 ?>&search=<?= urlencode($search) ?>">
+    Next
+</a>
+<?php endif; ?>
+
+</div>
 
     <!-- REUSABLE EDIT DRAWER -->
     <div id="editDrawer" class="edit-drawer">

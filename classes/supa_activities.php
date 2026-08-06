@@ -140,11 +140,54 @@ function getAttendanceRecords($actId)
     return $this->api->get($query);
 }
 
-function getActivityAttendanceReport($actId, $classification, $barangay, $search = null)
+// function getActivityAttendanceReport($actId, $classification, $barangay, $search = null)
+// {
+//     $scholars = $this->getEligibleScholars($classification, $barangay);
+//     $logs = $this->getAttendanceRecords($actId);
+
+//     $logMap = [];
+//     foreach ($logs as $log) {
+//         $logMap[$log['user_id']] = $log;
+//     }
+
+//     $result = [];
+
+//     // MERGE (no reference usage)
+//     foreach ($scholars as $s) {
+//         $log = $logMap[$s['user_id']] ?? null;
+
+//         $s['ar_id'] = $log['ar_id'] ?? null;
+//         $s['timein'] = $log['timein'] ?? null;
+//         $s['timeout'] = $log['timeout'] ?? null;
+//         $s['scanned_by'] = $log['scanned_by'] ?? null;
+//         $s['attendance_status'] = $log['attendance_status'] ?? 'absent';
+//         $s['officer_fullname'] = $log['officer_fullname'] ?? null;
+
+//         $result[] = $s;
+//     }
+
+//     if (!empty($search)) {
+//         $search = strtolower(trim($search));
+
+//         $result = array_filter($result, function ($s) use ($search) {
+//             return
+//                 str_contains(strtolower($s['username'] ?? ''), $search) ||
+//                 str_contains(strtolower($s['first_name'] ?? ''), $search) ||
+//                 str_contains(strtolower($s['last_name'] ?? ''), $search);
+//         });
+
+//         $result = array_values($result); 
+//     }
+
+//     return $result;
+// }
+
+function buildActivityAttendanceReport($actId, $classification, $barangay, $search = '')
 {
     $scholars = $this->getEligibleScholars($classification, $barangay);
     $logs = $this->getAttendanceRecords($actId);
 
+    // Map attendance logs by user_id
     $logMap = [];
     foreach ($logs as $log) {
         $logMap[$log['user_id']] = $log;
@@ -152,8 +195,8 @@ function getActivityAttendanceReport($actId, $classification, $barangay, $search
 
     $result = [];
 
-    // MERGE (no reference usage)
     foreach ($scholars as $s) {
+
         $log = $logMap[$s['user_id']] ?? null;
 
         $s['ar_id'] = $log['ar_id'] ?? null;
@@ -166,20 +209,60 @@ function getActivityAttendanceReport($actId, $classification, $barangay, $search
         $result[] = $s;
     }
 
+    // Search
     if (!empty($search)) {
+
         $search = strtolower(trim($search));
 
-        $result = array_filter($result, function ($s) use ($search) {
+        $result = array_values(array_filter($result, function ($s) use ($search) {
+
             return
                 str_contains(strtolower($s['username'] ?? ''), $search) ||
                 str_contains(strtolower($s['first_name'] ?? ''), $search) ||
                 str_contains(strtolower($s['last_name'] ?? ''), $search);
-        });
 
-        $result = array_values($result); 
+        }));
     }
 
     return $result;
+}
+
+function getActivityAttendanceReport(
+    $actId,
+    $classification,
+    $barangay,
+    $search = '',
+    $page = 1,
+    $limit = 10
+) {
+
+    $result = $this->buildActivityAttendanceReport(
+        $actId,
+        $classification,
+        $barangay,
+        $search
+    );
+
+    $offset = ($page - 1) * $limit;
+
+    return array_slice($result, $offset, $limit);
+}
+
+function countActivityAttendanceReport(
+    $actId,
+    $classification,
+    $barangay,
+    $search = ''
+) {
+
+    return count(
+        $this->buildActivityAttendanceReport(
+            $actId,
+            $classification,
+            $barangay,
+            $search
+        )
+    );
 }
 
 
