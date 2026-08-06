@@ -15,7 +15,7 @@ include "../assets/layout.php";
 ?>
 
 <style>
-        .officer-header {
+    .officer-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -27,12 +27,18 @@ include "../assets/layout.php";
     .officer-header h2 {
         font-size: 22px;
         font-weight: 600;
-        color: #222;
+        color: #4C7742;
+    }
+
+    .officer-header p{
+        font-size:14px;
+        color: #666;
+
     }
 
     /* ADD BUTTON */
     #nav_addofficer {
-        background: #1e293b;
+        background: #FFC857;
         color: white;
         padding: 8px 14px;
         border-radius: 6px;
@@ -48,59 +54,184 @@ include "../assets/layout.php";
 
         .modal {
         display: none;
-        /* Hidden by default */
         position: fixed;
-        /* Stay in place */
-        z-index: 1;
-        /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%;
-        /* Full width */
-        height: 100%;
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.4);
-        /* Black w/ opacity */
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.45);
+        justify-content: center;
+        align-items: center;
     }
 
-    /* Modal Content/Box */
+    /* SHOW WITH JS */
+    .modal.show {
+        display: flex;
+    }
+
+    /* MODAL BOX */
     .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        /* Could be more or less, depending on screen size */
+        background: #fff;
+        width: 400px;
+        max-width: 90%;
+        border-radius: 10px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+        animation: fadeIn .2s ease;
+        position: relative;
     }
 
-    /* The Close Button */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
+    /* TITLE */
+    .modal-content strong {
+        display: block;
+        font-size: 18px;
+        padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e5e5e5;
+        color: #d32f2f;
     }
 
-    .close:hover,
-    .close:focus {
+    /* DETAILS */
+    .modal-content p {
+        margin: 8px 0;
         color: black;
+        font-size: 14px;
+    }
+
+    .modal-info {
+    background: #f8f9fa;
+    border: 1px solid #e3e6ea;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 18px 0;
+}
+
+.modal-info p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.modal-info p:not(:last-child) {
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 8px;
+}
+
+.modal-info span {
+    font-weight: 600;
+    color: #222;
+}
+
+    /* CLOSE BUTTON */
+    .close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-size: 24px;
+        color: #777;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .close:hover {
+        color: #000;
+    }
+
+    /* BUTTONS */
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    #confirmBtn,
+    #cancelBtn {
+        border: none;
+        padding: 9px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    #confirmBtn {
+        background: #d32f2f;
+        color: white;
+    }
+
+    #confirmBtn:hover {
+        background: #b71c1c;
+    }
+
+    #cancelBtn {
+        background: #e0e0e0;
+        color: #333;
+    }
+
+    #cancelBtn:hover {
+        background: #cfcfcf;
+    }
+
+    /* ANIMATION */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .action-group {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .action-group form {
+        margin: 0;
+    }
+
+    .action-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        background: none;
+        border: none;
+        color: #555;
         text-decoration: none;
         cursor: pointer;
+        font-size: 16px;
+    }
+
+    .action-icon:hover {
+        color: #1e88e5;
+    }
+
+    .action-btn {
+        background: none;
+        border: none;
     }
 </style>
 
 <div class="officer-header">
+    
+<div class="officer-title">
     <h2>Officer Accounts</h2>
-    <a href="admin_officers_create.php" id="nav_addofficer">Add Officer</a>
+    <p>Manage officers user accounts.</p>
+</div>
+    <a href="admin_officers_create.php" id="nav_addofficer"> &plus; Add Officer</a>
 </div>
 <div class="table-container">
         <table class="table">
-    <thead style="background: rgb(64, 188, 64);">
+    <thead>
         <tr>
             <th>Id</th>
             <th>Full Name</th>
@@ -118,23 +249,24 @@ include "../assets/layout.php";
                 <td><?= $o['barangay'] ?></td>
                 <td><?= $o['phonenumber'] ?></td>
                 <td>
-                    <!-- <a href="/esko/admin/admin_activities_view.php?Id=<?= $o['ar_id'] ?>">Edit</a> -->
-                     <a href="/esko/admin/admin_officers_edit.php?officerId=<?= $o['user_id'] ?>">
-                            Edit
-                            </a>
-                    <!-- <a href="/esko/admin/admin_officers_deactivate.php?officerId=<?= $o['user_id'] ?>">Delete</a> -->
+                     <div class="action-group">
+                        <a href="/esko/admin/admin_officers_edit.php?officerId=<?= $o['user_id'] ?>"
+                                class="action-icon"
+                                title="Edit Officer Details">
+                                <i class="fa-solid fa-pen-to-square"></i></a>
                     <form method="POST" action="/esko/admin/admin_officers_deactivate.php" name="deleteForm">
                             <input type="hidden"
                                 name="id"
                                 value="<?= $o['user_id'] ?>">
                             <button type="button"
-                                class="delete-btn"
+                                class="action-icon action-btn officer-action-btn"
                                 data-name="<?= $o['last_name'] . ', ' . $o['first_name'] ?>"
                                 data-barangay="<?= $o['barangay'] ?>"
-                                data-officerno="<?= $o['username'] ?>">
-                                Delete
-                            </button>
+                                data-officerno="<?= $o['username'] ?>"
+                                 title="<?= $o['is_active'] ? 'Deactivate User' : 'Reactivate User' ?>">
+                                <i class="fa-solid fa-trash"></i></button>
                     </form>
+                     </div>
                 </td>
 
             </tr>
@@ -155,7 +287,6 @@ include "../assets/layout.php";
         <button id="confirmBtn">Confirm</button>
         <button id="cancelBtn">Cancel</button>
     </div>
-
 </div>
 
 <script>
@@ -169,16 +300,28 @@ include "../assets/layout.php";
     let cancelBtn = document.getElementById("cancelBtn");
 
     document.addEventListener('click', function(ev) {
-        if(ev.target.classList.contains('delete-btn')){
-             ev.preventDefault();
+        // if(ev.target.classList.contains('delete-btn')){
+        //      ev.preventDefault();
 
-        modalName.innerText = ev.target.dataset.name;
-        modalBrgy.innerText = ev.target.dataset.barangay;
-        modalOfficerNo.innerText = ev.target.dataset.officerno;
+        // modalName.innerText = ev.target.dataset.name;
+        // modalBrgy.innerText = ev.target.dataset.barangay;
+        // modalOfficerNo.innerText = ev.target.dataset.officerno;
 
-        currentForm = ev.target.closest("form");
-        modal.style.display = "block";
-        }    
+        // currentForm = ev.target.closest("form");
+        // modal.style.display = "block";
+        // } 
+
+        const btn = ev.target.closest('.officer-action-btn');
+        if (btn) {
+            ev.preventDefault();
+
+            modalName.innerText = btn.dataset.name;
+            modalBrgy.innerText = btn.dataset.barangay;
+            modalOfficerNo.innerText = btn.dataset.officer;
+
+            currentForm = btn.closest('form');
+            modal.style.display = 'flex';
+        }
         // reactivation logic
     });
 

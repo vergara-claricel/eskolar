@@ -12,7 +12,7 @@ class Semester {
     }
 
     function getAllSemester() {
-    return $this->api->get("semesters", "?select=*");
+    return $this->api->get("semesters", "?select=*&order=semester_start.desc,semester_status.desc");
     }
 
     function getActiveSemester() {
@@ -68,7 +68,22 @@ function updateActiveSem($sem_id) {
 );
     return true;
     }
+
+    function updateSemDetails($sem_id, $semester_name, $semester_start, $semester_end){
+        $this->api->patch(
+            "semesters?sem_id=eq.$sem_id",
+            "",
+            [
+                "semester_name" => $semester_name,
+                "semester_start" => $semester_start,
+                "semester_end" => $semester_end
+            ]
+        );
+
+        return true;
+    }
 }
+
 $semobj = new Semester($api);
 
 

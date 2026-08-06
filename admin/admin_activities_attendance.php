@@ -13,34 +13,22 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
 
 ?>
 <style>
-    .scholar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        margin-inline-end: 80px;
-    }
-
-    /* TITLE */
-    .scholar-header h2 {
-        font-size: 22px;
-        font-weight: 600;
-        color: #222;
-    }
 
     /* ADD BUTTON */
     #create_activitybtn {
-        background: #1e293b;
-        color: white;
+  background: #FFC857;
+          color: white;
         padding: 8px 14px;
         border-radius: 6px;
         text-decoration: none;
         font-size: 13px;
         font-weight: 500;
         transition: 0.2s;
+        margin-left: auto;
+        margin-right: 20px;
     }
 
-    #nav_addscholar:hover {
+    #create_activitybtn:hover {
         background: #1565c0;
     }
 
@@ -124,9 +112,9 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
 }
 </style>
 
-<div class="scholar-header">
+<div class="page-header">
     <h2>Activities & Attendance</h2>
-    <a href="/esko/admin/admin_activities_create.php" id="create_activitybtn">Create Activity</a>
+    <p> Manage activity and attendance records. </p>
 </div>
 
 <?php if (isset($_GET['success']) && $_GET['success'] === 'deleted'): ?>
@@ -172,11 +160,12 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     <option value="Saysain">Saysain</option>
     <option value="Tabing-Ilog">Tabing-Ilog</option>
 </select>
+<a href="/esko/admin/admin_activities_create.php" id="create_activitybtn">Create Activity</a>
 </div>
 
 <div class="table-container">
     <table class="table">
-        <thead style="background: rgb(64, 188, 64);">
+        <thead>
             <tr>
                 <th>Date</th>
                 <th>Activity Name </th>

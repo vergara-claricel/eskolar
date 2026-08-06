@@ -21,6 +21,23 @@
     background: #f6f6f6;
 }
 
+    .page-header {
+        margin-bottom: 20px;
+        margin-inline: 10px;
+    }
+
+    /* TITLE */
+    .page-header h2 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #4C7742;
+    }
+
+    .page-header p{
+        font-size:14px;
+        color: #666;
+    }
+
 /* SIDEBAR */
 .sidebar {
     width: 230px;
@@ -33,7 +50,7 @@
 .logo {
     font-size: 24px;
     font-weight: bold;
-    color: rgb(64, 188, 64);
+    color: #4C7742;
     padding: 0 25px 35px;
 }
 
@@ -54,12 +71,12 @@
 }
 
 .menu a:hover {
-    background: #ececec;
+    background: #9DB8A4;
 }
 
 .menu .active {
-    background: rgb(64, 188, 64);
-    color: white;
+    background:#254725;
+    color: #FCFCFC;
 }
 
 /* MAIN AREA */
@@ -92,11 +109,12 @@
 
 #currentsem{
     background-color:
-    rgb(64, 188, 64);
-    color: rgb(2, 81, 2);
+    #9DB8A4;
+    color: #254725;
     padding: 12px;
     border-radius: 20px;
     font-size: 14px;
+    font-weight: bold;
 }
 
 #logout{

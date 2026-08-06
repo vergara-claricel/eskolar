@@ -336,9 +336,9 @@ include "../assets/layout.php";
 
         <!-- classification -->
         <div class="activity-classification">
-            <?= $actDetails['classification'] ?>
+            <?= $actDetails['classification'] ?: '-'?>
             <?php if ($actDetails['classification'] === 'Barangay' && !empty($actDetails['barangay'])): ?>
-                - <?= $actDetails['barangay'] ?>
+                - <?= $actDetails['barangay'] ?: 'N/A'?>
             <?php endif; ?>
         </div>
 
@@ -347,11 +347,11 @@ include "../assets/layout.php";
 
             <div class="activity-title">
                 <div class="activity-name">
-                    <?= htmlspecialchars($actDetails['activityname']) ?>
+                    <?= htmlspecialchars($actDetails['activityname']) ?: '' ?>
                 </div>
 
                 <span class="activity-status">
-                    <?= htmlspecialchars($actDetails['computed_status']) ?>
+                    <?= htmlspecialchars($actDetails['computed_status']) ?: 'Not set'?>
                 </span>
             </div>
 
@@ -378,21 +378,38 @@ include "../assets/layout.php";
         <div class="activity-grid">
 
             <div class="label">Date </div>
-            <div class="value"><?= htmlspecialchars($actDetails['activitydate']) ?></div>
-
-
-            <div class="label">Venue</div>
-            <div class="value"><?= htmlspecialchars($actDetails['venue']) ?></div>
+            <div class="value">
+                <?= !empty($actDetails['activitydate'])
+            ? date("F j, Y", strtotime($actDetails['activitydate']))
+            : '-' ?>
+            </div>
 
             <div class="label">TIMEIN CUTOFF</div>
-            <div class="value"><?= htmlspecialchars($actDetails['timein_start']) . " - " . htmlspecialchars($actDetails['timein_end'])  ?></div>
+            <div class="value"> <?= (!empty($actDetails['timein_start']) && !empty($actDetails['timein_end']))
+            ? date("g:i A", strtotime($actDetails['timein_start'])) .
+              " - " .
+              date("g:i A", strtotime($actDetails['timein_end']))
+            : 'TBA' ?>
+            </div>
+
+            <div class="label">Venue</div>
+            <div class="value"><?= htmlspecialchars($actDetails['venue']) ?: 'TBA'?></div>
+
 
             <div class="label">TIMEOUT CUTOFF</div>
-            <div class="value"><?= htmlspecialchars($actDetails['timeout_start']) . " - " . htmlspecialchars($actDetails['timeout_end'])  ?></div>
+            <div class="value"> <?= (!empty($actDetails['timeout_start']) && !empty($actDetails['timeout_end']))
+            ? date("g:i A", strtotime($actDetails['timeout_start'])) .
+              " - " .
+              date("g:i A", strtotime($actDetails['timeout_end']))
+            : 'TBA' ?>
+            </div>
 
             <div class="label">Info</div>
 
-            <div class="value"><?= nl2br(htmlspecialchars($actDetails['info'])) ?></div>
+            <div class="value"  style="grid-column: span 3;">
+                <?= !empty($actDetails['info'])
+            ? nl2br(htmlspecialchars($actDetails['info']))
+            : 'No additional information.' ?></div>
 
         </div>
 
@@ -414,7 +431,7 @@ include "../assets/layout.php";
 
     <div class="table-container">
         <table class="table">
-            <thead style="background: rgb(64, 188, 64);">
+            <thead>
                 <tr>
                     <th>Iskolar No.</th>
                     <th>Full Name</th>
@@ -438,7 +455,7 @@ include "../assets/layout.php";
                         <td>
                             <!-- <a href="/esko/admin/admin_activities_view.php?Id=<?= $s['ar_id'] ?>">Edit</a> -->
                             <a href="javascript:void(0)"
-                                class="edit-btn"
+                                class="action-icon edit-btn"
                                 data-ar_id="<?= $s['ar_id'] ?>"
                                 data-user_id="<?= $s['user_id'] ?? '' ?>"
                                 data-iskolarno="<?= $s['username'] ?? '' ?>"
@@ -447,7 +464,7 @@ include "../assets/layout.php";
                                 data-timeout="<?= $s['timeout'] ?? '' ?>"
                                 data-scanned_by="<?= $s['scanned_by'] ?>"
                                 data-officer_fullname="<?= $s['officer_fullname'] ?? '' ?>">
-                                Edit
+                                <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                         </td>
                     </tr>
@@ -583,27 +600,29 @@ include "../assets/layout.php";
     </div>
 
     <script>
-        document.addEventListener('click', function(e) {
-            if (!e.target.classList.contains('edit-btn')) return;
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.edit-btn');
+    if (!btn) return;
 
-            document.getElementById('editDrawer').classList.add('open');
-            document.getElementById('ar_id').value = e.target.dataset.ar_id;
-            document.getElementById('user_id').value = e.target.dataset.user_id;
-            document.getElementById('iskolarno').value = e.target.dataset.iskolarno;
-            document.getElementById('fullname').value = e.target.dataset.fullname;
+    document.getElementById('editDrawer').classList.add('open');
 
-            document.getElementById('timein').value =
-                e.target.dataset.timein ? e.target.dataset.timein.substring(0, 5) : '';
+    document.getElementById('ar_id').value = btn.dataset.ar_id;
+    document.getElementById('user_id').value = btn.dataset.user_id;
+    document.getElementById('iskolarno').value = btn.dataset.iskolarno;
+    document.getElementById('fullname').value = btn.dataset.fullname;
 
-            document.getElementById('timeout').value =
-                e.target.dataset.timeout ? e.target.dataset.timeout.substring(0, 5) : '';
+    document.getElementById('timein').value =
+        btn.dataset.timein ? btn.dataset.timein.substring(0, 5) : '';
 
-            document.getElementById('officer_fullname').value =
-                e.target.dataset.officer_fullname;
+    document.getElementById('timeout').value =
+        btn.dataset.timeout ? btn.dataset.timeout.substring(0, 5) : '';
 
-            document.getElementById('scanned_by').value =
-                e.target.dataset.scanned_by;
-        });
+    document.getElementById('officer_fullname').value =
+        btn.dataset.officer_fullname;
+
+    document.getElementById('scanned_by').value =
+        btn.dataset.scanned_by;
+});
 
         function closeDrawer() {
             document.getElementById('editDrawer').classList.remove('open');

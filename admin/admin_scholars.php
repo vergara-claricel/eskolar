@@ -19,30 +19,18 @@ $activeSem = $semobj->getActiveSemester();
 ?>
 
 <style>
-    .scholar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        margin-inline: 50px;
-    }
-
-    /* TITLE */
-    .scholar-header h2 {
-        font-size: 22px;
-        font-weight: 600;
-        color: #222;
-    }
 
     /* ADD BUTTON */
     #nav_addscholar {
-        background: #1e293b;
+        background: #FFC857;
         color: white;
         padding: 8px 14px;
         border-radius: 6px;
         text-decoration: none;
         font-size: 13px;
         font-weight: 500;
+        margin-left: auto;
+        margin-right: 20px;
         transition: 0.2s;
     }
 
@@ -263,9 +251,9 @@ $activeSem = $semobj->getActiveSemester();
         border: none;
     }
 </style>
-<div class="scholar-header">
+<div class="page-header">
     <h2>Scholars</h2>
-    <a href="admin_scholars_create.php" id="nav_addscholar">Add Scholar</a>
+    <p>View scholar attendance records, edit scholar details and manage account status. </p>
 </div>
 
 <div class="filter-bar">
@@ -297,12 +285,14 @@ $activeSem = $semobj->getActiveSemester();
         <option value="Saysain">Saysain</option>
         <option value="Tabing-Ilog">Tabing-Ilog</option>
     </select>
+
+    <a href="admin_scholars_create.php" id="nav_addscholar"> &plus; Add Scholar</a>
 </div>
 
 
 <div class="table-container">
     <table class="table">
-        <thead style="background: rgb(64, 188, 64);">
+        <thead>
             <tr>
                 <th>Iskolar No. </th>
                 <th>Full Name</th>
@@ -334,7 +324,7 @@ $activeSem = $semobj->getActiveSemester();
                                     value="<?= $s['user_id'] ?>">
                                 <button type="button"
                                     class="action-icon action-btn scholar-action-btn"
-                                    title="<?= $s['is_active'] ? 'Deactivate' : 'Reactivate' ?>"
+                                    title="<?= $s['is_active'] ? 'Deactivate User' : 'Reactivate User' ?>"
                                     data-action="<?= $s['is_active'] ? 'deactivate' : 'reactivate' ?>"
                                     data-name="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
                                     data-barangay="<?= $s['barangay'] ?>"
