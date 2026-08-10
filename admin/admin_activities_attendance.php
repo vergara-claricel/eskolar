@@ -172,7 +172,8 @@ if (!empty($activesem)) {
     <option value="Saysain">Saysain</option>
     <option value="Tabing-Ilog">Tabing-Ilog</option>
 </select>
-<a href="/esko/admin/admin_activities_create.php" id="create_activitybtn">Create Activity</a>
+
+<a href="/esko/admin/admin_activities_create.php" id="create_activitybtn" onclick="return checkActiveSemester();">Create Activity</a>
 </div>
 
 <div class="table-container">
@@ -272,6 +273,18 @@ if (!empty($activesem)) {
     document.getElementById('searchActs').addEventListener('input', loadActivities);
     document.getElementById('statusFilter').addEventListener('change', loadActivities);
     document.getElementById('barangayFilter').addEventListener('change', loadActivities);
+
+    function checkActiveSemester() {
+    const semId = <?= json_encode($activeSemId ?? null) ?>;
+
+    if (!semId) {
+        alert("There is no active semester. Please set an active semester first.");
+        return false; // prevents navigation
+    }
+
+    return true; // allows navigation
+}
 </script>
+
 
 <?php include "../assets/layout_end.php"; ?>

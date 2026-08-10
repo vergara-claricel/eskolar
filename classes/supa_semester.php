@@ -60,6 +60,10 @@ function updateActiveSem($sem_id) {
         "?semester_status=eq.active",
         ["semester_status" => "inactive"]
     );
+
+    if (empty($sem_id)) {
+        return true;
+    }
     // set selected active
     $this->api->patch(
     "semesters",
