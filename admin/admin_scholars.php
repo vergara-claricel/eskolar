@@ -14,6 +14,7 @@ include "../assets/layout.php";
 // $allscho = $schoobj->getAllActiveScholars();
 // print_r($allscho);
 $activeSem = $semobj->getActiveSemester();
+$semId = $activeSem['sem_id'] ?? '';
 // include "../assets/layout.php";
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
@@ -373,7 +374,7 @@ $totalPages = ceil($totalRows / $limit);
                     <td><?= $s['barangay'] ?></td>
                     <td>
                         <div class="action-group">
-                            <a href="/esko/admin/admin_scholars_view.php?semid=<?= urlencode($activeSem['sem_id']) ?>&scholarid=<?= urlencode($s['user_id']) ?>"
+                            <a href="/esko/admin/admin_scholars_view.php?semid=<?= urlencode($semId) ?>&scholarid=<?= urlencode($s['user_id']) ?>"
                                 class="action-icon"
                                 title="View Scholar Records">
                                 <i class="fa-solid fa-eye"></i></a>

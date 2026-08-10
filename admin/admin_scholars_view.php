@@ -26,18 +26,34 @@ $scholarUserId = $_GET['scholarid'];
 
 
 $activeSem = $semobj->getActiveSemester();
-$semId = $activeSem['sem_id'];
+$semId = $activeSem['sem_id'] ?? null;
 
-$scholar_info = $schoobj->getScholarInfo($scholarUserId);
-$scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
+$scholar_info = [];
+$scholar_ar = [];
+$scholarAttended = 0;
+$totalBrgyEvents =0;
+$totalEvents = 0;
+$totalMunicipalEvents = 0;
+$quotaPercentage = 0;
+$passFail = 'N/A';
 
-$scholarBrgy = $scholar_info['barangay'];
-$scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
-$totalBrgyEvents = $scObj->getTotalBarangayEvents($scholarBrgy, $semId);
-$totalMunicipalEvents = $scObj->getMunicipalEvents($semId);
-$totalEvents = $scObj->getTotalEvents($totalBrgyEvents, $totalMunicipalEvents);
-$quotaPercentage = $scObj->computeQuotaPercent($scholarAttended, $totalEvents);
-$passFail = $scObj->attendanceRemark($quotaPercentage);
+
+if($semId != null){
+    $scholar_info = $schoobj->getScholarInfo($scholarUserId);
+    $scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
+
+    $scholarBrgy = $scholar_info['barangay'];
+    $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
+    $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholarBrgy, $semId);
+    $totalMunicipalEvents = $scObj->getMunicipalEvents($semId);
+    $totalEvents = $scObj->getTotalEvents($totalBrgyEvents, $totalMunicipalEvents);
+    $quotaPercentage = $scObj->computeQuotaPercent($scholarAttended, $totalEvents);
+    $passFail = $scObj->attendanceRemark($quotaPercentage);
+} else {
+    $scholar_info = $schoobj->getScholarInfo($scholarUserId);
+}
+
+
 
 if (isset($_POST['updateAttendanceRecord'])) {
 
@@ -338,7 +354,7 @@ include "../assets/layout.php";
             </h2>
             <div class="meta-details">
                 <span>Barangay: <b><?= $scholar_info['barangay'] ?></b></span>
-                <span>Semester: <b><?= $activeSem['semester_name'] ?></b></span>
+                <span>Semester: <b><?= $activeSem['semester_name'] ?? 'Not found.' ?></b></span>
                 <span>Contact: <b><?= $scholar_info['phonenumber'] ?></b></span>
             </div>
         </div>

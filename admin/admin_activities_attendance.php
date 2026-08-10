@@ -7,10 +7,22 @@ include "../assets/layout.php";
 // $config = require __DIR__ . "/../api/supabase.php";
 
 // $actobj = new Activities($api);
-$activesem = $semobj->getActiveSemester();
-$activeSemId = $activesem['sem_id'];
-$allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
+// $activesem =[];
+// $activesem = $semobj->getActiveSemester();
+// $activeSemId = $activesem['sem_id'];
+// $allacts =[];
+// if(!empty($activesem)){
+//     $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
+// }
 
+$activesem = $semobj->getActiveSemester();
+$activeSemId = null;
+$allacts = [];
+
+if (!empty($activesem)) {
+    $activeSemId = $activesem['sem_id'];
+    $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
+}
 ?>
 <style>
 
@@ -237,16 +249,6 @@ $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
     const originalHTML = tableBody.innerHTML;
 
     function loadActivities() {
-        // let search = document.getElementById('searchActs').value;
-        // let status = document.getElementById('statusFilter').value;
-        // let barangay = document.getElementById('barangayFilter').value;
-        // console.log(barangay);
-        // fetch(`admin_activities_search.php?search=${search}&status=${status}&barangay=${barangay}`)
-        //     .then(res => res.text())
-        //     .then(data => {
-        //         document.getElementById('activitiesTable').innerHTML = data;
-        //     });
-
         clearTimeout(timer);
         timer = setTimeout(() => {
             let search = document.getElementById('searchActs').value.trim();

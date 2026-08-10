@@ -245,7 +245,7 @@ include "../assets/layout.php";
         <?php foreach ($officers as $o): ?>
             <tr>
                 <td><?= $o['username'] ?></td>
-                <td><?= $o['first_name'] .' ' . $o['last_name'] ?></td>
+                <td><?= $o['last_name'] .', ' . $o['first_name'] ?></td>
                 <td><?= $o['barangay'] ?></td>
                 <td><?= $o['phonenumber'] ?></td>
                 <td>

@@ -214,9 +214,11 @@ include "../assets/layout.php";
         <div id="setsem">
             <h3>Set Active Semester</h3>
             <form method="POST">
+
                 <?php $allsem = $semobj->getAllSemester(); ?>
 
                 <select name="activesem" id="activesem">
+                    <option value=""<?= empty($activeSem) ? 'selected' : '' ?>>NONE</option>
                     <?php foreach ($allsem as $sem): ?>
                         <option value="<?= $sem['sem_id'] ?>"
                             <?= ($sem['semester_status'] == 'active') ? 'selected' : '' ?>>

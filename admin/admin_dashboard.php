@@ -9,8 +9,16 @@ require_once "../test.php";
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
 $totalscholars = $schoobj->activeScholarsCount();
-$totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
-$upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
+
+$totalevents = [];
+$upcomingEvents = [];
+
+if (!empty($activeSem['sem_id'])) {
+    $totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
+    $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
+}
+// $totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
+// $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
 include "../assets/layout.php";
 ?>
 
@@ -180,6 +188,8 @@ include "../assets/layout.php";
     <div class="activities-card">
         <h2>Upcoming Activities</h2>
         
+<?php if (!empty($upcomingEvents)): ?>
+
         <?php foreach ($upcomingEvents as $ue):
             $date = strtotime($ue['activitydate']); ?>
             
@@ -195,6 +205,13 @@ include "../assets/layout.php";
                 </div>
             </a>
         <?php endforeach; ?>
+
+    
+<?php else: ?>
+
+      <p class="activity-item">No upcoming activities available.</p>
+
+<?php endif; ?>
         
         <a href="/esko/admin/admin_activities_attendance.php" class="view-link">View all activities →</a>
     </div>
