@@ -75,10 +75,9 @@ include "../assets/layout.php";
     color: #333333;
 }
 
-/* Specific accent borders for the metrics to match your vibe */
-.metric-card:nth-child(1) { border-left: 5px solid  rgb(64, 188, 64) }
-.metric-card:nth-child(2) { border-left: 5px solid  rgb(64, 188, 64) }
-.metric-card:nth-child(3) { border-left: 5px solid  rgb(64, 188, 64) }
+.metric-card:nth-child(1) { border-left: 5px solid  #4C7742 }
+.metric-card:nth-child(2) { border-left: 5px solid  #4C7742 }
+.metric-card:nth-child(3) { border-left: 5px solid  #4C7742 }
 
 /* Activities Section */
 .activities-card {
@@ -101,7 +100,7 @@ include "../assets/layout.php";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background:  rgb(222, 241, 222);;
+    background:  rgb(244, 248, 239);;
     padding: 20px 25px;
     border-radius: 20px;
     border: 2px solid  rgb(146, 189, 146);;
@@ -139,7 +138,7 @@ include "../assets/layout.php";
 }
 
 .activity-date {
-    background:  rgb(142, 203, 142);;
+    background:  #4C7742;
     padding: 12px 18px;
     border-radius: 18px;
     text-align: center;
@@ -161,7 +160,7 @@ include "../assets/layout.php";
 .view-link {
     display: inline-block;
     margin-top: 10px;
-    color:  rgb(64, 188, 64);
+    color:  #4C7742;
     font-weight: 500;
     text-decoration: none;
 }
@@ -216,5 +215,6 @@ include "../assets/layout.php";
         <a href="/esko/admin/admin_activities_attendance.php" class="view-link">View all activities →</a>
     </div>
 </div>
+
 
 <?php include "../assets/layout_end.php"; ?>

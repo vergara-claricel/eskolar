@@ -32,8 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      //    $pdo->rollBack();
         echo "Error: " . $e->getMessage();
     }
-    include "../assets/layout.php";
 }
+
+ include "../assets/layout.php";
 ?>
 <style>
 #scholarform {

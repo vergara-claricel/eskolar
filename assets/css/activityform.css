@@ -1,107 +1,270 @@
-/* Container settings to drastically cut vertical length */
-#activity_form {
-    max-width: 480px;
-    margin: 12px auto;
+/* =========================
+   MODAL
+   ========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.45);
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+.modal-content {
+    position: relative;
+
+    width: 100%;
+    max-width: 760px;
+
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    border-radius: 14px;
+
+    padding: 28px 32px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
 }
 
 
-/* Base Form Stack Layout */
+/* =========================
+   TITLE
+   ========================= */
+
+.modal-content h3 {
+    margin: 0 0 24px;
+
+    color: #0f172a;
+
+    font-size: 1.20rem;
+    font-weight: 700;
+}
+
+
+/* =========================
+   CLOSE
+   ========================= */
+
+.close-modal {
+    position: absolute;
+    top: 17px;
+    right: 20px;
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    color: #64748b;
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+
+/* =========================
+   FORM
+   ========================= */
+
+#activity_form {
+    width: 100%;
+}
+
 .activity-form {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 18px;
+    row-gap: 16px;
+}
+
+
+/* Full-width fields */
+
+.full {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================
+   FORM GROUP
+   ========================= */
+
+.form-group {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
 }
 
-/* Compact Labels */
-.activity-form label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #64748b;
-    margin-top: 6px;
-    margin-bottom: 3px;
+
+/* =========================
+   LABEL
+   ========================= */
+
+.form-label {
+    margin: 0 0 6px;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    color: #475569;
 }
 
-/* First label doesn't need top spacing */
-.activity-form label:first-of-type {
-    margin-top: 0;
-}
 
-/* Low-profile, tight input & select elements */
+/* =========================
+   INPUTS
+   ========================= */
+
 .activity-form input[type="text"],
 .activity-form input[type="date"],
 .activity-form input[type="time"],
 .activity-form select,
 .activity-form textarea {
+
     width: 100%;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    color: #1e293b;
-    background-color: #f8fafc;
-    border: 1px solid #cbd5e1;
-    border-radius: 5px;
+    min-height: 40px;
+
+    padding: 8px 11px;
+
     box-sizing: border-box;
+
     font-family: inherit;
+    font-size: 0.85rem;
+
+    color: #1e293b;
+
+    background: #f8fafc;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+
+    transition: 0.15s ease;
 }
 
-/* Clean Minimal Focus States */
+
+/* Focus */
+
 .activity-form input:focus,
 .activity-form select:focus,
 .activity-form textarea:focus {
+
     outline: none;
-    border-color: #2563eb;
-    background-color: #ffffff;
+
+    background: #ffffff;
+
+    border-color: #3b82f6;
+
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* The existing native Time Row */
+
+/* =========================
+   TIME ROW
+   ========================= */
+
 .time-row {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 2px;
+
+    gap: 18px;
 }
 
-/* Removes top labels adjustments inside the inner grid */
-.time-row div {
-    display: flex;
-    flex-direction: column;
-}
 
-.time-row label {
-    margin-top: 4px;
-}
+/* =========================
+   TEXTAREA
+   ========================= */
 
-/* Compact height for your existing textarea */
 .activity-form textarea {
-    resize: vertical;
-    min-height: 45px;
-    height: 45px;
+    min-height: 65px;
+
+    resize: none;
 }
 
-/* Hidden helper class state preservation */
+
+/* =========================
+   HIDDEN
+   ========================= */
+
 .hidden {
     display: none !important;
 }
 
-/* Low-profile inline submit block */
+
+/* =========================
+   BUTTON
+   ========================= */
+
+.form-actions {
+    margin-top: 2px;
+}
+
 .activity-form button[type="submit"] {
+
     width: 100%;
-    padding: 8px;
-    margin-top: 14px;
-    background-color: #0f172a;
-    color: #ffffff;
+    height: 40px;
+
     border: none;
-    border-radius: 5px;
+    border-radius: 7px;
+
+    background: #FFC857;
+    color: white;
+
+    font-family: inherit;
     font-size: 0.85rem;
     font-weight: 600;
+
     cursor: pointer;
-    transition: background-color 0.1s ease;
+
+    transition: background 0.15s ease;
 }
 
 .activity-form button[type="submit"]:hover {
-    background-color: #1e293b;
+    background: #1e293b;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 24px 20px;
+    }
+
+    .activity-form {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .time-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 }

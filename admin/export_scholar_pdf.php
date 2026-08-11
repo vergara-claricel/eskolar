@@ -16,6 +16,9 @@ $scholarUserId = $_GET['scholarid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 
+$logoLeft = __DIR__ . '/../assets/images/logo_iskolar.jpg';
+$logoRight = __DIR__ . '/../assets/images/bagac_logo.png';
+
 
 $scholar_info = $schoobj->getScholarInfos($scholarUserId);
 
@@ -36,12 +39,60 @@ body {
     color: #000;
 }
 
-/* =========================
-   HEADER
-   ========================= */
 
 .header {
     width: 100%;
+    text-align: center;
+}
+
+.header-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.header-table td {
+    border: none;
+    vertical-align: middle;
+}
+
+
+/* QR ABOVE EVERYTHING */
+
+.qr-top-cell {
+    text-align: right;
+    vertical-align: bottom !important;
+    padding-bottom: 5px;
+}
+
+.qr {
+    width: 55px;
+    height: 55px;
+}
+
+.qr-label {
+    font-size: 7px;
+    margin-top: 2px;
+}
+
+
+/* LOGOS */
+
+.logo-cell {
+    width: 20%;
+    text-align: center;
+}
+
+.logo-left,
+.logo-right {
+    width: 70px;
+    height: 70px;
+}
+
+
+/* CENTER TEXT */
+
+.title-cell {
+    width: 60%;
     text-align: center;
 }
 
@@ -59,68 +110,15 @@ body {
 .scorecard-title {
     font-size: 18px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
-/* Header logos */
-
-.logo-left {
-    width: 75px;
-    height: 75px;
-}
-
-.logo-right {
-    width: 75px;
-    height: 75px;
-}
-
-.qr {
-    width: 65px;
-    height: 65px;
-}
-
-/* =========================
-   HEADER TABLE
-   ========================= */
-
-.header-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.header-table td {
-    border: none;
-    vertical-align: middle;
-}
-
-.logo-cell {
-    width: 20%;
-    text-align: center;
-}
-
-.title-cell {
-    width: 60%;
-    text-align: center;
-}
-
-.qr-cell {
-    width: 20%;
-    text-align: center;
-}
-
-/* =========================
-   DIVIDER
-   ========================= */
 
 .main-divider {
     border-bottom: 3px solid #000;
     margin-top: 8px;
     margin-bottom: 10px;
 }
-
-/* =========================
-   SECTION TITLES
-   ========================= */
 
 .section-title {
     font-size: 12px;
@@ -135,10 +133,6 @@ body {
     margin-top: 16px;
     margin-bottom: 10px;
 }
-
-/* =========================
-   SCHOLAR INFORMATION
-   ========================= */
 
 .info-table {
     width: 100%;
@@ -160,10 +154,6 @@ body {
     font-weight: bold;
     padding-left: 8px;
 }
-
-/* =========================
-   ACTIVITY TABLE
-   ========================= */
 
 .activity-table {
     width: 100%;
@@ -208,9 +198,6 @@ body {
     font-weight: normal;
 }
 
-/* =========================
-   FOOTER
-   ========================= */
 
 .footer-divider {
     border-top: 3px solid #000;
@@ -238,64 +225,58 @@ body {
 
 <!-- =========================
      HEADER
-     ========================= -->
+========================= -->
 
 <table class='header-table'>
 
-<tr>
-
-    <!-- LEFT LOGO -->
-    <td class='logo-cell'>
-        <img src='LOGO_LEFT' class='logo-left'>
-    </td>
-
-
-    <!-- CENTER HEADER -->
-    <td class='title-cell'>
-
-        <div class='header-title'>
-            REPUBLIC OF THE PHILIPPINES
-        </div>
-
-        <div class='header-subtitle'>
-            MUNICIPALITY OF BAGAC
-        </div>
-
-        <div class='header-subtitle'>
-            ISKOLAR NG BAGAC
-        </div>
-
-        <div class='scorecard-title'>
-            SCORECARD
-        </div>
-
-    </td>
+    <!-- QR ON TOP -->
+    <tr>
+        <td colspan='3' class='qr-top-cell'>
+            <img src='qr' class='qr'>
+            <div class='qr-label'>
+                Scan to view record
+            </div>
+        </td>
+    </tr>
 
 
-    <!-- RIGHT LOGO + QR -->
-    <td class='qr-cell'>
+    <!-- LOGOS + CENTER TEXT -->
+    <tr>
 
-        <table width='100%'>
-            <tr>
-                <td align='center'>
-                    <img src='LOGO_RIGHT' class='logo-right'>
-                </td>
-                <td align='center'>
-                    <img src='QR_CODE' class='qr'>
-                </td>
-            </tr>
+        <!-- LEFT LOGO -->
+        <td class='logo-cell'>
+            <img src='$logoLeft' class='logo-left'>
+        </td>
 
-            <tr>
-                <td colspan='2'
-                    style='font-size:8px; text-align:center;'>
-                    Scan to view record
-                </td>
-            </tr>
-        </table>
 
-    </td>
+        <!-- CENTER HEADER -->
+        <td class='title-cell'>
 
-</tr>
+            <div class='header-title'>
+                REPUBLIC OF THE PHILIPPINES
+            </div>
+
+            <div class='header-subtitle'>
+                MUNICIPALITY OF BAGAC
+            </div>
+
+            <div class='header-subtitle'>
+                ISKOLAR NG BAGAC
+            </div>
+
+            <div class='scorecard-title'>
+                SCORECARD
+            </div>
+
+        </td>
+
+
+        <!-- RIGHT LOGO -->
+        <td class='logo-cell'>
+            <img src='$logoRight' class='logo-right'>
+        </td>
+
+    </tr>
 
 </table>
 
@@ -303,11 +284,6 @@ body {
 <!-- DIVIDER -->
 
 <div class='main-divider'></div>
-
-
-<!-- =========================
-     SCHOLAR INFORMATION
-     ========================= -->
 
 <div class='section-title'>
     SCHOLAR'S INFORMATION
@@ -359,10 +335,6 @@ body {
 
 </table>
 
-
-<!-- =========================
-     ACTIVITY INFORMATION
-     ========================= -->
 
 <div class='activity-title'>
     ACTIVITY INFORMATION
@@ -429,11 +401,6 @@ $html .= "
 
 </table>
 
-
-<!-- =========================
-     FOOTER
-     ========================= -->
-
 <div class='footer-divider'></div>
 
 <table class='footer-table'>
@@ -466,8 +433,16 @@ $html .= "
 ";
 
 $dompdf = new Dompdf();
+
+$options = $dompdf->getOptions();
+$options->set('isRemoteEnabled', true);
+$options->set('isHtml5ParserEnabled', true);
+$options->set('chroot', realpath(__DIR__ . '/..'));
+
+$dompdf->setOptions($options);
+
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
+$dompdf->setPaper([0, 0, 595, 500], 'portrait');
 $dompdf->render();
-$dompdf->stream("scholar_report.pdf", ["Attachment" => true]);
+$dompdf->stream("eScorecard.pdf", ["Attachment" => false]);
 exit;

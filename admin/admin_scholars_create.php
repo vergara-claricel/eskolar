@@ -76,7 +76,7 @@ include "../assets/layout.php";
     .scholar-form h4 {
         font-size: 0.75rem;
         font-weight: 600;
-        color: #1e88e5;
+        color: #4C7742;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin: 12px 0 6px 0;
@@ -140,7 +140,7 @@ include "../assets/layout.php";
         width: 100%;
         padding: 8px;
         margin-top: 14px;
-        background-color: #0f172a;
+        background-color: #FFC857;
         color: #ffffff;
         border: none;
         border-radius: 5px;
