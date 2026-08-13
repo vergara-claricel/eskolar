@@ -334,7 +334,7 @@ function getActiveScholarCount()
         }
 
          if ($limit !== null) {
-        $query .= "&limit=$limit&offset=$offset";
+        $query .= "&limit=$limit&offset=$offset&order=last_name.asc";
         }
 
         return $this->api->get($query);

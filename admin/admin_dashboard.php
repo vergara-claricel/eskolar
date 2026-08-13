@@ -10,11 +10,11 @@ require_once "../test.php";
 $activeSem = $semobj->getActiveSemester();
 $totalscholars = $schoobj->activeScholarsCount();
 
-$totalevents = [];
+$totalevents = 0;
 $upcomingEvents = [];
 
 if (!empty($activeSem['sem_id'])) {
-    $totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
+    $totalevents = $actobj->countActivitiesOfActiveSem($activeSem['sem_id']);
     $upcomingEvents = $actobj->upcomingActivities($activeSem['sem_id']);
 }
 // $totalevents = $actobj->getActivitiesOfActiveSem($activeSem['sem_id']);
@@ -75,9 +75,11 @@ include "../assets/layout.php";
     color: #333333;
 }
 
-.metric-card:nth-child(1) { border-left: 5px solid  #4C7742 }
-.metric-card:nth-child(2) { border-left: 5px solid  #4C7742 }
-.metric-card:nth-child(3) { border-left: 5px solid  #4C7742 }
+.metric-card:nth-child(1),
+.metric-card:nth-child(2) {
+    border-left: 5px solid #4C7742;
+}
+
 
 /* Activities Section */
 .activities-card {
@@ -88,85 +90,134 @@ include "../assets/layout.php";
     border: 1px solid #f0f0f0;
 }
 
-.activities-card h2 {
-    font-size: 18px;
-    margin-top: 0;
+.activities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+.activities-card h2 {
+    margin: 0;
+    font-size: 18px;
     color: #333;
     font-weight: 600;
 }
 
-.activity-item {
+.view-link {
+    color: #4C7742;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: underline;
+    margin: 0;
+}
+
+.view-link:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* Upcoming Activities Grid */
+.activities-grid {
+   display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+
+/* Individual Activity Card */
+.activity-card {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background:  rgb(244, 248, 239);;
-    padding: 20px 25px;
-    border-radius: 20px;
-    border: 2px solid  rgb(146, 189, 146);;
-    margin-bottom: 18px;
+    flex-direction: column;
+    min-height: 160px;
+    padding: 20px;
+    background: rgb(244, 248, 239);
+    border: 1px solid #e5ecdf;
+    border-radius: 16px;
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 210px;
+    height: 155px;
+    box-sizing: border-box;
 }
 
-.activity-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+.activity-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.activity-info {
-    width: 80%;
-    overflow: hidden;
+
+/* Date */
+.activity-date {
+    color: #4C7742;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
 
-.activity-info h3 {
-    margin: 0;
+
+/* Activity Name */
+.activity-card h3 {
+    margin: 0 0 8px 0;
     font-size: 16px;
-    color: green;
+    line-height: 1.3;
+    color: #2D2D2D;
+    font-weight: 700;
 }
 
-.activity-info p {
-    margin-top: 6px;
-    margin-bottom: 0;
+
+/* Activity Info */
+.activity-card p {
+    margin: 0;
     color: #6f6f6f;
     font-size: 11px;
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.activity-date {
-    background:  #4C7742;
-    padding: 12px 18px;
-    border-radius: 18px;
+
+/* View Activity */
+.activity-card span {
+    margin-top: auto;
+    padding-top: 15px;
+    color: #4C7742;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* Empty State */
+.no-activities {
+    padding: 25px;
     text-align: center;
-    font-size: 16px;
-    min-width: 80px;
+    color: #777;
+    background: #f8f8f8;
+    border-radius: 12px;
+    font-size: 13px;
 }
 
-.activity-date span {
-    display: block;
-    color: #2D2D2D;
-    font-weight: 500;
-}
 
-.activity-date strong {
-    color: #2D2D2D;
-    font-size: 16px;
-}
+/* Mobile */
+@media (max-width: 600px) {
 
-.view-link {
-    display: inline-block;
-    margin-top: 10px;
-    color:  #4C7742;
-    font-weight: 500;
-    text-decoration: none;
-}
+    .activities-card {
+        padding: 20px;
+    }
 
-.view-link:hover {
-    text-decoration: underline;
+    .activities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-card {
+        min-height: 145px;
+    }
 }
 </style>
 
@@ -174,45 +225,78 @@ include "../assets/layout.php";
     <h1 class="dashboard-title">Dashboard</h1>
 
     <div class="metrics-row">
+
         <div class="metric-card">
             <div class="metric-label">Total Scholars</div>
-            <div class="metric-value"><?= count($totalscholars) ?></div>
+            <div class="metric-value">
+                <?= count($totalscholars) ?>
+            </div>
         </div>
+
         <div class="metric-card">
             <div class="metric-label">Total Activities</div>
-            <div class="metric-value"><?= count($totalevents) ?></div>
+            <div class="metric-value">
+                <?= $totalevents ?>
+            </div>
         </div>
+
     </div>
 
+
     <div class="activities-card">
-        <h2>Upcoming Activities</h2>
-        
-<?php if (!empty($upcomingEvents)): ?>
 
-        <?php foreach ($upcomingEvents as $ue):
-            $date = strtotime($ue['activitydate']); ?>
-            
-            <a class="activity-item" href="/esko/admin/admin_activities_view.php?actId=<?= $ue['activity_id'] ?>">
-        
-                <div class="activity-date">
-                    <span><?= date("M d", $date) ?></span>
-                    <strong><?= date("Y", $date) ?></strong>
-                </div>
-                <div class="activity-info">
-                    <h3><?= htmlspecialchars($ue['activityname']) ?></h3>
-                    <p><?= htmlspecialchars($ue['info']) ?></p>
-                </div>
+        <div class="activities-header">
+            <h2>Upcoming Activities</h2>
+
+            <a href="/esko/admin/admin_activities_attendance.php"
+            class="view-link">
+                View all activities →
             </a>
-        <?php endforeach; ?>
+        </div>
 
-    
-<?php else: ?>
+        <?php if (!empty($upcomingEvents)): ?>
 
-      <p class="activity-item">No upcoming activities available.</p>
+            <div class="activities-grid">
 
-<?php endif; ?>
-        
-        <a href="/esko/admin/admin_activities_attendance.php" class="view-link">View all activities →</a>
+                <?php foreach ($upcomingEvents as $ue):
+                    $date = strtotime($ue['activitydate']);
+                ?>
+
+                    <a
+                        class="activity-card"
+                        href="/esko/admin/admin_activities_view.php?actId=<?= $ue['activity_id'] ?>"
+                    >
+
+                        <div class="activity-date">
+                            <?= date("M d, Y", $date) ?>
+                        </div>
+
+                        <h3>
+                            <?= htmlspecialchars($ue['activityname']) ?>
+                        </h3>
+
+                        <p>
+                            <?= htmlspecialchars($ue['info']) ?>
+                        </p>
+
+                        <span>
+                            View activity →
+                        </span>
+
+                    </a>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        <?php else: ?>
+
+            <div class="no-activities">
+                No upcoming activities available.
+            </div>
+
+        <?php endif; ?>
+
     </div>
 </div>
 

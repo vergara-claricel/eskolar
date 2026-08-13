@@ -5,23 +5,66 @@ $title = "Dashboard";
 require_once "../test.php";
 // $config = require __DIR__ . "/../api/supabase.php";
 
-// $actobj = new Activities($api);
-// $activesem =[];
-// $activesem = $semobj->getActiveSemester();
-// $activeSemId = $activesem['sem_id'];
-// $allacts =[];
-// if(!empty($activesem)){
-//     $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
-// }
+$barangays = [
+    'Atilano Ricardo',
+    'Bagumbayan',
+    'Banawang',
+    'Binuangan',
+    'Binukawan',
+    'Ibis',
+    'Ibaba',
+    'Pag-asa',
+    'Parang',
+    'Paysawan',
+    'Quinawan',
+    'San Antonio',
+    'Saysain',
+    'Tabing-Ilog'
+];
 
 $activesem = $semobj->getActiveSemester();
 $activeSemId = null;
 $allacts = [];
 
+$search = $_GET['search'] ?? '';
+$status = $_GET['status'] ?? '';
+$barangay = $_GET['barangay'] ?? '';
+
+$page = max(1, (int)($_GET['page'] ?? 1));
+$limit = 5;
+$offset = ($page - 1) * $limit;
+$totalRows = 0;
+
 if (!empty($activesem)) {
     $activeSemId = $activesem['sem_id'];
-    $allacts = $actobj->getActivitiesOfActiveSem($activeSemId);
+    if ($search === '' && $status === '' && $barangay === '') {
+        $allacts = $actobj->getActivitiesOfActiveSem(
+            $activeSemId,
+            $page,
+            $limit
+        );
+        $totalRows = $actobj->countActivitiesOfActiveSem($activeSemId);
+    } else {
+        $allacts = $actobj->filterActivities(
+            $search,
+            $status,
+            $barangay,
+            $activeSemId,
+            $limit,
+            $offset
+        );
+        $totalRows = $actobj->countFilteredActivities(
+            $search,
+            $status,
+            $barangay,
+            $activeSemId
+        );
+    }
+} else {
+    $totalRows = 0;
 }
+
+$totalPages = ceil($totalRows / $limit);
 
 if (isset($_POST['create_activity'])) {
 
@@ -53,10 +96,11 @@ include "../assets/layout.php";
 ?>
 <style>
     /* ADD BUTTON */
-    #create_activitybtn {
+    #createActivityBtn {
         background: #FFC857;
         color: white;
         padding: 8px 14px;
+        border: 0;
         border-radius: 6px;
         text-decoration: none;
         font-size: 13px;
@@ -66,7 +110,7 @@ include "../assets/layout.php";
         margin-right: 20px;
     }
 
-    #create_activitybtn:hover {
+    #createActivityBtn:hover {
         background: #1565c0;
     }
 
@@ -150,6 +194,27 @@ include "../assets/layout.php";
     }
 
 
+    .pagination{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.pagination a{
+    padding:8px 14px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    text-decoration:none;
+    color:#333;
+}
+
+.pagination a.active{
+    background:#2d8cff;
+    color:white;
+    border-color:#2d8cff;
+}
+
 
 </style>
 
@@ -187,32 +252,29 @@ include "../assets/layout.php";
     <form method="GET" id="searchForm">
         <input type="text" name="search" id="searchActs" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
         <button type="submit">search</button>
-    </form>
 
     <select name="status" id="statusFilter">
         <option value="">All Events</option>
-        <option value="Upcoming">Upcoming</option>
-        <option value="Active">Active</option>
-        <option value="Ended">Ended</option>
+        <option value="Upcoming" <?= $status === 'Upcoming' ? 'selected' : '' ?>>Upcoming</option>
+        <option value="Active" <?= $status === 'Active' ? 'selected' : '' ?>>Active</option>
+        <option value="Ended" <?= $status === 'Ended' ? 'selected' : '' ?>>Ended</option>
     </select>
 
     <select name="barangay" id="barangayFilter">
         <option value="">All Barangays</option>
-        <option value="Atilano Ricardo">Atilano Ricardo</option>
-        <option value="Bagumbayan">Bagumbayan</option>
-        <option value="Banawang">Banawang</option>
-        <option value="Binuangan">Binuangan</option>
-        <option value="Binukawan">Binukawan</option>
-        <option value="Ibis">Ibis</option>
-        <option value="Ibaba">Ibaba</option>
-        <option value="Pag-asa">Pag-asa</option>
-        <option value="Parang">Parang</option>
-        <option value="Paysawan">Paysawan</option>
-        <option value="Quinawan">Quinawan</option>
-        <option value="San Antonio">San Antonio</option>
-        <option value="Saysain">Saysain</option>
-        <option value="Tabing-Ilog">Tabing-Ilog</option>
+        <?php foreach ($barangays as $brgy): ?>
+        <option value="<?= htmlspecialchars($brgy) ?>"
+            <?= $barangay === $brgy ? 'selected' : '' ?>>
+            <?= htmlspecialchars($brgy) ?>
+        </option>
+    <?php endforeach; ?>
     </select>
+    </form>
+    <a href="?admin_activities_attendance.php"
+   class="action-icon"
+   title="Reset Filters">
+    <i class="fa-solid fa-filter-circle-xmark"></i>
+</a>
 
     <button id="createActivityBtn" onclick="checkActiveSemester()">&plus; Create Activity</button>
     <!-- <a href="/esko/admin/admin_activities_create.php" id="create_activitybtn" onclick="return checkActiveSemester();">Create Activity</a> -->
@@ -265,6 +327,34 @@ include "../assets/layout.php";
         </tbody>
     </table>
 </div>
+
+<div class="pagination">
+
+<?php
+$query = http_build_query([
+    'search' => $search,
+    'status' => $status,
+    'barangay' => $barangay
+]);
+?>
+
+<?php if ($page > 1): ?>
+    <a href="?page=<?= $page - 1 ?>&<?= $query ?>">Previous</a>
+<?php endif; ?>
+
+<?php for ($i = 1; $i <= $totalPages; $i++): ?>
+    <a href="?page=<?= $i ?>&<?= $query ?>"
+       class="<?= $i == $page ? 'active' : '' ?>">
+        <?= $i ?>
+    </a>
+<?php endfor; ?>
+
+<?php if ($page < $totalPages): ?>
+    <a href="?page=<?= $page + 1 ?>&<?= $query ?>">Next</a>
+<?php endif; ?>
+
+</div>
+
 
 <div id="createActivityModal" class="modal">
     <div class="modal-content">
@@ -404,36 +494,46 @@ include "../assets/layout.php";
         </div>
     </div>
 </div>
+
+
 <script>
-    let timer;
+    // let timer;
 
-    const tableBody = document.getElementById('activitiesTable');
-    const originalHTML = tableBody.innerHTML;
+    // const tableBody = document.getElementById('activitiesTable');
+    // const originalHTML = tableBody.innerHTML;
 
-    function loadActivities() {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            let search = document.getElementById('searchActs').value.trim();
-            let status = document.getElementById('statusFilter').value;
-            let barangay = document.getElementById('barangayFilter').value;
-            if (search === "" && status == "" && barangay == "") {
-                tableBody.innerHTML = originalHTML;
-                return;
-            }
+    // function loadActivities() {
+    //     clearTimeout(timer);
+    //     timer = setTimeout(() => {
+    //         let search = document.getElementById('searchActs').value.trim();
+    //         let status = document.getElementById('statusFilter').value;
+    //         let barangay = document.getElementById('barangayFilter').value;
+    //         if (search === "" && status == "" && barangay == "") {
+    //             tableBody.innerHTML = originalHTML;
+    //             return;
+    //         }
 
-            fetch(`admin_activities_search.php?search=${encodeURIComponent(search)}&status=${status}&barangay=${encodeURIComponent(barangay)}`)
-                .then(res => res.text())
-                .then(data => {
-                    tableBody.innerHTML = data;
-                });
+    //         fetch(`admin_activities_search.php?search=${encodeURIComponent(search)}&status=${status}&barangay=${encodeURIComponent(barangay)}`)
+    //             .then(res => res.text())
+    //             .then(data => {
+    //                 tableBody.innerHTML = data;
+    //             });
 
-        }, 300);
-    }
+    //     }, 300);
+    // }
 
-    // live search
-    document.getElementById('searchActs').addEventListener('input', loadActivities);
-    document.getElementById('statusFilter').addEventListener('change', loadActivities);
-    document.getElementById('barangayFilter').addEventListener('change', loadActivities);
+    // // live search
+    // document.getElementById('searchActs').addEventListener('input', loadActivities);
+    // document.getElementById('statusFilter').addEventListener('change', loadActivities);
+    // document.getElementById('barangayFilter').addEventListener('change', loadActivities);
+
+    document.getElementById('statusFilter').addEventListener('change', function () {
+    document.getElementById('searchForm').submit();
+});
+
+document.getElementById('barangayFilter').addEventListener('change', function () {
+    document.getElementById('searchForm').submit();
+});
 
     function checkActiveSemester() {
         const semId = <?= json_encode($activeSemId ?? null) ?>;

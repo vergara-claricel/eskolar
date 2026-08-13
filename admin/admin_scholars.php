@@ -8,8 +8,23 @@
 
 $title = "Scholars";
 require_once "../test.php";
-include "../assets/layout.php";
 
+$barangays = [
+    'Atilano Ricardo',
+    'Bagumbayan',
+    'Banawang',
+    'Binuangan',
+    'Binukawan',
+    'Ibis',
+    'Ibaba',
+    'Pag-asa',
+    'Parang',
+    'Paysawan',
+    'Quinawan',
+    'San Antonio',
+    'Saysain',
+    'Tabing-Ilog'
+];
 
 // $allscho = $schoobj->getAllActiveScholars();
 // print_r($allscho);
@@ -17,14 +32,14 @@ $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'] ?? '';
 // include "../assets/layout.php";
 $search = $_GET['search'] ?? '';
-$status = $_GET['status'] ?? '';
+$status = $_GET['status'] ?? '1';
 $barangay = $_GET['barangay'] ?? '';
 
 $page = max(1, (int)($_GET['page'] ?? 1));
 $limit = 5;
 $offset = ($page - 1) * $limit;
 
-if ($search === '' && $status === '' && $barangay === '') {
+if ($search === '' && $status === '1' && $barangay === '') {
     $allscho = $schoobj->getAllActiveScholars($page, $limit);
     $totalRows = $schoobj->getActiveScholarCount();
 } else {
@@ -44,7 +59,7 @@ if ($search === '' && $status === '' && $barangay === '') {
 }
 
 $totalPages = ceil($totalRows / $limit);
-
+include "../assets/layout.php";
 // $allscho = $schoobj->getAllActiveScholars($page, $limit);
 // $totalRows = $schoobj->getActiveScholarCount();
 // $totalPages = ceil($totalRows / $limit);
@@ -311,6 +326,7 @@ $totalPages = ceil($totalRows / $limit);
     <p>View scholar attendance records, edit scholar details and manage account status. </p>
 </div>
 
+<!-- filter  -->
 <div class="filter-bar">
     <form method="GET" id="searchForm">
         <input type="text" name="search" id="search" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
@@ -333,27 +349,26 @@ $totalPages = ceil($totalRows / $limit);
 
     <select name="barangay" id="barangayFilter">
         <option value="">All Barangays</option>
-        <option value="Atilano Ricardo">Atilano Ricardo</option>
-        <option value="Bagumbayan">Bagumbayan</option>
-        <option value="Banawang">Banawang</option>
-        <option value="Binuangan">Binuangan</option>
-        <option value="Binukawan">Binukawan</option>
-        <option value="Ibis">Ibis</option>
-        <option value="Ibaba">Ibaba</option>
-        <option value="Pag-asa">Pag-asa</option>
-        <option value="Parang">Parang</option>
-        <option value="Paysawan">Paysawan</option>
-        <option value="Quinawan">Quinawan</option>
-        <option value="San Antonio">San Antonio</option>
-        <option value="Saysain">Saysain</option>
-        <option value="Tabing-Ilog">Tabing-Ilog</option>
+        <?php foreach ($barangays as $brgy): ?>
+        <option value="<?= htmlspecialchars($brgy) ?>"
+            <?= $barangay === $brgy ? 'selected' : '' ?>>
+            <?= htmlspecialchars($brgy) ?>
+        </option>
+        <?php endforeach; ?>
     </select>
+
+    <a href="?page=1"
+   class="action-icon"
+   title="Reset Filters">
+    <i class="fa-solid fa-filter-circle-xmark"></i>
+</a>
     </form>
+<!-- end filter  -->
 
     <a href="admin_scholars_create.php" id="nav_addscholar"> &plus; Add Scholar</a>
 </div>
 
-
+<!-- scholar table -->
 <div class="table-container">
     <table class="table">
         <thead>
@@ -406,7 +421,6 @@ $totalPages = ceil($totalRows / $limit);
 
 
 <div class="pagination">
-
 <?php
 $query = http_build_query([
     'search' => $search,
@@ -433,9 +447,8 @@ $query = http_build_query([
 </div>
 
 
-<!-- The Modal -->
+<!-- REACTIVATE/ACTIVE MODAL -->
 <div id="myModal" class="modal">
-
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
@@ -455,46 +468,6 @@ $query = http_build_query([
 </div>
 
 <script>
-    // let timer;
-
-    // const tableBody = document.getElementById('scholarsTable');
-    // const originalHTML = tableBody.innerHTML;
-
-    // function loadScholars() {
-    //     clearTimeout(timer);
-
-    //     timer = setTimeout(() => {
-    //         let search = document.getElementById('search').value.trim();
-    //         let status = document.getElementById('statusFilter').value;
-    //         let barangay = document.getElementById('barangayFilter').value;
-    //         if (search === "" && status == "" && barangay == "") {
-    //             tableBody.innerHTML = originalHTML;
-    //             return;
-    //         }
-
-    //         fetch(`admin_scholars_filter.php?search=${encodeURIComponent(search)}&status=${status}&barangay=${encodeURIComponent(barangay)}`)
-    //             .then(res => res.text())
-    //             .then(data => {
-    //                 tableBody.innerHTML = data;
-    //             });
-
-    //     }, 300);
-    // }
-
-    // // live search
-    // document.getElementById('search').addEventListener('input', loadScholars);
-    // document.getElementById('statusFilter').addEventListener('change', loadScholars);
-    // document.getElementById('barangayFilter').addEventListener('change', loadScholars);
-
-    // const searchInput = document.getElementById('search');
-    // const form = document.getElementById('searchForm');
-
-    // form.addEventListener('submit', e => e.preventDefault());
-
-    // searchInput.addEventListener('keydown', e => {
-    //     if (e.key === 'Enter') e.preventDefault();
-    // });
-
     let currentForm;
     let modal = document.getElementById("myModal");
     let modalName = document.getElementById("modalName");
@@ -544,6 +517,14 @@ $query = http_build_query([
     cancelBtn.onclick = function() {
         modal.style.display = "none";
     }
+
+    document.getElementById('statusFilter').addEventListener('change', function () {
+    document.getElementById('searchForm').submit();
+});
+
+document.getElementById('barangayFilter').addEventListener('change', function () {
+    document.getElementById('searchForm').submit();
+});
 </script>
 
 <?php include "../assets/layout_end.php"; ?>
