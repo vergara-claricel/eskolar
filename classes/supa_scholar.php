@@ -72,7 +72,8 @@ class Scholar
         return $qrToken;
     }
 
-    function getNextScholarNumber(){
+    function getNextScholarNumber()
+    {
         $users = $this->api->get(
             "users?role=eq.scholar&order=username.desc&limit=1"
         );
@@ -93,13 +94,13 @@ class Scholar
     {
 
         $existing = $this->api->get("users?username=eq.$iskolarno");
-            if (!empty($existing)) {
-                return [
-                    "success" => false,
-                    "message" => "Scholar number already exists."
-                ];
-            }
-        
+        if (!empty($existing)) {
+            return [
+                "success" => false,
+                "message" => "Scholar number already exists."
+            ];
+        }
+
         // 1. create user
         $user = $this->api->post("users", [
             "first_name" => $firstname,
@@ -144,25 +145,25 @@ class Scholar
     }
 
     function getAllActiveScholars($page, $limit)
-{
-    $offset = ($page - 1) * $limit;
+    {
+        $offset = ($page - 1) * $limit;
 
-    $query = "?select=*&is_active=eq.true"
-           . "&order=last_name.asc"
-           . "&limit=$limit"
-           . "&offset=$offset";
+        $query = "?select=*&is_active=eq.true"
+            . "&order=last_name.asc"
+            . "&limit=$limit"
+            . "&offset=$offset";
 
-    return $this->api->get("scholar_view", $query);
-}
+        return $this->api->get("scholar_view", $query);
+    }
 
-function getActiveScholarCount()
-{
-    $data = $this->api->get(
-        "scholar_view?select=user_id&is_active=eq.true"
-    );
+    function getActiveScholarCount()
+    {
+        $data = $this->api->get(
+            "scholar_view?select=user_id&is_active=eq.true"
+        );
 
-    return count($data);
-}
+        return count($data);
+    }
 
     function searchScholars($keyword)
     {
@@ -207,11 +208,11 @@ function getActiveScholarCount()
         // );
 
         return $this->api->post(
-        "rpc/get_activities_attendance_scholar",
-        [
-            "p_user_id" => $user_id,
-            "p_semester" => $semId
-        ]
+            "rpc/get_activities_attendance_scholar",
+            [
+                "p_user_id" => $user_id,
+                "p_semester" => $semId
+            ]
         );
     }
 
@@ -282,37 +283,9 @@ function getActiveScholarCount()
         );
     }
 
-    // function filterScholars($search = '', $status = '', $barangay = '')
-    // {
-    //     $query = "scholar_view?select=*";
-
-    //     $filters = [];
-
-    //     if ($search) {
-    //         $q = "*$search*";
-    //         $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
-    //     }
-
-    //     if ($status !== '') {
-    //         $filters[] = "is_active=eq.$status";
-    //     }
-
-    //     if ($barangay) {
-    //         $brgy = urlencode($barangay);
-    //         $filters[] = "barangay=eq.$brgy";
-    //     }
-
-    //     if ($filters) {
-    //         $query .= "&" . implode("&", $filters);
-    //     }
-
-    //     return $this->api->get($query);
-    // }
-
-        function filterScholars($search = '', $status = '', $barangay = '', $limit= null, $offset= null)
+    function filterScholars($search = '', $status = '', $barangay = '', $limit = null, $offset = null)
     {
         $query = "scholar_view?select=*";
-
         $filters = [];
 
         if ($search) {
@@ -333,39 +306,72 @@ function getActiveScholarCount()
             $query .= "&" . implode("&", $filters);
         }
 
-         if ($limit !== null) {
-        $query .= "&limit=$limit&offset=$offset&order=last_name.asc";
+        if ($limit !== null) {
+            $query .= "&limit=$limit&offset=$offset&order=last_name.asc";
         }
 
         return $this->api->get($query);
     }
 
     function countFilteredScholars($search = '', $status = '', $barangay = '')
-{
-    $query = "scholar_view?select=count";
+    {
+        $query = "scholar_view?select=count";
+        $filters = [];
 
-    $filters = [];
+        if ($search) {
+            $q = "*$search*";
+            $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
+        }
 
-    if ($search) {
-        $q = "*$search*";
-        $filters[] = "or=(username.ilike.$q,first_name.ilike.$q,last_name.ilike.$q)";
+        if ($status !== '') {
+            $filters[] = "is_active=eq.$status";
+        }
+
+        if ($barangay) {
+            $filters[] = "barangay=eq." . urlencode($barangay);
+        }
+
+        if ($filters) {
+            $query .= "&" . implode("&", $filters);
+        }
+
+        $result = $this->api->get($query);
+        return (int)$result[0]['count'];
     }
 
-    if ($status !== '') {
-        $filters[] = "is_active=eq.$status";
+    function generateScorecardQr($scholarId)
+    {
+        $data = $this->api->get(
+            "scholar_view?select=verification_token,username&user_id=eq.$scholarId"
+        );
+
+        if (empty($data)) {
+            return null;
+        }
+
+        $scholar = $data[0];
+        $folder = __DIR__ . "/../qrcodes/";
+
+        if (!file_exists($folder)) {
+            mkdir($folder, 0777, true);
+        }
+
+        // qr content
+        $baseUrl = "https://localhost/public_view/verify.php";
+        $qrUrl = $baseUrl . "?verification_token=" . urlencode($scholar['verification_token']);
+
+        $fileName = "qr_" . $scholar['username'] . ".svg";
+        $filePath = $folder . $fileName;
+
+        $options = new QROptions([
+            'scale' => 6,
+            'eccLevel' => EccLevel::L,
+        ]);
+
+        $qrcode = new QRCode($options);
+        $svg = $qrcode->render($qrUrl);
+        $svg = base64_decode(preg_replace('#^data:image/svg\+xml;base64,#i', '', $svg));
+        file_put_contents($filePath, $svg);
+        return $filePath;
     }
-
-    if ($barangay) {
-        $filters[] = "barangay=eq." . urlencode($barangay);
-    }
-
-    if ($filters) {
-        $query .= "&" . implode("&", $filters);
-    }
-
-    $result = $this->api->get($query);
-
-    return (int)$result[0]['count'];
-    
-}
 }

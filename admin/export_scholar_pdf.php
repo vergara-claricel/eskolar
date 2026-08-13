@@ -15,13 +15,24 @@ require_once "../test.php";
 $scholarUserId = $_GET['scholarid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
-
+$qrPath = $schoobj->generateScorecardQr($scholarUserId);
+if (!file_exists($qrPath)) {
+    die("QR not found: " . $qrPath);
+}
 $logoLeft = __DIR__ . '/../assets/images/logo_iskolar.jpg';
 $logoRight = __DIR__ . '/../assets/images/bagac_logo.png';
-
-
 $scholar_info = $schoobj->getScholarInfos($scholarUserId);
+$qrPath = __DIR__ . '/../qrcodes/qr_' . $scholar_info['username'] . '.svg';
 
+if (!file_exists($qrPath)) {
+    die("QR file not found at path: " . $qrPath);
+}
+$svgContent = file_get_contents($qrPath);
+$qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($svgContent);
+
+// Also encode logos for dompdf consistency
+$logoLeftData = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoLeft));
+$logoRightData = 'data:image/png;base64,' . base64_encode(file_get_contents($logoRight));
 $scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
 
 
@@ -65,8 +76,8 @@ body {
 }
 
 .qr {
-    width: 55px;
-    height: 55px;
+    width: 90px;
+    height: 90px;
 }
 
 .qr-label {
@@ -84,8 +95,8 @@ body {
 
 .logo-left,
 .logo-right {
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
 }
 
 
@@ -232,7 +243,7 @@ body {
     <!-- QR ON TOP -->
     <tr>
         <td colspan='3' class='qr-top-cell'>
-            <img src='qr' class='qr'>
+            <img src='$qrBase64' class='qr'>
             <div class='qr-label'>
                 Scan to view record
             </div>
