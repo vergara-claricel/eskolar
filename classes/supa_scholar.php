@@ -133,15 +133,22 @@ class Scholar
         return $userId;
     }
 
-    function activeScholarsCount()
-    {
-        $data = $this->api->get(
-            "scholar_view?select=*&order=last_name.asc"
-        );
+    // function activeScholarsCount()
+    // {
+    //     $data = $this->api->get(
+    //         "scholar_view?select=*&order=last_name.asc"
+    //     );
 
-        return array_values(array_filter($data, function ($row) {
-            return isset($row['is_active']) && $row['is_active'] === true;
-        }));
+    //     return array_values(array_filter($data, function ($row) {
+    //         return isset($row['is_active']) && $row['is_active'] === true;
+    //     }));
+    // }
+
+    function getAllScholarsForArchive(){
+        $data = $this->api->get(
+            "scholar_view?select=*&is_active=eq.true"
+        );
+        return $data;
     }
 
     function getAllActiveScholars($page, $limit)

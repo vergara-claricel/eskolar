@@ -10,7 +10,15 @@ $title = "Semester";
 // $semobj = new Semester($api);
 
 require_once "../test.php";
+$activeSem = $semobj->getActiveSemester();
+$activeSemId = $activeSem['sem_id'];
+$archiveobj->getSemesterAttendanceArchive($activeSemId);
 
+if (isset($_GET['export'])) {
+    $semId = (int) $_GET['export'];
+
+    $archiveobj->exportSemesterAttendanceCsv($semId);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {
 
@@ -272,8 +280,12 @@ include "../assets/layout.php";
                                 title="Archive Semester Records">
                              <i class="fa-solid fa-box-archive"></i></a>
                             </button>
+                            <a href="admin_sem.php?export=2">
+    Test Export
+</a>
                             </div>
                         </td>
+
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -360,7 +372,7 @@ include "../assets/layout.php";
             </form>
             <p><span id="toArchiveSemName"></span></p>
         </div>
-        <p>Doing so would remove ALL related activity and attendance records and exported into an Excel file. </p>
+        <p>Doing so would export all related records for this semester into a CSV file. </p>
         <p>Continue?</p>
         <div class="modal-buttons">
         <button id="archiveBtn">Confirm</button>

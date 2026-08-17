@@ -8,7 +8,7 @@ require_once "../test.php";
 // $api = new Supabase($config);
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
-$totalscholars = $schoobj->activeScholarsCount();
+$totalscholars = $schoobj->getActiveScholarCount();
 
 $totalevents = 0;
 $upcomingEvents = [];
@@ -229,7 +229,7 @@ include "../assets/layout.php";
         <div class="metric-card">
             <div class="metric-label">Total Scholars</div>
             <div class="metric-value">
-                <?= count($totalscholars) ?>
+                <?= $totalscholars ?>
             </div>
         </div>
 

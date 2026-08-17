@@ -261,7 +261,9 @@ include "../assets/layout.php";
     </select>
 
     <select name="barangay" id="barangayFilter">
-        <option value="">All Barangays</option>
+        <option value="" <?= $barangay === 'Municipal' ? 'selected' : '' ?>>All Activities</option>
+        <option value="Municipal" <?= $barangay === 'Municipal' ? 'selected' : '' ?>>Municipal</option>
+        <option value="Barangay"  <?= $barangay === 'Barangay' ? 'selected' : '' ?>>All Barangays</option>
         <?php foreach ($barangays as $brgy): ?>
         <option value="<?= htmlspecialchars($brgy) ?>"
             <?= $barangay === $brgy ? 'selected' : '' ?>>

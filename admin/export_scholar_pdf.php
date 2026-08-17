@@ -29,10 +29,6 @@ if (!file_exists($qrPath)) {
 }
 $svgContent = file_get_contents($qrPath);
 $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($svgContent);
-
-// Also encode logos for dompdf consistency
-$logoLeftData = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoLeft));
-$logoRightData = 'data:image/png;base64,' . base64_encode(file_get_contents($logoRight));
 $scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
 
 
@@ -427,7 +423,7 @@ $html .= "
 
     <td width='25%'>
         <b>REMARKS:</b>
-        &nbsp; PASSED
+        &nbsp;
     </td>
 
     <td width='33%'>

@@ -75,10 +75,17 @@ class Activities
             $filters[] = "computed_status=eq.$status";
         }
 
-        if ($barangay !== '') {
-            $brgy = urlencode($barangay);
-            $filters[] = "barangay=eq.$brgy";
-        }
+    if ($barangay === 'Municipal') {
+        $filters[] = "classification=eq.Municipal";
+
+    } elseif ($barangay === 'Barangay') {
+        $brgy = urlencode($barangay);
+
+        $filters[] = "classification=eq.Barangay";
+    } else if ($barangay !== ''){
+        $brgy = urlencode($barangay);
+        $filters[] = "barangay=eq.$brgy";
+    }
 
         if ($filters) {
             $query .= "&" . implode("&", $filters);
