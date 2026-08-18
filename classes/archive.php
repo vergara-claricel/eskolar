@@ -2,6 +2,7 @@
 
 require_once '../classes/supabase.php';
 $config = require __DIR__ . "esko/../api/supabase.php";
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -90,75 +91,94 @@ class Archive
         return $archive;
     }
 
-public function exportSemesterAttendanceCsv($semId)
-{
-    $archive = $this->getSemesterAttendanceArchive($semId);
+    public function exportSemesterAttendanceCsv($semId)
+    {
+        $archive = $this->getSemesterAttendanceArchive($semId);
 
-    if (empty($archive)) {
-        return false;
-    }
+        if (empty($archive)) {
+            return false;
+        }
 
-    // Get unique activities
-    $activities = [];
+        // Get unique activities
+        $activities = [];
 
-    foreach ($archive as $scholar) {
-        foreach ($scholar['activities'] as $activityId => $activity) {
-            if (!isset($activities[$activityId])) {
-                $activities[$activityId] = $activity['activityname'];
+        foreach ($archive as $scholar) {
+            foreach ($scholar['activities'] as $activityId => $activity) {
+                if (!isset($activities[$activityId])) {
+                    $activities[$activityId] = $activity['activityname'];
+                }
             }
         }
-    }
 
-    $fileName = "attendance_archive_semester_{$semId}.csv";
+        $fileName = "attendance_archive_semester_{$semId}.csv";
+        $filePath = sys_get_temp_dir() . '/' . $fileName;
 
-    header('Content-Type: text/csv; charset=utf-8');
-    header("Content-Disposition: attachment; filename=\"$fileName\"");
-    header('Cache-Control: max-age=0');
+        header('Content-Type: text/csv; charset=utf-8');
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
+        header('Cache-Control: max-age=0');
 
-    $output = fopen('php://output', 'w');
+        $output = fopen('php://output', 'w');
 
-    // Header
-    $headers = ['Scholar Name'];
+        // Header
+        $headers = ['Scholar Name'];
 
-    foreach ($activities as $activityName) {
-        $headers[] = $activityName;
-    }
-
-    $headers[] = 'Activities Attended';
-    $headers[] = 'Quota %';
-    $headers[] = 'Remarks';
-
-    fputcsv($output, $headers);
-
-    // Scholar rows
-    foreach ($archive as $scholar) {
-
-        $row = [];
-
-        $row[] = $scholar['name'];
-
-        foreach ($activities as $activityId => $activityName) {
-
-            $status =
-                $scholar['activities'][$activityId]['status']
-                ?? 'absent';
-
-            $row[] = ($status === 'present')
-                ? 'Attended'
-                : 'Not Attended';
+        foreach ($activities as $activityName) {
+            $headers[] = $activityName;
         }
 
-        $row[] = $scholar['attended'];
+        $headers[] = 'Activities Attended';
+        $headers[] = 'Quota %';
+        $headers[] = 'Remarks';
 
-        // Your quota is currently stored as 0–100
-        $row[] = $scholar['quota'] . '%';
+        fputcsv($output, $headers);
 
-        $row[] = $scholar['remarks'];
+        // Scholar rows
+        foreach ($archive as $scholar) {
 
-        fputcsv($output, $row);
+            $row = [];
+
+            $row[] = $scholar['name'];
+
+            foreach ($activities as $activityId => $activityName) {
+
+                $status =
+                    $scholar['activities'][$activityId]['status']
+                    ?? 'absent';
+
+                $row[] = ($status === 'present')
+                    ? 'Attended'
+                    : 'Not Attended';
+            }
+
+            $row[] = $scholar['attended'];
+
+            // Your quota is currently stored as 0–100
+            $row[] = $scholar['quota'] . '%';
+
+            $row[] = $scholar['remarks'];
+
+            fputcsv($output, $row);
+        }
+        fclose($output);
+         return [
+        'path' => $filePath,
+        'filename' => $fileName
+    ];
     }
 
-    fclose($output);
-    exit;
-}
+    function restoreSemesterRecords($semId){
+        return $this->api->patch(
+                "semesters",
+                "?sem_id=eq.$semId",
+                ["is_archived" => 0]
+            );
+    }
+
+        function archiveSemesterRecords($semId){
+        return $this->api->patch(
+                "semesters",
+                "?sem_id=eq.$semId",
+                ["is_archived" => 1, "is_active" => 0]
+            );
+    }
 }

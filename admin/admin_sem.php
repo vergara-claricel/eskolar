@@ -11,23 +11,43 @@ $title = "Semester";
 
 require_once "../test.php";
 $activeSem = $semobj->getActiveSemester();
-$activeSemId = $activeSem['sem_id'];
-$archiveobj->getSemesterAttendanceArchive($activeSemId);
+$activeSemId = $activeSem['sem_id'] ?? '';
 
-if (isset($_GET['export'])) {
-    $semId = (int) $_GET['export'];
+// archive restore
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['archive_action'])) {
+    $semid = $_POST['sem_id'];
+    $action = $_POST['archive_action'];
 
-    $archiveobj->exportSemesterAttendanceCsv($semId);
+    if ($action === 'archive') {
+        $csv = $archiveobj->exportSemesterAttendanceCsv($semid);
+        if ($csv) {
+            $archiveobj->archiveSemesterRecords($semid);
+            $_SESSION['success_message'] =
+                'Semester records were successfully archived and exported.';
+            $_SESSION['download_file'] = $csv;
+        } else {
+
+            $_SESSION['error_message'] =
+                'No attendance records were found for this semester.';
+        }
+    } elseif ($action === 'restore') {
+        $archiveobj->restoreSemesterRecords($semid);
+        $_SESSION['success_message'] =
+            'Semester records were successfully restored.';
+    }
+
+    header("Location: admin_sem.php");
+    exit;
 }
 
+// creating sem
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {
-
     $semester_name = $_POST['semester_name'];
     $semester_start = $_POST['semester_start'];
     $semester_end = $_POST['semester_end'];
     $semester_status = $_POST['semester_status'];
 
-       try {
+    try {
         $result = $semobj->saveSemester(
             $semester_name,
             $semester_start,
@@ -36,54 +56,104 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_sem'])) {
         );
         header("location: /esko/admin/admin_sem.php");
         exit;
-
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
 // change active sem
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem'])){
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem'])) {
     $sem_id = $_POST['activesem'];
 
     try {
         $newsem = $semobj->updateActiveSem($sem_id);
-         if ($newsem) {
+        if ($newsem) {
             echo "Active semester updated!";
             header("location: /esko/admin/admin_sem.php");
             exit;
         } else {
             echo "Update failed.";
         }
-    } catch(Exception $e){
+    } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem_details'])){
+// update sem
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem_details'])) {
     $sem_id = $_POST['sem_id'];
     $semester_name  = $_POST['semester_name'];
     $semester_start  = $_POST['semester_start'];
     $semester_end  = $_POST['semester_end'];
 
     try {
-        $editsem = $semobj->updateSemDetails($sem_id,$semester_name, $semester_start, $semester_end);
-         if ($editsem) {
+        $editsem = $semobj->updateSemDetails($sem_id, $semester_name, $semester_start, $semester_end);
+        if ($editsem) {
             echo "Semester Edited!";
             header("location: /esko/admin/admin_sem.php");
             exit;
         } else {
             echo "Update failed.";
         }
-    } catch(Exception $e){
+    } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 include "../assets/layout.php";
 ?>
 
+<!-- // success message -->
+<?php if (isset($_SESSION['success_message'])): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showSuccessModal(
+                'Success',
+                <?= json_encode($_SESSION['success_message']) ?>
+            );
+        });
+    </script>
+<?php
+    unset($_SESSION['success_message']);
+endif;
+?>
+
 <style>
-     .modal {
+    .success-content {
+        text-align: center;
+        max-width: 400px;
+    }
+
+    .success-icon {
+        font-size: 45px;
+        margin-bottom: 15px;
+    }
+
+    #successMessage {
+        margin-bottom: 20px;
+    }
+
+    .loading-content {
+        text-align: center;
+        padding: 30px;
+    }
+
+    .loader {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 20px;
+        border: 4px solid #ddd;
+        border-top: 4px solid #333;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .modal {
         display: none;
         position: fixed;
         inset: 0;
@@ -115,8 +185,8 @@ include "../assets/layout.php";
         display: block;
         font-size: 18px;
         padding-bottom: 12px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #e5e5e5;
         color: #d32f2f;
     }
 
@@ -128,30 +198,30 @@ include "../assets/layout.php";
     }
 
     .modal-info {
-    background: #f8f9fa;
-    border: 1px solid #e3e6ea;
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin: 18px 0;
-}
+        background: #f8f9fa;
+        border: 1px solid #e3e6ea;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin: 18px 0;
+    }
 
-.modal-info p {
-    margin: 8px 0;
-    font-size: 14px;
-    color: #444;
-    display: flex;
-    align-items: center;
-}
+    .modal-info p {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #444;
+        display: flex;
+        align-items: center;
+    }
 
-.modal-info p:not(:last-child) {
-    border-bottom: 1px solid #ececec;
-    padding-bottom: 8px;
-}
+    .modal-info p:not(:last-child) {
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 8px;
+    }
 
-.modal-info span {
-    font-weight: 600;
-    color: #222;
-}
+    .modal-info span {
+        font-weight: 600;
+        color: #222;
+    }
 
     /* CLOSE BUTTON */
     .close {
@@ -205,7 +275,6 @@ include "../assets/layout.php";
     #cancelBtn:hover {
         background: #cfcfcf;
     }
-
 </style>
 
 <div class="page-header">
@@ -226,7 +295,7 @@ include "../assets/layout.php";
                 <?php $allsem = $semobj->getAllSemester(); ?>
 
                 <select name="activesem" id="activesem">
-                    <option value=""<?= empty($activeSem) ? 'selected' : '' ?>>NONE</option>
+                    <option value="" <?= empty($activeSem) ? 'selected' : '' ?>>NONE</option>
                     <?php foreach ($allsem as $sem): ?>
                         <option value="<?= $sem['sem_id'] ?>"
                             <?= ($sem['semester_status'] == 'active') ? 'selected' : '' ?>>
@@ -253,40 +322,42 @@ include "../assets/layout.php";
 
                 <tbody>
                     <?php foreach ($allsem as $row): ?>
-                    <tr>
-                        <td><?= $row['semester_name'] ?></td>
-                        <td>
-                            <?= (new DateTime($row['semester_start']))->format('M d, Y') ?>
-                            -
-                            <?= (new DateTime($row['semester_end']))->format('M d, Y') ?>
-                        </td>
-                        <td><?= $row['semester_status'] ?></td>
-                        <td>
-                            <!-- <button>Edit</button> -->
-                            <div class="action-group">
-                                <button
-                                 class="action-icon edit-sem"
-                                title="Edit Semester"
-                                data-semid="<?= $row['sem_id'] ?>"
-                                data-semname="<?= $row['semester_name'] ?>"
-                                data-semstart="<?= $row['semester_start'] ?>"
-                                data-semend="<?= $row['semester_end'] ?>"
-                                data-semstatus="<?= $row['semester_status'] ?>">
-                             <i class="fa-solid fa-pen-to-square"></i></a>
-                            </button>
-                                <button class="action-icon archive-sem"
-                                data-semid="<?= $row['sem_id'] ?>"
-                                data-semname="<?= $row['semester_name'] ?>"
-                                title="Archive Semester Records">
-                             <i class="fa-solid fa-box-archive"></i></a>
-                            </button>
-                            <a href="admin_sem.php?export=2">
-    Test Export
-</a>
-                            </div>
-                        </td>
+                        <tr>
+                            <td><?= $row['semester_name'] ?></td>
+                            <td>
+                                <?= (new DateTime($row['semester_start']))->format('M d, Y') ?>
+                                -
+                                <?= (new DateTime($row['semester_end']))->format('M d, Y') ?>
+                            </td>
+                            <td><?= $row['semester_status'] ?></td>
+                            <td>
+                                <!-- <button>Edit</button> -->
+                                <div class="action-group">
+                                    <?php if (!$row['is_archived']): ?>
+                                        <button
+                                            type="button"
+                                            class="action-icon edit-sem"
+                                            title="Edit Semester"
+                                            data-semid="<?= $row['sem_id'] ?>"
+                                            data-semname="<?= htmlspecialchars($row['semester_name']) ?>"
+                                            data-semstart="<?= $row['semester_start'] ?>"
+                                            data-semend="<?= $row['semester_end'] ?>"
+                                            data-semstatus="<?= $row['semester_status'] ?>">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                    <button type="button"
+                                        class="action-icon archive-sem"
+                                        data-semid="<?= $row['sem_id'] ?>"
+                                        title="<?= $row['is_archived'] ? 'Restore Semester Records' : 'Archive Semester Records' ?>"
+                                        data-action="<?= $row['is_archived'] ? 'restore' : 'archive' ?>"
+                                        data-semname="<?= $row['semester_name'] ?>">
+                                        <i class="fa-solid <?= $row['is_archived'] ? 'fa-rotate-left' : 'fa-box-archive' ?>"></i>
+                                    </button>
+                                </div>
+                            </td>
 
-                    </tr>
+                        </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -300,24 +371,22 @@ include "../assets/layout.php";
         <div id="semform">
             <form method="POST" class="sem-form">
 
-            <h4>Create New Semester</h4>
+                <h4>Create New Semester</h4>
 
                 <div class="semform-item">
                     <label>Semester Name</label>
-                <input type="text" name="semester_name" required>
+                    <input type="text" name="semester_name" required>
                 </div>
 
                 <div class="semform-item">
                     <label>Start Date</label>
-                <input type="date" name="semester_start" required>
+                    <input type="date" name="semester_start" required>
                 </div>
 
                 <div class="semform-item">
                     <label>End Date</label>
-                <input type="date" name="semester_end" required>
+                    <input type="date" name="semester_end" required>
                 </div>
-                
-
                 <button type="submit" name="create_sem">CREATE SEM</button>
             </form>
         </div>
@@ -326,59 +395,82 @@ include "../assets/layout.php";
 </div>
 
 <div id="editSemModal" class="modal">
-
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
         <p><strong>Edit Semester</strong></p>
         <form method="POST">
 
-                <input type="hidden" name="sem_id" id="modalSemId">
+            <input type="hidden" name="sem_id" id="modalSemId">
             <div class="semform-item">
-                    <label>Semester Name</label>
+                <label>Semester Name</label>
                 <input id="modalSemName" type="text" name="semester_name" value>
-                </div>
+            </div>
 
-                <div class="semform-item">
-                    <label>Start Date</label>
+            <div class="semform-item">
+                <label>Start Date</label>
                 <input id="modalSemStart" type="date" name="semester_start" required>
-                </div>
+            </div>
 
-                <div class="semform-item">
-                    <label>End Date</label>
+            <div class="semform-item">
+                <label>End Date</label>
                 <input id="modalSemEnd" type="date" name="semester_end" required>
-                </div>
+            </div>
 
             <div class="modal-buttons">
                 <button type="submit" name="update_sem_details" id="confirmBtn">Save Changes</button>
                 <button type="button" id="cancelEditSem">Cancel</button>
             </div>
 
-        </div>
     </div>
-        </form>
+</div>
+</form>
 </div>
 
 <div id="archiveModal" class="modal">
-
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close" id="closeArchiveModal">&times;</span>
-        <p><strong>Action Confirmation</strong></p>
-        <p>Are you sure you want to archive this semester?</p>
+        <p><strong><span id="titleModalAction"></span> Confirmation</strong></p>
+        <p>Are you sure you want to <span id="modalAction"></span> this semester?</p>
         <div class="modal-info">
-            <form method="post">
+            <form method="post" id="archiveForm">
                 <input type="hidden" name="sem_id" id="toArchiveSemId">
+                <input type="hidden" name="archive_action" id="whatAction">
             </form>
             <p><span id="toArchiveSemName"></span></p>
         </div>
         <p>Doing so would export all related records for this semester into a CSV file. </p>
         <p>Continue?</p>
         <div class="modal-buttons">
-        <button id="archiveBtn">Confirm</button>
-        <button id="cancelArchiveBtn">Cancel</button></div>
+            <button type="submit" name="archive_restore_btn" id="archiveBtn">Confirm</button>
+            <button id="cancelArchiveBtn">Cancel</button>
+        </div>
     </div>
+</div>
 
+<!-- LOADING -->
+<div id="loadingModal" class="modal">
+    <div class="modal-content loading-content">
+        <div class="loader"></div>
+        <p><strong>Processing...</strong></p>
+        <p id="loadingText">Exporting semester records. Please wait.</p>
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="successModal" class="modal">
+    <div class="modal-content success-content">
+        <span class="close" id="closeSuccessModal">&times;</span>
+        <div class="success-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <p><strong id="successTitle">Success</strong></p>
+        <p id="successMessage">Action completed successfully.</p>
+        <div class="modal-buttons">
+            <button type="button" id="successOkBtn">OK</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -427,15 +519,19 @@ include "../assets/layout.php";
             modalSemName.value = btn.dataset.semname;
             modalSemStart.value = btn.dataset.semstart;
             modalSemEnd.value = btn.dataset.semend;
-            
+
             currentForm = btn.closest('form');
 
             modal.style.display = 'flex';
-        } else if (archivebtn){
+        } else if (archivebtn) {
+            const action = archivebtn.dataset.action;
+            document.getElementById('modalAction').innerText = action;
+            document.getElementById('titleModalAction').innerText =
+                action === 'archive' ? 'Archive' : 'Restore';
             toArchiveSemId.value = archivebtn.dataset.semid;
             toArchiveName.innerText = archivebtn.dataset.semname;
-
-            currentForm = archivebtn.closest('form');
+            document.getElementById('whatAction').value = action;
+            archiveBtn.innerText = action === 'archive' ? 'Archive' : 'Restore';
             archiveModal.style.display = 'flex';
         }
     });
@@ -447,9 +543,14 @@ include "../assets/layout.php";
     });
 
     archiveBtn.addEventListener("click", function() {
-        if (currentForm) {
-            currentForm.submit();
-        }
+        const action = document.getElementById('whatAction').value;
+        document.getElementById('loadingModal').style.display = 'flex';
+        document.getElementById('loadingText').innerText =
+            action === 'archive' ?
+            'Exporting and archiving semester records. Please wait.' :
+            'Restoring semester records. Please wait.';
+        archiveModal.style.display = "none";
+        document.getElementById('archiveForm').submit();
     });
 
     closeModal.onclick = function() {
@@ -467,5 +568,22 @@ include "../assets/layout.php";
     cancelArchiveBtn.onclick = function() {
         archiveModal.style.display = "none";
     }
+
+    function showSuccessModal(title, message) {
+        document.getElementById('successTitle').innerText = title;
+        document.getElementById('successMessage').innerText = message;
+
+        document.getElementById('successModal').style.display = 'flex';
+    }
+
+    const successModal = document.getElementById('successModal');
+
+    document.getElementById('successOkBtn').onclick = function() {
+        successModal.style.display = 'none';
+    };
+
+    document.getElementById('closeSuccessModal').onclick = function() {
+        successModal.style.display = 'none';
+    };
 </script>
 <?php include "../assets/layout_end.php"; ?>
