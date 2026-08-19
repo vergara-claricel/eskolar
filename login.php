@@ -1,31 +1,9 @@
 <?php
-// session_start();
-// require __DIR__ . "/connection.php"; // your DB connection
-// require __DIR__ . "/localcon.php";
-
-// if (isset($_POST['login'])) {
-//     $username = trim($_POST['username']);
-//     $password = trim($_POST['password']);
-
-//     $sql = "SELECT id, username, password, role FROM users WHERE username = :username LIMIT 1";
-//     $stmt = $pdo->prepare($sql);
-//     $stmt->execute(['username' => $username]);
-//     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-//     if ($user && $password == $user["password"]) {
-//         $_SESSION["userid"] = $user["id"];
-//         $_SESSION["role"] = $user["role"];
-//         header("Location: /esko/admin/admin_dashboard.php");
-//         exit;
-//     } else {
-//         $error = "Invalid username or password";
-//     }
-// }
 session_start();
 if (isset($_POST['login'])) {
 
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $username = trim($_POST['username']) ?? '';
+    $password = trim($_POST['password']) ?? '';
 
     $apiKey = "sb_publishable_JVZTWW0Ld8XJ_HQz7LGXkA_iLUkpN7c";
     $url = "https://yaksrweqnidfpvceoqzo.supabase.co/rest/v1/users"
@@ -46,10 +24,8 @@ if (isset($_POST['login'])) {
     $users = json_decode($response, true);
 
     $user = $users[0] ?? null;
-    var_dump($user);
 
-    if ($user && $password === $user["password"]) {
-
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION["userid"] = $user["id"];
         $_SESSION["role"] = $user["role"];
 
@@ -63,159 +39,510 @@ if (isset($_POST['login'])) {
         $error = "Invalid username or password";
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eSkolar Login</title>
+    <title>eSkolar | Administration</title>
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
         }
 
         body {
-            height: 100vh;
+            min-height: 100vh;
+            background: #f5f7f4;
+            color: #254725;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+        }
+
+        /* =========================
+           LEFT BRANDING SECTION
+        ========================= */
+
+        .branding {
+            position: relative;
+            background: #254725;
+            color: white;
+            padding: 60px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background: #f0f6ff;
             overflow: hidden;
         }
 
-        /* Fade-in animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .branding-content {
+            position: relative;
+            z-index: 2;
+            max-width: 520px;
+            margin: auto;
         }
 
-        .login-container {
-            width: 360px;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-            animation: fadeInUp 0.6s ease-out;
-            text-align: center;
-        }
+.brand-mark {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
 
-        /* .logo {
-            width: 85px;
-            margin-bottom: 15px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-        } */
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 9px;
+}
 
-        h2 {
+.partner-logos {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.partner-logos img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+        .branding h1 {
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1;
+            letter-spacing: -2px;
             margin-bottom: 20px;
-            color: rgb(64, 188, 64);;
+            font-weight: 750;
+        }
+
+        .branding h1 span {
+            color: #FFC857;
+        }
+
+        .branding-description {
+            color: #cbd8cc;
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 430px;
+            margin-bottom: 38px;
+        }
+
+        /* Decorative elements */
+
+        .decor-circle {
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .circle-one {
+            width: 500px;
+            height: 500px;
+            right: -250px;
+            top: -180px;
+        }
+
+        .circle-two {
+            width: 350px;
+            height: 350px;
+            left: -200px;
+            bottom: -180px;
+        }
+
+        .decor-line {
+            position: absolute;
+            width: 200px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(-35deg);
+            bottom: 100px;
+            right: 80px;
+        }
+
+
+        /* =========================
+           RIGHT LOGIN SECTION
+        ========================= */
+
+        .login-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: #f5f7f4;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 390px;
+        }
+
+        .login-header {
+            margin-bottom: 32px;
+        }
+
+        .login-header h2 {
+            color: #254725;
+            font-size: 30px;
             font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #718071;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+
+        /* Error */
+
+        .error {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            background: #fff8e8;
+            border: 1px solid #f2d58d;
+            color: #775914;
+
+            padding: 12px 14px;
+            border-radius: 8px;
+
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+
+        /* Form */
+
+        .login-form {
+            background: white;
+            border: 1px solid #e1e8e1;
+            border-radius: 12px;
+            padding: 28px;
+
+            box-shadow:
+                0 8px 30px rgba(37, 71, 37, 0.06);
         }
 
         .input-group {
-            text-align: left;
-            margin-bottom: 15px;
+            margin-bottom: 19px;
         }
 
-        label {
-            font-size: 14px;
-            color: #333;
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #344b34;
+            margin-bottom: 7px;
         }
 
-        input {
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
             width: 100%;
-            padding: 10px;
-            margin-top: 4px;
-            border-radius: 6px;
-            border: 1px solid #c5d2e8;
+            height: 46px;
+
+            border: 1px solid #d3ddd4;
+            border-radius: 7px;
+
+            background: #fbfcfb;
+
+            padding: 0 42px 0 13px;
+
+            font-size: 14px;
+            color: #254725;
+
             outline: none;
-            font-size: 15px;
+            transition: 0.2s ease;
         }
 
-        input:focus {
-            border-color: rgb(64, 188, 64);;
+        .input-wrapper input::placeholder {
+            color: #a5afa6;
         }
 
-        .btn {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background: rgb(64, 188, 64);;
-            border: none;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 16px;
+        .input-wrapper input:focus {
+            background: white;
+            border-color: #4C7742;
+            box-shadow: 0 0 0 3px rgba(76, 119, 66, 0.10);
         }
 
-        .btn:hover {
-            background: rgb(64, 188, 64);;
-        }
-
-        .error {
-            background: #ffdddd;
-            color: #b30000;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        /* Subtle floating background shape */
-        .bg-shape {
+        .password-toggle {
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background:rgb(64, 188, 64);;
-            border-radius: 50%;
-            top: -150px;
-            right: -150px;
-            opacity: 0.15;
-            filter: blur(5px);
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: #89958b;
+            cursor: pointer;
+
+            font-size: 12px;
+            padding: 4px;
+        }
+
+        .password-toggle:hover {
+            color: #254725;
+        }
+
+
+        /* Login button */
+
+        .login-btn {
+            width: 100%;
+            height: 46px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: #4C7742;
+            color: white;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+            background: #254725;
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+
+        /* Footer */
+
+        .login-footer {
+            text-align: center;
+            margin-top: 22px;
+
+            color: #9aa49b;
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .login-page {
+                grid-template-columns: 1fr;
+            }
+
+            .branding {
+                display: none;
+            }
+
+            .login-section {
+                min-height: 100vh;
+                padding: 25px;
+            }
+
+            .login-wrapper {
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 420px) {
+
+            .login-section {
+                padding: 20px;
+            }
+
+            .login-form {
+                padding: 22px;
+            }
+
+            .login-header h2 {
+                font-size: 27px;
+            }
         }
     </style>
-
 </head>
+
 <body>
 
-<div class="bg-shape"></div>
+<div class="login-page">
 
-<div class="login-container">
-    <!-- <img src="assets/logo.png" alt="eSkolar Logo" class="logo"> -->
+    <section class="branding">
 
-    <h2>eSkolar</h2>
+        <div class="decor-circle circle-one"></div>
+        <div class="decor-circle circle-two"></div>
+        <div class="decor-line"></div>
 
-    <?php if (!empty($error)): ?>
-        <div class="error"><?= $error ?></div>
-    <?php endif; ?>
+        <div class="branding-content">
 
-    <form method="POST">
-        <div class="input-group">
-            <label>Username</label>
-            <input type="text" name="username" required>
-        </div>
+            <div class="brand-mark">
+                <img src="assets/images/logo_iskolar.jpg" alt="INBagac logo">
+            </div>
+            <h1>
+                e<span>Skolar</span>
+            </h1>
 
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
-
-        <button type="submit" name="login" class="btn">Login</button>
-    </form>
+            <p class="branding-description">
+                An integrated and centralized system for Iskolar ng Bagac designed
+                to simplify scholar records, activities, and attendance monitoring.
+            </p>
+            <div class="partner-logos">
+    <img src="assets/images/logo_iskolar.jpg" alt="Iskolar ng Bagac">
+    <img src="assets/images/bagac_logo.png" alt="Municipality of Bagac">
 </div>
+        </div>
+
+    </section>
+
+
+    <main class="login-section">
+
+        <div class="login-wrapper">
+
+            <div class="login-header">
+                <h2>Welcome back!</h2>
+                <p>
+                    Sign in to access the eSkolar administration portal.
+                </p>
+
+            </div>
+
+
+            <?php if (!empty($error)): ?>
+
+                <div class="error">
+                    <span>⚠</span>
+
+                    <span>
+                        <?= htmlspecialchars($error) ?>
+                    </span>
+                </div>
+
+            <?php endif; ?>
+
+
+            <form method="POST" class="login-form">
+
+                <div class="input-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    name="login"
+                    class="login-btn"
+                >
+                    Sign in
+                </button>
+
+            </form>
+
+
+            <div class="login-footer">
+                eSkolar Administration Portal
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+const password = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+
+togglePassword.addEventListener("click", function () {
+
+    const isPassword = password.type === "password";
+
+    password.type = isPassword ? "text" : "password";
+
+    togglePassword.innerText = isPassword ? "Hide" : "Show";
+
+});
+
+</script>
 
 </body>
 </html>

@@ -1,41 +1,90 @@
-/* FORM GRID */
-
-#scholarform{
-    background-color: white;
-    padding: 15px;
+/* FORM CONTAINER */
+#edituserform {
+    max-width: 480px;
+    margin: 12px auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    display: flex;
-    justify-content: center;
+    padding: 14px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    font-family: system-ui, -apple-system, sans-serif;
 }
-#scholarform form {
+
+/* SECTION HEADERS */
+.user-form h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 12px 0 8px;
+}
+
+/* TWO-COLUMN ROW */
+.form-row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px 12px;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
-/* NAME ROW FORCE INLINE */
-.name-row {
-    grid-column: 1 / -1;
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 12px;
-}
-
-/* EACH FIELD INSIDE NAME ROW */
-.name-row > div {
+.form-group {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    gap: 3px;
 }
 
-/* INPUTS ALWAYS FULL WIDTH */
-#scholarform input,
-#scholarform select {
-    width: 100%;
-}
-
-/* LABEL FIX */
-#scholarform label {
-    font-size: 12px;
+/* LABELS */
+.user-form label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
     margin-bottom: 3px;
+}
+
+/* INPUTS */
+.user-form input[type="text"],
+.user-form input[type="email"],
+.user-form input[type="password"],
+.user-form select {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    color: #1e293b;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+}
+
+.user-form input:focus,
+.user-form select:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: #ffffff;
+}
+
+.user-form input::placeholder {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* SUBMIT BUTTON */
+.user-form button[type="submit"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    background-color: #4C7742;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.user-form button[type="submit"]:hover {
+    background-color: #1e293b;
 }

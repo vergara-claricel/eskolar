@@ -122,6 +122,19 @@ include "../assets/layout.php";
         margin: 15px 0;
     }
 
+    .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: -20px;
+}
+
+.filter-item label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
     #searchForm {
         display: flex;
         align-items: center;
@@ -194,28 +207,26 @@ include "../assets/layout.php";
     }
 
 
-    .pagination{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-}
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
 
-.pagination a{
-    padding:8px 14px;
-    border:1px solid #ddd;
-    border-radius:6px;
-    text-decoration:none;
-    color:#333;
-}
+    .pagination a {
+        padding: 8px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #333;
+    }
 
-.pagination a.active{
-    background:#2d8cff;
-    color:white;
-    border-color:#2d8cff;
-}
-
-
+    .pagination a.active {
+        background: #2d8cff;
+        color: white;
+        border-color: #2d8cff;
+    }
 </style>
 
 <div class="page-header">
@@ -241,7 +252,7 @@ include "../assets/layout.php";
         </div>
 
         <button class="close-notif"
-                onclick="document.getElementById('successBox').remove()">
+            onclick="document.getElementById('successBox').remove()">
             &times;
         </button>
     </div>
@@ -253,30 +264,37 @@ include "../assets/layout.php";
         <input type="text" name="search" id="searchActs" placeholder="Search…" value="<?= $_GET['search'] ?? '' ?>">
         <button type="submit">search</button>
 
-    <select name="status" id="statusFilter">
-        <option value="">All Events</option>
-        <option value="Upcoming" <?= $status === 'Upcoming' ? 'selected' : '' ?>>Upcoming</option>
-        <option value="Active" <?= $status === 'Active' ? 'selected' : '' ?>>Active</option>
-        <option value="Ended" <?= $status === 'Ended' ? 'selected' : '' ?>>Ended</option>
-    </select>
+        <div class="filter-item">
+            <label for="statusFilter">Activity Status</label>
+            <select name="status" id="statusFilter">
+                <option value="">All Activities</option>
+                <option value="Upcoming" <?= $status === 'Upcoming' ? 'selected' : '' ?>>Upcoming</option>
+                <option value="Active" <?= $status === 'Active' ? 'selected' : '' ?>>Active</option>
+                <option value="Ended" <?= $status === 'Ended' ? 'selected' : '' ?>>Ended</option>
+            </select>
+        </div>
 
-    <select name="barangay" id="barangayFilter">
-        <option value="" <?= $barangay === 'Municipal' ? 'selected' : '' ?>>All Activities</option>
-        <option value="Municipal" <?= $barangay === 'Municipal' ? 'selected' : '' ?>>Municipal</option>
-        <option value="Barangay"  <?= $barangay === 'Barangay' ? 'selected' : '' ?>>All Barangays</option>
-        <?php foreach ($barangays as $brgy): ?>
-        <option value="<?= htmlspecialchars($brgy) ?>"
-            <?= $barangay === $brgy ? 'selected' : '' ?>>
-            <?= htmlspecialchars($brgy) ?>
-        </option>
-    <?php endforeach; ?>
-    </select>
+        <div class="filter-item">
+            <label for="barangayFilter">Location</label>
+            <select name="barangay" id="barangayFilter">
+                <option value="">All Activities</option>
+                <option value="Municipal" <?= $barangay === 'Municipal' ? 'selected' : '' ?>>Municipal</option>
+                <option value="Barangay" <?= $barangay === 'Barangay' ? 'selected' : '' ?>>All Barangays</option>
+
+                <?php foreach ($barangays as $brgy): ?>
+                    <option value="<?= htmlspecialchars($brgy) ?>"
+                        <?= $barangay === $brgy ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($brgy) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </form>
     <a href="?admin_activities_attendance.php"
-   class="action-icon"
-   title="Reset Filters">
-    <i class="fa-solid fa-filter-circle-xmark"></i>
-</a>
+        class="action-icon"
+        title="Reset Filters">
+        <i class="fa-solid fa-filter-circle-xmark"></i>
+    </a>
 
     <button id="createActivityBtn" onclick="checkActiveSemester()">&plus; Create Activity</button>
     <!-- <a href="/esko/admin/admin_activities_create.php" id="create_activitybtn" onclick="return checkActiveSemester();">Create Activity</a> -->
@@ -332,28 +350,28 @@ include "../assets/layout.php";
 
 <div class="pagination">
 
-<?php
-$query = http_build_query([
-    'search' => $search,
-    'status' => $status,
-    'barangay' => $barangay
-]);
-?>
+    <?php
+    $query = http_build_query([
+        'search' => $search,
+        'status' => $status,
+        'barangay' => $barangay
+    ]);
+    ?>
 
-<?php if ($page > 1): ?>
-    <a href="?page=<?= $page - 1 ?>&<?= $query ?>">Previous</a>
-<?php endif; ?>
+    <?php if ($page > 1): ?>
+        <a href="?page=<?= $page - 1 ?>&<?= $query ?>">Previous</a>
+    <?php endif; ?>
 
-<?php for ($i = 1; $i <= $totalPages; $i++): ?>
-    <a href="?page=<?= $i ?>&<?= $query ?>"
-       class="<?= $i == $page ? 'active' : '' ?>">
-        <?= $i ?>
-    </a>
-<?php endfor; ?>
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?page=<?= $i ?>&<?= $query ?>"
+            class="<?= $i == $page ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
 
-<?php if ($page < $totalPages): ?>
-    <a href="?page=<?= $page + 1 ?>&<?= $query ?>">Next</a>
-<?php endif; ?>
+    <?php if ($page < $totalPages): ?>
+        <a href="?page=<?= $page + 1 ?>&<?= $query ?>">Next</a>
+    <?php endif; ?>
 
 </div>
 
@@ -479,8 +497,7 @@ $query = http_build_query([
 
                     <textarea
                         name="activityinfo"
-                        id="activityinfo"
-                    ></textarea>
+                        id="activityinfo"></textarea>
                 </div>
 
 
@@ -529,13 +546,13 @@ $query = http_build_query([
     // document.getElementById('statusFilter').addEventListener('change', loadActivities);
     // document.getElementById('barangayFilter').addEventListener('change', loadActivities);
 
-    document.getElementById('statusFilter').addEventListener('change', function () {
-    document.getElementById('searchForm').submit();
-});
+    document.getElementById('statusFilter').addEventListener('change', function() {
+        document.getElementById('searchForm').submit();
+    });
 
-document.getElementById('barangayFilter').addEventListener('change', function () {
-    document.getElementById('searchForm').submit();
-});
+    document.getElementById('barangayFilter').addEventListener('change', function() {
+        document.getElementById('searchForm').submit();
+    });
 
     function checkActiveSemester() {
         const semId = <?= json_encode($activeSemId ?? null) ?>;

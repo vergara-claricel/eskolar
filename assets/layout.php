@@ -27,6 +27,7 @@ $adminName = $adminName ?? 'Admin';
     <link rel="stylesheet" href="/esko/assets/css/table.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="/esko/assets/css/activityform.css">
     <link rel="stylesheet" href="/esko/assets/css/activity.css">
+    <link rel="stylesheet" href="/esko/assets/css/form.css">
     <link rel="stylesheet" href="/esko/assets/css/semester.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     
@@ -117,19 +118,24 @@ $adminName = $adminName ?? 'Admin';
             <div class="logo">eSkolar</div>
 
             <nav class="menu">
-                <a href="admin_dashboard.php" class="<?= active('admin_dashboard') ?>">Dashboard</a>
+                <a href="admin_dashboard.php" class="<?= active('admin_dashboard') ?>">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard</a>
 
                 <a href="admin_activities_attendance.php"
-                    class="<?= active('admin_activities') ?>">Activities & Attendance</a>
+                    class="<?= active('admin_activities') ?>">
+                    <i class="fa-solid fa-calendar-check"></i> Activities & Attendance</a>
 
                 <a href="admin_scholars.php"
-                    class="<?= active('admin_scholars') ?>">Scholars</a>
+                    class="<?= active('admin_scholars') ?>">
+                    <i class="fa-solid fa-user-graduate"></i> Scholars</a>
 
                 <a href="admin_sem.php"
-                    class="<?= active('admin_sem') ?>">Semester</a>
+                    class="<?= active('admin_sem') ?>">
+                    <i class="fa-solid fa-calendar-days"></i> Semester</a>
 
                 <a href="admin_officers.php"
-                    class="<?= active('admin_officers') ?>">Officers</a>
+                    class="<?= active('admin_officers') ?>">
+                    <i class="fa-solid fa-user-tie"></i> Officers</a>
             </nav>
         </aside>
 

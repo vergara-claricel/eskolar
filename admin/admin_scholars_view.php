@@ -113,13 +113,12 @@ include "../assets/layout.php";
         border-radius: 12px;
         padding: 20px 24px;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-
         display: flex;
         justify-content: space-between;
         /* Spreads profile left, metrics right */
         align-items: center;
         /* Keeps everything vertically centered */
-        gap: 40px;
+        gap: 20px;
     }
 
     /* LEFT SIDE: Identity & Info */
@@ -151,18 +150,24 @@ include "../assets/layout.php";
         border: 1px solid #e2e8f0;
     }
 
-    /* Horizontal alignment for Barangay & Semester */
-    .scholarinfo .meta-details {
-        display: flex;
-        gap: 20px;
-        font-size: 0.85rem;
-        color: #64748b;
-    }
+.scholarinfo .meta-details {
+    display: flex;
+    gap: 70px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
 
-    .scholarinfo .meta-details span b {
-        color: #334155;
-        font-weight: 500;
-    }
+.scholarinfo .meta-details span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.scholarinfo .meta-details span b {
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
 
 
     /* RIGHT SIDE: Compact Metrics Column */
@@ -341,11 +346,10 @@ include "../assets/layout.php";
 </style>
 
 
+<a href="/esko/admin/admin_scholars.php" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
 
 <div class="container">
-
     <div class="scholarinfo">
-
         <!-- LEFT COLUMN: Profile & Registration Details -->
         <div class="profile-side">
             <h2>
@@ -353,9 +357,10 @@ include "../assets/layout.php";
                 <span class="scholar-id">#<?= $scholar_info['username'] ?></span>
             </h2>
             <div class="meta-details">
-                <span>Barangay: <b><?= $scholar_info['barangay'] ?></b></span>
+                <span>Barangay: <b><?= $scholar_info['barangay'] ?? 'N/A'?></b></span>
+                <span>Contact: <b><?= $scholar_info['phonenumber'] ?? 'N/A' ?></b></span>
+                <span>Email: <b><?= $scholar_info['email'] ?? 'N/A' ?></b></span>
                 <span>Semester: <b><?= $activeSem['semester_name'] ?? 'Not found.' ?></b></span>
-                <span>Contact: <b><?= $scholar_info['phonenumber'] ?></b></span>
             </div>
         </div>
 
