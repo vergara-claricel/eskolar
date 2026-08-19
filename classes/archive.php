@@ -147,7 +147,7 @@ class Archive
 
                 $row[] = ($status === 'present')
                     ? 'Attended'
-                    : 'Not Attended';
+                    : 'Absent';
             }
 
             $row[] = $scholar['attended'];

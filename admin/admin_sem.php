@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['archive_action'])) {
                 'Semester records were successfully archived and exported.';
             $_SESSION['download_file'] = $csv;
         } else {
-
             $_SESSION['error_message'] =
                 'No attendance records were found for this semester.';
         }
@@ -37,6 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['archive_action'])) {
     }
 
     header("Location: admin_sem.php");
+    exit;
+}
+
+//download archived
+if (isset($_GET['export'])) {
+    $semid = (int) $_GET['export'];
+    $archiveobj->exportSemesterAttendanceCsv($semid);
     exit;
 }
 
@@ -275,6 +281,34 @@ endif;
     #cancelBtn:hover {
         background: #cfcfcf;
     }
+
+    .semester-tabs {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #e2e8e2;
+    }
+
+    .semester-tab {
+        background: none;
+        border: none;
+        padding: 8px 2px 10px;
+        color: #718071;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+    }
+
+    .semester-tab:hover {
+        color: #4C7742;
+    }
+
+    .semester-tab.active {
+        color: #254725;
+        font-weight: 600;
+        border-bottom-color: #4C7742;
+    }
 </style>
 
 <div class="page-header">
@@ -310,6 +344,16 @@ endif;
 
         <!-- SEM LIST -->
         <div id="semlist">
+
+            <div class="semester-tabs">
+                <button type="button" class="semester-tab active" data-filter="active">
+                    Existing
+                </button>
+
+                <button type="button" class="semester-tab" data-filter="archived">
+                    Archived
+                </button>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -322,7 +366,8 @@ endif;
 
                 <tbody>
                     <?php foreach ($allsem as $row): ?>
-                        <tr>
+                        <tr class="semester-row"
+                            data-archived="<?= $row['is_archived'] ? 'true' : 'false' ?>">
                             <td><?= $row['semester_name'] ?></td>
                             <td>
                                 <?= (new DateTime($row['semester_start']))->format('M d, Y') ?>
@@ -354,6 +399,11 @@ endif;
                                         data-semname="<?= $row['semester_name'] ?>">
                                         <i class="fa-solid <?= $row['is_archived'] ? 'fa-rotate-left' : 'fa-box-archive' ?>"></i>
                                     </button>
+                                    <?php if ($row['is_archived']): ?>
+                                        <a href="admin_sem.php?export=<?= $row['sem_id'] ?>" class="download-btn">
+                                            <i class="fa-solid fa-download"></i>
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
 
@@ -362,7 +412,6 @@ endif;
                 </tbody>
             </table>
         </div>
-
     </div>
 
     <!-- RIGHT SIDE / CREATE FORM -->
@@ -472,6 +521,7 @@ endif;
         </div>
     </div>
 </div>
+
 
 <script>
     const select = document.getElementById('activesem');
@@ -585,5 +635,37 @@ endif;
     document.getElementById('closeSuccessModal').onclick = function() {
         successModal.style.display = 'none';
     };
+
+    function filterSemesters(filter) {
+        document.querySelectorAll('.semester-row').forEach(row => {
+            const archived = row.dataset.archived === 'true';
+            if (filter === 'active') {
+                row.style.display = archived ? 'none' : '';
+            }
+            if (filter === 'archived') {
+                row.style.display = archived ? '' : 'none';
+            }
+        });
+    }
+
+
+    // Tab click
+    document.querySelectorAll('.semester-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Change active tab
+            document.querySelectorAll('.semester-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+
+            this.classList.add('active');
+
+            // Filter
+            filterSemesters(this.dataset.filter);
+        });
+
+    });
+
+    // INITIAL LOAD
+    filterSemesters('active');
 </script>
 <?php include "../assets/layout_end.php"; ?>
