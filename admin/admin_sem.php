@@ -1,13 +1,6 @@
 <?php
 
 $title = "Semester";
-// include "../assets/layout.php";
-
-// $config = require __DIR__ . "/../api/supabase.php";
-
-// $api = new Supabase($config);
-
-// $semobj = new Semester($api);
 
 require_once "../test.php";
 $activeSem = $semobj->getActiveSemester();

@@ -96,3 +96,7 @@
 .table a:hover {
     opacity: 0.85;
 }
+
+.table .action-icon{
+    color: black;
+}

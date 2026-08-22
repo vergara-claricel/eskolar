@@ -36,13 +36,6 @@ $actDetails['classification'],
 );
 
 $totalPages = ceil($totalRows / $limit);
-// $ar = $actobj->getActivityAttendanceReport(
-//     $actId,
-//     $actDetails['classification'],
-//     $actDetails['barangay'],
-//     $keyword
-// );
-
 $totalRecords = count($ar);
 
 
@@ -129,253 +122,9 @@ include "../assets/layout.php";
 ?>
 
 <style>
-    /* Overlay background */
-    .edit-drawer {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 0;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.45);
-        overflow: hidden;
-        transition: width 0.3s ease;
-        z-index: 9999;
-    }
-
-    /* Drawer box */
-    .edit-drawer .drawer-content {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 360px;
-        height: 100%;
-        background: #ffffff;
-        padding: 25px;
-        box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
-        overflow-y: auto;
-    }
-
-    /* When open */
-    .edit-drawer.open {
-        width: 360px;
-    }
-
-    /* Close button */
-    .drawer-close {
-        font-size: 28px;
-        cursor: pointer;
-        float: right;
-        color: #444;
-        margin-bottom: 10px;
-    }
-
-    .drawer-close:hover {
-        color: #000;
-    }
-
-    /* Title */
-    .edit-drawer h2 {
-        margin: 10px 0 20px;
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    /* Labels */
-    .edit-drawer form label {
-        display: block;
-        margin: 12px 0 5px;
-        font-size: 14px;
-        color: #333;
-        font-weight: 500;
-    }
-
-    /* Inputs */
-    .edit-drawer form input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #bbb;
-        border-radius: 6px;
-        font-size: 15px;
-    }
-
-    /* Submit Button */
-    .edit-drawer form button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 12px;
-        background: #1e88e5;
-        color: white;
-        border: none;
-        font-size: 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .edit-drawer form button:hover {
-        background: #1565c0;
-    }
-
-    /* ACTIVTY DRAWER CSS */
-
-    .activity-drawer {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 0;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.45);
-        overflow: hidden;
-        transition: 0.3s ease;
-        z-index: 9999;
-    }
-
-    .activity-drawer.open {
-        width: 100%;
-    }
-
-    .activity-drawer .drawer-content {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 420px;
-        height: 100%;
-        background: #fff;
-        padding: 20px;
-        overflow-y: auto;
-    }
-
-    .drawer-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .drawer-close {
-        font-size: 26px;
-        cursor: pointer;
-    }
-
-    .drawer-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 15px;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .field.full {
-        grid-column: 1 / -1;
-    }
-
-    .field label {
-        font-size: 12px;
-        margin-bottom: 4px;
-        color: #555;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-    }
-
-    .drawer-btn {
-        margin-top: 15px;
-        width: 100%;
-        padding: 10px;
-        background: #1e88e5;
-        color: white;
-        border: none;
-        border-radius: 6px;
-    }
-
-.ar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    margin: 30px 0 18px;
-    gap: 20px;
-}
-
-.ar-title h3 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    color: #222;
-}
-
-.ar-title p {
-    margin: 4px 0 0;
-    color: #666;
-    font-size: 14px;
-}
-
-#searchForm {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#searchAttendance {
-    width: 260px;
-    padding: 9px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-}
-
-#searchAttendance:focus {
-    border-color: #1e88e5;
-}
-
-#searchForm button {
-    padding: 9px 16px;
-    border: none;
-    background: #1e88e5;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-#searchForm button:hover {
-    background: #1565c0;
-}
-
-
-    .pagination{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-}
-
-.pagination a{
-    padding:8px 14px;
-    border:1px solid #ddd;
-    border-radius:6px;
-    text-decoration:none;
-    color:#333;
-}
-
-.pagination a.active{
-    background:#2d8cff;
-    color:white;
-    border-color:#2d8cff;
-}
 </style>
 
-<a href="/esko/admin/admin_activities_attendance.php" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
+<a href="/esko/z/admin_activities_attendance.php" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
 
 <div class="activity-view">
     <div class="activity-info">
@@ -421,7 +170,6 @@ include "../assets/layout.php";
 
         <!-- DETAILS GRID -->
         <div class="activity-grid">
-
             <div class="label">Date </div>
             <div class="value">
                 <?= !empty($actDetails['activitydate'])
@@ -451,7 +199,7 @@ include "../assets/layout.php";
 
             <div class="label">Info</div>
 
-            <div class="value"  style="grid-column: span 3;">
+            <div class="value"  style="grid-column: span 2;">
                 <?= !empty($actDetails['info'])
             ? nl2br(htmlspecialchars($actDetails['info']))
             : 'No additional information.' ?></div>

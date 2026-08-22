@@ -1,0 +1,348 @@
+    /* Container matches your 900px table */
+    .container {
+        max-width: 950px;
+        margin: 0 auto 24px auto;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* The Main Header Split Box */
+    .scholarinfo {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px 24px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        /* Spreads profile left, metrics right */
+        align-items: center;
+        /* Keeps everything vertically centered */
+        gap: 20px;
+    }
+
+    /* LEFT SIDE: Identity & Info */
+    .scholarinfo .profile-side {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        /* Takes up the available left space naturally */
+    }
+
+    .scholarinfo h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .scholar-id {
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: #f1f5f9;
+        color: #475569;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+    }
+
+.scholarinfo .meta-details {
+    display: flex;
+    gap: 70px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.scholarinfo .meta-details span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.scholarinfo .meta-details span b {
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+
+    /* RIGHT SIDE: Compact Metrics Column */
+    .scholarinfo .metrics-side {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        /* Dynamically shrinks to fit text width */
+        gap: 24px;
+        background: #f8fafc;
+        /* Light grey backdrop to group metrics together */
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: 1px solid #f1f5f9;
+    }
+
+    /* Individual Stat Layout */
+    .scholarinfo p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+    }
+
+    .scholarinfo p b {
+        font-size: 1.05rem;
+        /* Larger font size for core metrics */
+        text-transform: none;
+        letter-spacing: normal;
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    /* Color indicators for Remarks status */
+    .status-pass {
+        color: #16a34a !important;
+    }
+
+    .status-fail {
+        color: #dc2626 !important;
+    }
+
+    
+    .scholar-ar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin: 30px 20px 18px;
+    gap: 20px;
+}
+
+.ar-title h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+}
+
+.ar-title p {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+#exportSCbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+    background: #dc2626;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: .2s ease;
+}
+
+#exportSCbtn:hover {
+    background: #b91c1c;
+}
+
+#exportSCbtn i {
+    font-size: 15px;
+}
+
+    .edit-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.45);
+        overflow: hidden;
+        transition: width 0.3s ease;
+        z-index: 9999;
+    }
+
+    /* Drawer box */
+    .edit-drawer .drawer-content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 360px;
+        height: 100%;
+        background: #ffffff;
+        padding: 25px;
+        box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+    }
+
+    /* When open */
+    .edit-drawer.open {
+        width: 360px;
+    }
+
+    /* Close button */
+    .drawer-close {
+        font-size: 28px;
+        cursor: pointer;
+        float: right;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+    .drawer-close:hover {
+        color: #000;
+    }
+
+    /* Title */
+    .edit-drawer h2 {
+        margin: 10px 0 20px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    /* Labels */
+    .edit-drawer form label {
+        display: block;
+        margin: 12px 0 5px;
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    /* Inputs */
+    .edit-drawer form input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    /* Submit Button */
+    .edit-drawer form button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #1e88e5;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .edit-drawer form button:hover {
+        background: #1565c0;
+    }
+
+    /* Tablet */
+@media (max-width: 768px) {
+
+    .container {
+        width: calc(100% - 30px);
+        max-width: none;
+        margin: 0 auto 24px;
+    }
+
+    .scholarinfo {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 18px;
+        gap: 18px;
+    }
+
+    .scholarinfo .profile-side {
+        width: 100%;
+    }
+
+    .scholarinfo h2 {
+        font-size: 1.2rem;
+        flex-wrap: wrap;
+    }
+
+    .scholarinfo .meta-details {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .scholarinfo .metrics-side {
+        width: 100%;
+        box-sizing: border-box;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    .container {
+        width: calc(100% - 20px);
+        margin: 0 auto 20px;
+    }
+
+    .scholarinfo {
+        padding: 16px;
+        border-radius: 10px;
+        gap: 20px;
+    }
+
+    /* Name */
+    .scholarinfo h2 {
+        font-size: 1.1rem;
+        line-height: 1.4;
+        gap: 6px;
+    }
+
+    .scholar-id {
+        font-size: 0.7rem;
+        padding: 3px 7px;
+    }
+
+    /* Student information */
+    .scholarinfo .meta-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 15px;
+        margin-top: 5px;
+    }
+
+    .scholarinfo .meta-details span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .scholarinfo .meta-details span b {
+        font-size: 0.8rem;
+        overflow-wrap: anywhere;
+    }
+
+    /* Metrics */
+    .scholarinfo .metrics-side {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 12px 8px;
+        border-radius: 8px;
+    }
+
+    .scholarinfo p {
+        font-size: 0.6rem;
+        text-align: center;
+        align-items: center;
+        letter-spacing: 0.3px;
+    }
+
+    .scholarinfo p b {
+        font-size: 0.9rem;
+    }
+}

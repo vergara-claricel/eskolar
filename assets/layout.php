@@ -26,6 +26,7 @@ $adminName = $adminName ?? 'Admin';
     <link rel="stylesheet" href="/esko/assets/css/layout.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="/esko/assets/css/table.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="/esko/assets/css/activityform.css">
+    <link rel="stylesheet" href="/esko/assets/css/scholar.css">
     <link rel="stylesheet" href="/esko/assets/css/activity.css">
     <link rel="stylesheet" href="/esko/assets/css/form.css">
     <link rel="stylesheet" href="/esko/assets/css/semester.css">

@@ -114,19 +114,65 @@ include "../assets/layout.php";
         background: #1565c0;
     }
 
-    .filter-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin: 15px 0;
-    }
+/* =========================
+   FILTER BAR
+========================= */
 
-    .filter-item {
+.filter-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   SEARCH FORM
+========================= */
+
+#searchForm {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#searchActs {
+    width: 250px;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#searchForm button {
+    height: 36px;
+    padding: 8px 16px;
+    border: none;
+    background: #2d8cff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#searchForm button:hover {
+    background: #1f73d8;
+}
+
+
+/* =========================
+   FILTER ITEMS
+========================= */
+
+.filter-item {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-top: -20px;
 }
 
 .filter-item label {
@@ -135,98 +181,77 @@ include "../assets/layout.php";
     color: #555;
 }
 
+#statusFilter,
+#barangayFilter {
+    min-width: 170px;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+    /* Entire filter section */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
+    }
+
+    /* Form becomes the mobile layout */
     #searchForm {
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
     }
 
+    /* Search input */
     #searchActs {
-        width: 250px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        width: 100%;
+        height: 40px;
     }
 
+    /* Search button */
     #searchForm button {
-        padding: 8px 16px;
-        border: none;
-        background: #2d8cff;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
+        width: 100%;
+        height: 40px;
     }
 
-    #searchForm button:hover {
-        background: #1f73d8;
+    /* Filter items */
+    .filter-item {
+        width: 100%;
     }
 
     #statusFilter,
     #barangayFilter {
-        min-width: 170px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
+        width: 100%;
+        min-width: 0;
+        height: 40px;
     }
 
-    .success-box {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #e8f5e9;
-        color: #2e7d32;
-        border: 1px solid #a5d6a7;
-        border-left: 5px solid #43a047;
-        padding: 12px 16px;
-        margin-bottom: 15px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 500;
+    /* Reset button */
+    .action-icon {
+        align-self: flex-start;
     }
 
-    .success-content {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    /* Create Activity */
+    #createActivityBtn {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
     }
-
-    .close-notif {
-        background: none;
-        border: none;
-        color: #2e7d32;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        line-height: 1;
-        padding: 0;
-    }
-
-    .close-notif:hover {
-        color: #1b5e20;
-    }
-
-
-    .pagination {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .pagination a {
-        padding: 8px 14px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        text-decoration: none;
-        color: #333;
-    }
-
-    .pagination a.active {
-        background: #2d8cff;
-        color: white;
-        border-color: #2d8cff;
-    }
+}
 </style>
 
 <div class="page-header">

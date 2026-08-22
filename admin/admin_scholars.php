@@ -225,32 +225,39 @@ include "../assets/layout.php";
 
     .filter-bar {
         display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin: 15px 0;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    width: 100%;
+    box-sizing: border-box;
     }
 
     #searchForm {
         display: flex;
-        align-items: center;
-        gap: 8px;
+    align-items: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
     }
 
     #search {
         width: 250px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
     }
 
     #searchForm button {
-        padding: 8px 16px;
-        border: none;
-        background: #2d8cff;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
+        height: 36px;
+    padding: 8px 16px;
+    border: none;
+    background: #2d8cff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
     }
 
     #searchForm button:hover {
@@ -260,10 +267,12 @@ include "../assets/layout.php";
     #statusFilter,
     #barangayFilter {
         min-width: 170px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
     }
 
     .action-group {
@@ -298,25 +307,60 @@ include "../assets/layout.php";
         border: none;
     }
 
-    .pagination{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-}
+    @media (max-width: 480px) {
 
-.pagination a{
-    padding:8px 14px;
-    border:1px solid #ddd;
-    border-radius:6px;
-    text-decoration:none;
-    color:#333;
-}
+    /* Entire filter section */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
+    }
 
-.pagination a.active{
-    background:#2d8cff;
-    color:white;
-    border-color:#2d8cff;
+    /* Form becomes the mobile layout */
+    #searchForm {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
+    }
+
+    /* Search input */
+    #search {
+        width: 100%;
+        height: 40px;
+    }
+
+    /* Search button */
+    #search button {
+        width: 100%;
+        height: 40px;
+    }
+
+    /* Filter items */
+    .filter-item {
+        width: 100%;
+    }
+
+    #statusFilter,
+    #barangayFilter {
+        width: 100%;
+        min-width: 0;
+        height: 40px;
+    }
+
+    /* Reset button */
+    .action-icon {
+        align-self: flex-start;
+    }
+
+    /* Create Scholar */
+    #nav_addscholar {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
 }
 
 </style>
