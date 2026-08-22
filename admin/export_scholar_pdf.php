@@ -88,8 +88,8 @@ body {
 }
 
 .qr {
-    width: 90px;
-    height: 90px;
+    width: 30mmpx;
+    height: 30mmpx;
 }
 
 .qr-label {
@@ -107,8 +107,8 @@ body {
 
 .logo-left,
 .logo-right {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
 }
 
 
@@ -120,18 +120,18 @@ body {
 }
 
 .header-title {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     line-height: 1.3;
 }
 
 .header-subtitle {
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.3;
 }
 
 .scorecard-title {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     margin-top: 8px;
 }
@@ -224,8 +224,7 @@ body {
 
 .footer-divider {
     border-top: 3px solid #000;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .footer-table {
@@ -441,9 +440,10 @@ $html .= "
 
     <td width='33%'>
         <b>PRESIDENT'S SIGNATURE: </b>
-        <span class='signature-line'>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </span>
+        
+        <img src='/assets/images/pinlac_sig.png' 
+         alt='President Signature'
+         style='width: 40px; height: auto; vertical-align: bottom; margin-bottom: -10px;'>
     </td>
 
 </tr>

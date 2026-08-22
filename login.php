@@ -27,11 +27,12 @@ if (isset($_POST['login'])) {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION["userid"] = $user["id"];
+        $adminId =$_SESSION["userid"];
         $_SESSION["role"] = $user["role"];
 
         // role-based redirect
         if ($user["role"] === "admin") {
-            header("Location: /esko/admin/admin_dashboard.php");
+            header("Location: /esko/admin/admin_dashboard.php?admin=$adminId");
         }
         exit;
 

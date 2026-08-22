@@ -219,6 +219,10 @@ include "../assets/layout.php";
         background: none;
         border: none;
     }
+
+    .notice{
+
+    }
 </style>
 
 <div class="officer-header">
@@ -227,6 +231,7 @@ include "../assets/layout.php";
     <h2>Officer Accounts</h2>
     <p>Manage officers user accounts.</p>
 </div>
+
     <a href="admin_officers_create.php" id="nav_addofficer"> &plus; Add Officer</a>
 </div>
 <div class="table-container">

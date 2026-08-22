@@ -161,7 +161,7 @@ include "../assets/layout.php";
                     <td>
                         <!-- <a href="/esko/admin/admin_activities_view.php?Id=<?= $s['ar_id'] ?>">Edit</a> -->
                         <a href="javascript:void(0)"
-                            class="edit-btn"
+                            class="action-btn edit-btn"
                             data-ar_id="<?= $s['ar_id'] ?>"
                             data-user_id="<?= $s['user_id'] ?: $_GET['scholarid'] ?>"
                             data-activityid="<?= $s['activity_id'] ?? '' ?>"
@@ -171,7 +171,7 @@ include "../assets/layout.php";
                             data-timeout="<?= $s['timeout'] ?? '' ?>"
                             data-scanned_by="<?= $s['scanned_by'] ?? '' ?>"
                             data-officer_fullname="<?= trim($s['officer_fullname'] ?? '') !== '' ? $s['officer_fullname'] : $adminName ?>">
-                            Edit
+                        <i class="fa-solid fa-pen-to-square" style="color: black;"></i>
                         </a>
                     </td>
 
