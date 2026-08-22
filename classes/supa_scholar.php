@@ -213,7 +213,6 @@ class Scholar
         //         . "&user_id=eq.$user_id"
         //         . "&activities.semester=eq.$semId"
         // );
-
         return $this->api->post(
             "rpc/get_activities_attendance_scholar",
             [
@@ -221,6 +220,7 @@ class Scholar
                 "p_semester" => $semId
             ]
         );
+        
     }
 
     function getScholarRecords($user_id, $semId)

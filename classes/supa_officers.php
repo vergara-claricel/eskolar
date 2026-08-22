@@ -128,4 +128,16 @@ function getAdminName($adminId)
 
     return $data[0]['first_name'] . ' ' . $data[0]['last_name'];
 }
+
+function getRepresentative($barangay){
+   $brgy = rawurlencode($barangay);
+   $query = "officer_view?select=first_name,last_name&is_active=eq.true&barangay=eq.$brgy";
+    $result =$this->api->get($query);
+
+   if (empty($result)) {
+        return null;
+    }
+
+    return $result[0];
+}
 }

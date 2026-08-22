@@ -124,7 +124,7 @@ include "../assets/layout.php";
 <style>
 </style>
 
-<a href="/esko/z/admin_activities_attendance.php" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
+<a href="/esko/admin/admin_activities_attendance.php" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
 
 <div class="activity-view">
     <div class="activity-info">

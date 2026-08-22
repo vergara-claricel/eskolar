@@ -34,8 +34,8 @@ class Activities
 
     function getActivitiesOfActiveSem($semid, $page, $limit)
     {
+       
         $offset = ($page - 1) * $limit;
-
         return $this->api->get(
             "activities_with_status",
             "?semester=eq.$semid" .
@@ -99,7 +99,6 @@ class Activities
         if ($offset !== null) {
             $query .= "&offset=$offset";
         }
-
         return $this->api->get($query);
     }
 
@@ -192,13 +191,13 @@ class Activities
     function getAttendanceRecords($actId)
     {
         return $this->api->get(
-            "scholar_attendance_view?activityid=eq.$actId&is_active=eq.true&order=last_name.asc"
+            "scholar_attendance_view?select=user_id,ar_id,timein,timeout,scanned_by,attendance_status,officer_fullname&activityid=eq.$actId&is_active=eq.true"
         );
     }
 
     function getEligibleScholars($classification, $barangay = null)
     {
-        $query = "scholar_view?select=*&is_active=eq.true&order=last_name.asc";
+        $query = "scholar_view?select=user_id,username,first_name,last_name&is_active=eq.true&order=last_name.asc";
 
         if ($classification === 'Barangay' && $barangay) {
             $query .= "&barangay=eq." . rawurlencode($barangay);
@@ -251,6 +250,7 @@ class Activities
 
     function buildActivityAttendanceReport($actId, $classification, $barangay, $search = '')
     {
+        $start = microtime(true);
         $scholars = $this->getEligibleScholars($classification, $barangay);
         $logs = $this->getAttendanceRecords($actId);
 
@@ -289,7 +289,9 @@ class Activities
                     str_contains(strtolower($s['last_name'] ?? ''), $search);
             }));
         }
-
+    echo "Users query: " .
+     round((microtime(true) - $start) * 1000) .
+     " ms";
         return $result;
     }
 

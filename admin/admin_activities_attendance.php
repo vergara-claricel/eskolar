@@ -254,6 +254,7 @@ include "../assets/layout.php";
 }
 </style>
 
+
 <div class="page-header">
     <h2>Activities & Attendance</h2>
     <p> Manage activity and attendance records. </p>
@@ -315,7 +316,7 @@ include "../assets/layout.php";
             </select>
         </div>
     </form>
-    <a href="?admin_activities_attendance.php"
+    <a href="/esko/admin/admin_activities_attendance.php"
         class="action-icon"
         title="Reset Filters">
         <i class="fa-solid fa-filter-circle-xmark"></i>
@@ -415,7 +416,7 @@ include "../assets/layout.php";
                 <!-- Activity Name -->
                 <div class="form-group full">
                     <label class="form-label" for="activityname">
-                        Activity Name
+                        Activity Name*
                     </label>
                     <input type="text" name="activityname" id="activityname">
                 </div>
@@ -424,9 +425,9 @@ include "../assets/layout.php";
                 <!-- Date + Venue -->
                 <div class="form-group">
                     <label class="form-label" for="activitydate">
-                        Activity Date
+                        Activity Date*
                     </label>
-                    <input type="date" name="activitydate" id="activitydate">
+                    <input type="date" name="activitydate" id="activitydate" required>
                 </div>
 
                 <div class="form-group">
@@ -442,16 +443,16 @@ include "../assets/layout.php";
 
                     <div class="form-group">
                         <label class="form-label" for="timein_start">
-                            TIME IN START
+                            TIME IN START*
                         </label>
-                        <input type="time" name="timein_start" id="timein_start">
+                        <input type="time" name="timein_start" id="timein_start" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="timein_end">
-                            TIME IN END
+                            TIME IN END*
                         </label>
-                        <input type="time" name="timein_end" id="timein_end">
+                        <input type="time" name="timein_end" id="timein_end" required>
                     </div>
 
                 </div>
@@ -462,14 +463,14 @@ include "../assets/layout.php";
 
                     <div class="form-group">
                         <label class="form-label" for="timeout_start">
-                            TIME OUT START
+                            TIME OUT START*
                         </label>
-                        <input type="time" name="timeout_start" id="timeout_start">
+                        <input type="time" name="timeout_start" id="timeout_start" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="timeout_end">
-                            TIME OUT END
+                        <label class="form-label" for="timeout_end" required>
+                            TIME OUT END*
                         </label>
                         <input type="time" name="timeout_end" id="timeout_end">
                     </div>
@@ -483,7 +484,7 @@ include "../assets/layout.php";
                         Classification
                     </label>
 
-                    <select name="classification" id="classification">
+                    <select name="classification" id="classification" required>
                         <option value="Municipal">Municipal</option>
                         <option value="Barangay">Barangay</option>
                     </select>
@@ -495,7 +496,7 @@ include "../assets/layout.php";
                         Select Barangay
                     </label>
 
-                    <select name="barangay" id="barangay">
+                    <select name="barangay" id="barangay" required>
                         <option value="Atilano Ricardo">Atilano Ricardo</option>
                         <option value="Bagumbayan">Bagumbayan</option>
                         <option value="Banawang">Banawang</option>

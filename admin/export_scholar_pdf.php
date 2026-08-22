@@ -30,7 +30,23 @@ if (!file_exists($qrPath)) {
 $svgContent = file_get_contents($qrPath);
 $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($svgContent);
 $scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
-
+if($scholar_ar !== null){
+    $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
+    $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholar_info['barangay'], $semId);
+    $totalMunicipalEvents = $scObj->getMunicipalEvents($semId);
+    $totalEvents = $scObj->getTotalEvents($totalBrgyEvents, $totalMunicipalEvents);
+    $quotaPercentage = $scObj->computeQuotaPercent($scholarAttended, $totalEvents);
+    $passFail = $scObj->attendanceRemark($quotaPercentage);
+    $repData = $offobj->getRepresentative($scholar_info['barangay']);
+} else{
+    echo "<alert>No attendance records to show.</alert>";
+    exit;
+}
+    if ($repData !== null) {
+     $repName = $repData['first_name'] . ' ' . $repData['last_name'];
+} else {
+    $repName = 'N/A';
+}
 
 $html = "
 
@@ -413,23 +429,20 @@ $html .= "
 <table class='footer-table'>
 
 <tr>
-
     <td width='42%'>
-        <b>REPRESENTATIVE'S NAME:</b>
-        <span class='signature-line'>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </span>
+        <b>REPRESENTATIVE'S NAME:  <span style='text-decoration: underline;'>$repName</span></b>
+        
     </td>
 
     <td width='25%'>
-        <b>REMARKS:</b>
+        <b>REMARKS: $passFail</b>
         &nbsp;
     </td>
 
     <td width='33%'>
-        <b>PRESIDENT'S SIGNATURE:</b>
+        <b>PRESIDENT'S SIGNATURE: </b>
         <span class='signature-line'>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
     </td>
 
