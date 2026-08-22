@@ -7,7 +7,7 @@ $title = "Dashboard";
 // include "../classes/supa_officers.php";
 
 require_once "../test.php";
-// $offobj = new Officer($api);
+$adminId = $_SESSION['userid'];
 $officers = $offobj->getOfficers();
 include "../assets/layout.php";
 
@@ -218,10 +218,6 @@ include "../assets/layout.php";
     .action-btn {
         background: none;
         border: none;
-    }
-
-    .notice{
-
     }
 </style>
 

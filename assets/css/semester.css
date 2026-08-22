@@ -16,37 +16,58 @@
 }
 
 /* ---------- SET ACTIVE SEM ---------- */
-
 #setsem,
 #semlist,
 #semform {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#setsem h3 {
+    margin: 0 0 15px;
+    font-size: 18px;
+    color: #2D2D2D;
 }
 
 #setsem form {
     display: flex;
-    gap: 10px;
     align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
 #setsem select {
     flex: 1;
-    padding: 8px 10px;
+    min-width: 0;
+    height: 38px;
+    padding: 0 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
 #setsem button {
-    padding: 8px 14px;
+    height: 38px;
+    padding: 0 18px;
     border: none;
     border-radius: 6px;
     background: #FFC857;
     color: #fff;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
 }
 
+#setsem button:hover {
+    background: #eeb644;
+}
 /* ---------- CREATE FORM ---------- */
 
 .sem-form {
@@ -58,22 +79,41 @@
 .semform-item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+
+    margin-bottom: 10px;
 }
 
 .semform-item label {
-    font-size: 13px;
+    margin-bottom: 5px;
+    font-size: 14px;
     font-weight: 600;
+    color: #444;
 }
 
-.sem-form input[type="text"],
-.sem-form input[type="date"] {
+.semform-item input {
     width: 100%;
-    padding: 10px;
+    padding: 9px 11px;
+
+    box-sizing: border-box;
+
     border: 1px solid #ddd;
     border-radius: 6px;
-    box-sizing: border-box;
+
+    background: #fff;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
+
+.semform-item input:focus {
+    border-color: #FFC857;
+    box-shadow: 0 0 0 2px rgba(255, 200, 87, 0.15);
+}
+
 
 .sem-form input:focus {
     outline: none;

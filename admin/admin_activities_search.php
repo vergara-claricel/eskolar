@@ -1,15 +1,10 @@
 <?php
-
-// require_once "../classes/supabase.php";
-// $config = require __DIR__ . "esko/../api/supabase.php";
-// include "../classes/supa_activities.php";
-// include "../classes/supa_semester.php";
-
-// $api = new Supabase($config);
-// $actobj = new Activities($api);
 require_once "../test.php";
+
+$adminId = $_SESSION['userid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
+
 
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';

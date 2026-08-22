@@ -3,6 +3,7 @@
 $title = "Semester";
 
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 $activeSem = $semobj->getActiveSemester();
 $activeSemId = $activeSem['sem_id'] ?? '';
 
@@ -16,11 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['archive_action'])) {
         if ($csv) {
             $archiveobj->archiveSemesterRecords($semid);
             $_SESSION['success_message'] =
-                'Semester records were successfully archived and exported.';
-            $_SESSION['download_file'] = $csv;
-        } else {
-            $_SESSION['error_message'] =
-                'No attendance records were found for this semester.';
+                'Semester records were successfully archived.';
         }
     } elseif ($action === 'restore') {
         $archiveobj->restoreSemesterRecords($semid);
@@ -101,23 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_sem_details']))
 include "../assets/layout.php";
 ?>
 
-<!-- // success message -->
-<?php if (isset($_SESSION['success_message'])): ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            showSuccessModal(
-                'Success',
-                <?= json_encode($_SESSION['success_message']) ?>
-            );
-        });
-    </script>
-<?php
-    unset($_SESSION['success_message']);
-endif;
-?>
-
 <style>
-    .success-content {
+    .success-archive-content {
         text-align: center;
         max-width: 400px;
     }
@@ -186,7 +168,7 @@ endif;
         padding-bottom: 12px;
         margin-bottom: 16px;
         border-bottom: 1px solid #e5e5e5;
-        color: #d32f2f;
+        color: black;
     }
 
     /* DETAILS */
@@ -247,8 +229,11 @@ endif;
         border-top: 1px solid #e5e5e5;
     }
 
+    #archiveBtn,
+    #cancelArchiveBtn,
     #confirmBtn,
-    #cancelBtn {
+    #cancelBtn,
+    #cancelEditSem {
         border: none;
         padding: 9px 18px;
         border-radius: 6px;
@@ -258,12 +243,21 @@ endif;
     }
 
     #confirmBtn {
-        background: #d32f2f;
+        background: #FFC857;
         color: white;
     }
 
+    #archiveBtn {
+        background: #254725;
+        color: white;
+    }
+
+    #archiveBtn:hover {
+        background: rgb(36, 167, 13);
+    }
+
     #confirmBtn:hover {
-        background: #b71c1c;
+        background: #c28f2b;
     }
 
     #cancelBtn {
@@ -271,6 +265,7 @@ endif;
         color: #333;
     }
 
+    #cancelArhiveBtn,
     #cancelBtn:hover {
         background: #cfcfcf;
     }
@@ -302,7 +297,86 @@ endif;
         font-weight: 600;
         border-bottom-color: #4C7742;
     }
+
+    /* =========================
+   SEMESTER ACTIONS
+========================= */
+
+    .action-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* All action buttons / links */
+    .action-group .action-icon,
+    .action-group .download-btn {
+        width: 34px;
+        height: 34px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+
+        border: none;
+        border-radius: 6px;
+
+        background: #f5f5f5;
+        color: #555;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    /* Icons */
+    .action-group i {
+        font-size: 14px;
+    }
+
+    /* Edit */
+    .action-group .edit-sem:hover {
+        background: #e8f1ff;
+        color: #FFC857;
+    }
+
+    /* Archive / Restore */
+    .action-group .archive-sem:hover {
+        background: #fff4dc;
+        color: #254725;
+    }
+
+    /* Download */
+    .action-group .download-btn:hover {
+        background: #e8f7ed;
+        color: #28a745;
+    }
+
+    /* Optional: slight click effect */
+    .action-group .action-icon:active,
+    .action-group .download-btn:active {
+        transform: scale(0.95);
+    }
 </style>
+
+<?php if (isset($_SESSION['success_message'])): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showSuccessModal(
+                'Success',
+                <?= json_encode($_SESSION['success_message']) ?>
+            );
+        });
+    </script>
+<?php
+    unset($_SESSION['success_message']);
+endif;
+?>
 
 <div class="page-header">
     <h2>Semester</h2>
@@ -463,11 +537,10 @@ endif;
                 <button type="submit" name="update_sem_details" id="confirmBtn">Save Changes</button>
                 <button type="button" id="cancelEditSem">Cancel</button>
             </div>
-
+        </form>
     </div>
 </div>
-</form>
-</div>
+
 
 <div id="archiveModal" class="modal">
     <!-- Modal content -->
@@ -476,7 +549,7 @@ endif;
         <p><strong><span id="titleModalAction"></span> Confirmation</strong></p>
         <p>Are you sure you want to <span id="modalAction"></span> this semester?</p>
         <div class="modal-info">
-            <form method="post" id="archiveForm">
+            <form method="POST" id="archiveForm">
                 <input type="hidden" name="sem_id" id="toArchiveSemId">
                 <input type="hidden" name="archive_action" id="whatAction">
             </form>
@@ -485,8 +558,8 @@ endif;
         <p>Doing so would export all related records for this semester into a CSV file. </p>
         <p>Continue?</p>
         <div class="modal-buttons">
-            <button type="submit" name="archive_restore_btn" id="archiveBtn">Confirm</button>
-            <button id="cancelArchiveBtn">Cancel</button>
+            <button type="submit" id="archiveBtn">Confirm</button>
+            <button type="button" id="cancelArchiveBtn">Cancel</button>
         </div>
     </div>
 </div>
@@ -502,7 +575,7 @@ endif;
 
 <!-- SUCCESS -->
 <div id="successModal" class="modal">
-    <div class="modal-content success-content">
+    <div class="modal-content success-archive-content">
         <span class="close" id="closeSuccessModal">&times;</span>
         <div class="success-icon">
             <i class="fa-solid fa-circle-check"></i>
@@ -521,43 +594,59 @@ endif;
     let originalValue = select.value;
 
     let currentForm;
-    let modal = document.getElementById("editSemModal");
-    let modalSemId = document.getElementById("modalSemId");
-    let modalSemName = document.getElementById("modalSemName");
-    let modalSemStart = document.getElementById("modalSemStart");
-    let modalSemEnd = document.getElementById("modalSemEnd");
-    let confirmBtn = document.getElementById("confirmBtn");
-    let closeModal = document.getElementById("closeModal");
-    let cancelBtn = document.getElementById("cancelEditSem");
 
-    let archiveModal = document.getElementById("archiveModal");
-    let closeArchiveModal = document.getElementById("closeArchiveModal");
-    let cancelArchiveBtn = document.getElementById("cancelArchiveBtn");
-    let archiveBtn = document.getElementById("archiveBtn");
-    let toArchiveSemId = document.getElementById("toArchiveSemId");
-    let toArchiveName = document.getElementById("toArchiveSemName");
-    // store original value when page loads
-    document.addEventListener('DOMContentLoaded', () => {
+    // Edit modal
+    const modal = document.getElementById("editSemModal");
+    const modalSemId = document.getElementById("modalSemId");
+    const modalSemName = document.getElementById("modalSemName");
+    const modalSemStart = document.getElementById("modalSemStart");
+    const modalSemEnd = document.getElementById("modalSemEnd");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const closeModal = document.getElementById("closeModal");
+    const cancelBtn = document.getElementById("cancelEditSem");
+
+    // Archive modal
+    const archiveModal = document.getElementById("archiveModal");
+    const closeArchiveModal = document.getElementById("closeArchiveModal");
+    const cancelArchiveBtn = document.getElementById("cancelArchiveBtn");
+    const archiveBtn = document.getElementById("archiveBtn");
+    const toArchiveSemId = document.getElementById("toArchiveSemId");
+    const toArchiveName = document.getElementById("toArchiveSemName");
+
+    // --------------------------------
+    // ACTIVE SEMESTER
+    // --------------------------------
+
+    document.addEventListener('DOMContentLoaded', function() {
         originalValue = select.value;
     });
 
     document.getElementById('update_sem').addEventListener('click', function(e) {
-        const selectedText = select.options[select.selectedIndex].text;
 
-        const confirmMsg = `Change active semester to "${selectedText}"?`;
+        const selectedText =
+            select.options[select.selectedIndex].text;
+
+        const confirmMsg =
+            `Change active semester to "${selectedText}"?`;
 
         if (!confirm(confirmMsg)) {
             e.preventDefault();
 
-            // revert to original selection
+            // Restore original selection
             select.value = originalValue;
         }
     });
+
+
+    // --------------------------------
+    // OPEN EDIT / ARCHIVE MODALS
+    // --------------------------------
 
     document.addEventListener('click', function(ev) {
         const btn = ev.target.closest('.edit-sem');
         const archivebtn = ev.target.closest('.archive-sem');
         if (btn) {
+
             modalSemId.value = btn.dataset.semid;
             modalSemName.value = btn.dataset.semname;
             modalSemStart.value = btn.dataset.semstart;
@@ -566,99 +655,136 @@ endif;
             currentForm = btn.closest('form');
 
             modal.style.display = 'flex';
-        } else if (archivebtn) {
+
+        }
+
+        // ARCHIVE / RESTORE
+        else if (archivebtn) {
+
             const action = archivebtn.dataset.action;
-            document.getElementById('modalAction').innerText = action;
+
+            document.getElementById('modalAction').innerText =
+                action;
+
             document.getElementById('titleModalAction').innerText =
                 action === 'archive' ? 'Archive' : 'Restore';
+
+            // Change title color
+            document.getElementById('titleModalAction').style.color = action === 'archive' ? '#28a745' : 'black';
+            document.getElementById('archiveBtn').style.backgroundColor = action === 'archive' ? '#28a745' : 'black';
+
             toArchiveSemId.value = archivebtn.dataset.semid;
             toArchiveName.innerText = archivebtn.dataset.semname;
             document.getElementById('whatAction').value = action;
             archiveBtn.innerText = action === 'archive' ? 'Archive' : 'Restore';
+
             archiveModal.style.display = 'flex';
         }
     });
 
+
+    // --------------------------------
+    // EDIT CONFIRM
+    // --------------------------------
+
     confirmBtn.addEventListener("click", function() {
+
         if (currentForm) {
             currentForm.submit();
         }
+
     });
 
-    archiveBtn.addEventListener("click", function() {
-        const action = document.getElementById('whatAction').value;
-        document.getElementById('loadingModal').style.display = 'flex';
+
+    // --------------------------------
+    // ARCHIVE / RESTORE CONFIRM
+    // --------------------------------
+
+    archiveBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        const action =
+            document.getElementById('whatAction').value;
+
+        const loadingModal =
+            document.getElementById('loadingModal');
+
+        const archiveForm =
+            document.getElementById('archiveForm');
+
         document.getElementById('loadingText').innerText =
             action === 'archive' ?
-            'Exporting and archiving semester records. Please wait.' :
+            'Archiving semester records. Please wait.' :
             'Restoring semester records. Please wait.';
-        archiveModal.style.display = "none";
+
+        archiveModal.style.display = 'none';
+        document.getElementById('loadingModal').style.display = 'flex';
         document.getElementById('archiveForm').submit();
     });
 
+
     closeModal.onclick = function() {
         modal.style.display = "none";
-    }
-
-    closeArchiveModal.onclick = function() {
-        archiveModal.style.display = "none";
-    }
+    };
 
     cancelBtn.onclick = function() {
         modal.style.display = "none";
-    }
+    };
+
+    closeArchiveModal.onclick = function() {
+        archiveModal.style.display = "none";
+    };
 
     cancelArchiveBtn.onclick = function() {
         archiveModal.style.display = "none";
-    }
-
-    function showSuccessModal(title, message) {
-        document.getElementById('successTitle').innerText = title;
-        document.getElementById('successMessage').innerText = message;
-
-        document.getElementById('successModal').style.display = 'flex';
-    }
-
-    const successModal = document.getElementById('successModal');
+    };
 
     document.getElementById('successOkBtn').onclick = function() {
-        successModal.style.display = 'none';
+        document.getElementById('successModal').style.display = "none";
     };
 
-    document.getElementById('closeSuccessModal').onclick = function() {
-        successModal.style.display = 'none';
-    };
+    function showSuccessModal(title, message) {
+
+        // Hide loading modal
+        document.getElementById('loadingModal').style.display = 'none';
+        // Set success information
+        document.getElementById('successTitle').innerText =
+            title;
+        document.getElementById('successMessage').innerText =
+            message;
+        // Show success modal
+        document.getElementById('successModal').style.display =
+            'flex';
+    }
 
     function filterSemesters(filter) {
         document.querySelectorAll('.semester-row').forEach(row => {
-            const archived = row.dataset.archived === 'true';
+            const archived =
+                row.dataset.archived === 'true';
             if (filter === 'active') {
-                row.style.display = archived ? 'none' : '';
-            }
-            if (filter === 'archived') {
-                row.style.display = archived ? '' : 'none';
+                row.style.display =
+                    archived ? 'none' : '';
+            } else if (filter === 'archived') {
+                row.style.display =
+                    archived ? '' : 'none';
             }
         });
     }
 
-
-    // Tab click
     document.querySelectorAll('.semester-tab').forEach(tab => {
         tab.addEventListener('click', function() {
-            // Change active tab
-            document.querySelectorAll('.semester-tab').forEach(t => {
-                t.classList.remove('active');
-            });
-
+            document.querySelectorAll('.semester-tab')
+                .forEach(t => {
+                    t.classList.remove('active');
+                });
             this.classList.add('active');
+            filterSemesters(
+                this.dataset.filter
+            );
 
-            // Filter
-            filterSemesters(this.dataset.filter);
         });
 
     });
 
-    // INITIAL LOAD
     filterSemesters('active');
 </script>
 <?php include "../assets/layout_end.php"; ?>

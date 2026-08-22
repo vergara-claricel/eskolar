@@ -7,7 +7,7 @@
 // $schoobj = new Scholar($api);
 require_once "../test.php";
 // include "../assets/layout.php";
-
+$adminId = $_SESSION['userid'];
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $barangay = $_GET['barangay'] ?? '';

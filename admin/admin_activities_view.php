@@ -1,14 +1,9 @@
 <?php
 // session_start();
 $title = "View Activity";
-// include "../assets/layout.php";
-// include "../classes/supa_activities.php";
-// $config = require __DIR__ . "/../api/supabase.php";
-// $adminId = $_SESSION["userid"];
-// $actobj = new Activities($api);
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 $adminId = $adminId ?? null;
-
 $activeSem = $semobj->getActiveSemester();
 $actId = $_GET['actId'];
 $keyword = $_GET['search'] ?? '';

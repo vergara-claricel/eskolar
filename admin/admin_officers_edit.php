@@ -7,7 +7,7 @@ $title = "Edit";
 // include "../classes/supa_officers.php";
 
 require_once "../test.php";
-
+$adminId = $_SESSION['userid'];
 $officerId = $_GET['officerId'] ?? null;
 // $offobj = new Officer($api);
 $officer = $offobj->getOfficerInfo($officerId);

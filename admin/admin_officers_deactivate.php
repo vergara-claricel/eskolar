@@ -10,8 +10,7 @@
 // $offobj = new Officer($api);
 
 require_once "../test.php";
-
-
+$adminId = $_SESSION['userid'];
 
 // $del = $offobj->deactivateOfficer($officerId);
 

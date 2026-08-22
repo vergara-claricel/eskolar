@@ -15,6 +15,7 @@
 // }
 $activeSem = $activeSem ?? null;
 $adminName = $adminName ?? 'Admin';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

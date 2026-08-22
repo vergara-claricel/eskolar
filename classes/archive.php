@@ -170,7 +170,7 @@ class Archive
         return $this->api->patch(
                 "semesters",
                 "?sem_id=eq.$semId",
-                ["is_archived" => 0]
+                ["is_archived" => false]
             );
     }
 
@@ -178,7 +178,9 @@ class Archive
         return $this->api->patch(
                 "semesters",
                 "?sem_id=eq.$semId",
-                ["is_archived" => 1, "is_active" => 0]
+                ["is_archived" => true, "semester_status" => "inactive"]
             );
+
+            
     }
 }

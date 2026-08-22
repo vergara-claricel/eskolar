@@ -1,9 +1,7 @@
 <?php
-// include "../classes/activities.php";
-// include "../classes/semester.php";
+
 require_once "../test.php";
-
-
+require_once "../session_check.php";
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 

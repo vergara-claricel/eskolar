@@ -4,6 +4,7 @@ $title = "View Scholar";
 // include "../classes/activities.php";
 // include "../classes/scorecard.php";
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 $actobj = new Activities($api);
 $offObj = new Officer($api);
 

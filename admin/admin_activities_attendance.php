@@ -3,6 +3,7 @@
 // include "../classes/semester.php";
 $title = "Dashboard";
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 // $config = require __DIR__ . "/../api/supabase.php";
 
 $barangays = [

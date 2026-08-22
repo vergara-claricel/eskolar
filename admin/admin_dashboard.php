@@ -1,7 +1,9 @@
 <?php
 $title = "Dashboard";
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 // include "../classes/supa_activities.php";
+
 
 // $config = require __DIR__ . "esko/../api/supabase.php";
 
@@ -9,7 +11,7 @@ require_once "../test.php";
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
 $totalscholars = $schoobj->getActiveScholarCount();
-$adminName = $offobj->getAdminName($_GET['admin']);
+$adminName = $offobj->getAdminName($adminId);
 $totalevents = 0;
 $upcomingEvents = [];
 

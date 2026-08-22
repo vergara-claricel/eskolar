@@ -7,7 +7,7 @@
 // $api = new Supabase($config);
 // $schoobj = new Scholar($api);
 require_once "../test.php";
-
+$adminId = $_SESSION['userid'];
 // $scholarid = $_GET['scholarid'];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){

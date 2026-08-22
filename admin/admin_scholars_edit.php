@@ -8,6 +8,7 @@ $title = "Edit";
 // $api = new Supabase($config);
 // $schoobj = new Scholar($api);
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 $scholarId = $_GET['scholarid'] ?? null;
 $scholar = $schoobj->getScholarInfo($scholarId);
 // handle update

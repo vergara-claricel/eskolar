@@ -10,7 +10,7 @@ $title = "Officer";
 
 // $offobj = new Officer($api);
 require_once "../test.php";
-
+$adminId = $_SESSION['userid'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 

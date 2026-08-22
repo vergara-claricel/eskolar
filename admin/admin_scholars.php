@@ -8,7 +8,7 @@
 
 $title = "Scholars";
 require_once "../test.php";
-
+$adminId = $_SESSION['userid'];
 $barangays = [
     'Atilano Ricardo',
     'Bagumbayan',
@@ -298,9 +298,6 @@ include "../assets/layout.php";
         font-size: 16px;
     }
 
-    .action-icon:hover {
-        color: #1e88e5;
-    }
 
     .action-btn {
         background: none;

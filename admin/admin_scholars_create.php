@@ -2,6 +2,7 @@
 
 $title = "Scholars";
 require_once "../test.php";
+$adminId = $_SESSION['userid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 

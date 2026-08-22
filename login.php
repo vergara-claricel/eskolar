@@ -27,12 +27,11 @@ if (isset($_POST['login'])) {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION["userid"] = $user["id"];
-        $adminId =$_SESSION["userid"];
         $_SESSION["role"] = $user["role"];
 
         // role-based redirect
         if ($user["role"] === "admin") {
-            header("Location: /esko/admin/admin_dashboard.php?admin=$adminId");
+            header("Location: /esko/admin/admin_dashboard.php");
         }
         exit;
 
@@ -95,7 +94,6 @@ if (isset($_POST['login'])) {
     height: 72px;
     border-radius: 14px;
     background: #ffffff;
-    padding: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -391,6 +389,217 @@ if (isset($_POST['login'])) {
                 font-size: 27px;
             }
         }
+
+        /* =========================
+   PAGE ANIMATIONS
+========================= */
+
+/* Initial page fade */
+.login-page {
+    animation: pageFadeIn 0.7s ease-out;
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* Branding content */
+.branding-content {
+    animation: brandingIn 0.8s ease-out;
+}
+
+@keyframes brandingIn {
+    from {
+        opacity: 0;
+        transform: translateX(-35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* Logo */
+.brand-mark {
+    animation: logoIn 0.7s ease-out 0.1s both;
+}
+
+@keyframes logoIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Title */
+.branding h1 {
+    animation: titleIn 0.7s ease-out 0.2s both;
+}
+
+@keyframes titleIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Description */
+.branding-description {
+    animation: textIn 0.7s ease-out 0.3s both;
+}
+
+@keyframes textIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Partner logos */
+.partner-logos {
+    animation: logosIn 0.7s ease-out 0.4s both;
+}
+
+@keyframes logosIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Login side */
+.login-wrapper {
+    animation: loginIn 0.7s ease-out 0.15s both;
+}
+
+@keyframes loginIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* Login button */
+.login-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn::after {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.15),
+        transparent
+    );
+
+    transition: left 0.5s ease;
+}
+
+.login-btn:hover::after {
+    left: 100%;
+}
+
+
+/* Partner logo hover */
+.partner-logos img {
+    transition: transform 0.25s ease;
+}
+
+.partner-logos img:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+
+/* Branding decorative circles */
+.circle-one {
+    animation: circleFloat 8s ease-in-out infinite;
+}
+
+.circle-two {
+    animation: circleFloatReverse 10s ease-in-out infinite;
+}
+
+@keyframes circleFloat {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-15px, 12px);
+    }
+}
+
+@keyframes circleFloatReverse {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(12px, -10px);
+    }
+}
+
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+}
     </style>
 </head>
 
@@ -407,7 +616,7 @@ if (isset($_POST['login'])) {
         <div class="branding-content">
 
             <div class="brand-mark">
-                <img src="assets/images/logo_iskolar.jpg" alt="INBagac logo">
+                <img src="assets/images/eskolar_logo.png" alt="eskolar logo">
             </div>
             <h1>
                 e<span>Skolar</span>

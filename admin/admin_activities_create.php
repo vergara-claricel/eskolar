@@ -1,11 +1,9 @@
 <?php
 // $upd = $actobj->updateStatuses();
 $title = "Activities & Attendance";
-// require_once "../classes/supabase.php";
-// $config = require __DIR__ . "esko/../api/supabase.php";
-// include "../classes/supa_activities.php";
-require_once "../test.php";
 
+require_once "../test.php";
+$adminId = $_SESSION['userid'];
 // $api = new Supabase($config);
 // $actobj = new Activities($api);
 $activeSem = $semobj->getActiveSemester();
