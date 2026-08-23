@@ -225,11 +225,14 @@ class Scholar
 
     function getScholarRecords($user_id, $semId)
     {
-        return $this->api->get(
+        $data = $this->api->get(
             "attendance_view_logs?select=*"
                 . "&user_id=eq.$user_id"
-                . "&semester=eq.$semId&attendance_status=eq.present"
+                . "&semester=eq.$semId&attendance_status=eq.present&order=date.asc"
         );
+
+        return $data;
+
     }
 
 

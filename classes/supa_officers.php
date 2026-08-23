@@ -170,7 +170,7 @@ class Officer
     function getRepresentative($barangay)
     {
         $brgy = rawurlencode($barangay);
-        $query = "officer_view?select=first_name,last_name&is_active=eq.true&role.eq=representative&barangay=eq.$brgy";
+        $query = "officer_view?select=first_name,last_name&is_active=eq.true&role=eq.representative&barangay=eq.$brgy";
         $result = $this->api->get($query);
 
         if (empty($result)) {

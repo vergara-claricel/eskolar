@@ -30,7 +30,6 @@ $passFail = 'N/A';
 if($semId != null){
     $scholar_info = $schoobj->getScholarInfo($scholarUserId);
     $scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
-
     $scholarBrgy = $scholar_info['barangay'];
     $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
     $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholarBrgy, $semId);

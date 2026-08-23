@@ -38,7 +38,7 @@ class Scorecard
     function getMunicipalEvents($semId)
     {
         $res = $this->api->get(
-            "activities?select=activity_id&classification=eq.Municipal&semester=eq.$semId"
+            "activities_with_status?select=activity_id&computed_status=eq.Ended&classification=eq.Municipal&semester=eq.$semId"
         );
 
         return is_array($res) ? count($res) : 0;
@@ -50,7 +50,7 @@ class Scorecard
         $brgy = urlencode($barangay);
 
         $res = $this->api->get(
-            "activities?select=activity_id&classification=eq.Barangay&barangay=eq.$brgy&semester=eq.$semId"
+            "activities_with_status?select=activity_id&computed_status=eq.Ended&classification=eq.Barangay&barangay=eq.$brgy&semester=eq.$semId"
         );
 
         return is_array($res) ? count($res) : 0;

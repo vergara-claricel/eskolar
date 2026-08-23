@@ -33,7 +33,7 @@ $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 
 $scholar_info = $schoobj->getScholarInfo($scholarUserId);
-$scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
+$scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
 
 $scholarBrgy = $scholar_info['barangay'];
 $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);

@@ -22,7 +22,8 @@ if (!file_exists($qrPath)) {
 }
 $svgContent = file_get_contents($qrPath);
 $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($svgContent);
-$scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
+$scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
+var_dump($scholar_ar);
 if($scholar_ar !== null){
     $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
     $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholar_info['barangay'], $semId);
@@ -392,7 +393,7 @@ foreach ($scholar_ar as $s) {
     <tr>
 
         <td class='date'>
-            {$s['date']}
+            {$s['activitydate']}
         </td>
 
         <td class='activity'>
