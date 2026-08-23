@@ -543,36 +543,6 @@ include "../assets/layout.php";
 
 
 <script>
-    // let timer;
-
-    // const tableBody = document.getElementById('activitiesTable');
-    // const originalHTML = tableBody.innerHTML;
-
-    // function loadActivities() {
-    //     clearTimeout(timer);
-    //     timer = setTimeout(() => {
-    //         let search = document.getElementById('searchActs').value.trim();
-    //         let status = document.getElementById('statusFilter').value;
-    //         let barangay = document.getElementById('barangayFilter').value;
-    //         if (search === "" && status == "" && barangay == "") {
-    //             tableBody.innerHTML = originalHTML;
-    //             return;
-    //         }
-
-    //         fetch(`admin_activities_search.php?search=${encodeURIComponent(search)}&status=${status}&barangay=${encodeURIComponent(barangay)}`)
-    //             .then(res => res.text())
-    //             .then(data => {
-    //                 tableBody.innerHTML = data;
-    //             });
-
-    //     }, 300);
-    // }
-
-    // // live search
-    // document.getElementById('searchActs').addEventListener('input', loadActivities);
-    // document.getElementById('statusFilter').addEventListener('change', loadActivities);
-    // document.getElementById('barangayFilter').addEventListener('change', loadActivities);
-
     document.getElementById('statusFilter').addEventListener('change', function() {
         document.getElementById('searchForm').submit();
     });

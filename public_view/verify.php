@@ -34,7 +34,6 @@ $semId = $activeSem['sem_id'];
 
 $scholar_info = $schoobj->getScholarInfo($scholarUserId);
 $scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
-
 $scholarBrgy = $scholar_info['barangay'];
 $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
 $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholarBrgy, $semId);
@@ -102,16 +101,21 @@ $passFail = $scObj->attendanceRemark($quotaPercentage);
         }
 
         .brand-logo {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
             border-radius: 8px;
-            background: #0f172a;
-            color: #ffffff;
-            font-size: 0.78rem;
-            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
         .brand-info {
@@ -254,6 +258,7 @@ $passFail = $scObj->attendanceRemark($quotaPercentage);
             font-weight: 700;
             color: #0f172a;
         }
+
         .table-container {
             width: 100%;
             overflow-x: auto;
@@ -372,146 +377,147 @@ $passFail = $scObj->attendanceRemark($quotaPercentage);
     </style>
 
 </head>
+
 <body>
 
 
 
-<header class="scorecard-header">
-    <div class="header-inner">
-        <div class="brand">
-            <div class="brand-logo">
-                eSko
+    <header class="scorecard-header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-logo">
+                    <img src="/assets/images/eskolar_logo.png" alt="eSkolar logo">
+                </div>
+                <div class="brand-info">
+                    <strong>eSkolar</strong>
+                    <span>Iskolar ng Bagac</span>
+                </div>
             </div>
-            <div class="brand-info">
-                <strong>eSkolar</strong>
-                <span>Iskolar ng Bagac</span>
+            <div class="header-label">
+                Digital Scorecard
             </div>
+
         </div>
-        <div class="header-label">
-            Digital Scorecard
+
+    </header>
+
+
+
+
+    <main class="page">
+        <div class="page-title">
+            <h1>eScorecard</h1>
+            <p>Public view of scholar's attendance record.</p>
         </div>
 
-    </div>
+        <section class="card">
+            <h2 class="card-title">Scholar Information</h2>
+            <div id="scholarInfo">
+                <div class="infoField">
+                    <p>Name</p>
+                    <p>
+                        <?= htmlspecialchars(
+                            $scholar_info['users']['first_name']
+                                . ' '
+                                . $scholar_info['users']['last_name']
+                        ) ?>
+                    </p>
+                </div>
 
-</header>
+                <div class="infoField">
+                    <p>Iskolar No.</p>
+                    <p><?= htmlspecialchars($scholar_info['username']) ?></p>
+                </div>
+                <div class="infoField">
+                    <p>Barangay</p>
+                    <p><?= htmlspecialchars($scholar_info['barangay']) ?></p>
+                </div>
+                <div class="infoField">
+                    <p>Semester</p>
+                    <p><?= htmlspecialchars($activeSem['semester_name']) ?></p>
+                </div>
 
-
-
-
-<main class="page">
-    <div class="page-title">
-        <h1>eScorecard</h1>
-        <p>Public view of scholar's attendance record.</p>
-    </div>
-
-    <section class="card">
-        <h2 class="card-title">Scholar Information</h2>
-        <div id="scholarInfo">
-            <div class="infoField">
-                <p>Name</p>
-                <p>
-                    <?= htmlspecialchars(
-                        $scholar_info['users']['first_name']
-                        . ' '
-                        . $scholar_info['users']['last_name']
-                    ) ?>
-                </p>
+                <div class="infoField">
+                    <p>Remarks</p>
+                    <p class="status-<?= strtolower($passFail) ?>">
+                        <?= htmlspecialchars($passFail) ?>
+                    </p>
+                </div>
             </div>
+        </section>
 
-            <div class="infoField">
-                <p>Iskolar No.</p>
-                <p><?= htmlspecialchars($scholar_info['username']) ?></p>
-            </div>
-            <div class="infoField">
-                <p>Barangay</p>
-                <p><?= htmlspecialchars($scholar_info['barangay']) ?></p>
-            </div>
-            <div class="infoField">
-                <p>Semester</p>
-                <p><?= htmlspecialchars($activeSem['semester_name']) ?></p>
-            </div>
+        <section class="card">
+            <h2 class="card-title">Activity Summary</h2>
 
-            <div class="infoField">
-                <p>Remarks</p>
-                <p class="status-<?= strtolower($passFail) ?>">
-                    <?= htmlspecialchars($passFail) ?>
-                </p>
+            <div id="activitiesInfo">
+                <div class="infoField">
+                    <p>Activities Attended</p>
+                    <p><?= $scholarAttended . ' / ' . $totalEvents ?></p>
+                </div>
+                <div class="infoField">
+                    <p>Quota</p>
+                    <p><?= $quotaPercentage . '%' ?></p>
+
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="card">
-        <h2 class="card-title">Activity Summary</h2>
-
-        <div id="activitiesInfo">
-            <div class="infoField">
-                <p>Activities Attended</p>
-                <p><?= $scholarAttended . ' / ' . $totalEvents ?></p>
-            </div>
-            <div class="infoField">
-                <p>Quota</p>
-                <p><?= $quotaPercentage . '%' ?></p>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2 class="card-title">Activities Information</h2>
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Activity Name</th>
-                        <th>Date </th>
-                        <th>Classification</th>
-                        <th>Time In / Out </th>
-                        <th>Remarks</th>
-                        <th>Verified By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($scholar_ar)): ?>
-                        <?php foreach ($scholar_ar as $s): ?>
+        <section class="card">
+            <h2 class="card-title">Activities Information</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Activity Name</th>
+                            <th>Date </th>
+                            <th>Classification</th>
+                            <th>Time In / Out </th>
+                            <th>Remarks</th>
+                            <th>Verified By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($scholar_ar)): ?>
+                            <?php foreach ($scholar_ar as $s): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($s['activityname']) ?></td>
+                                    <td><?= htmlspecialchars($s['activitydate']) ?></td>
+                                    <td><?= htmlspecialchars($s['classification']) ?></td>
+                                    <td>
+                                        <?= htmlspecialchars(
+                                            $s['timein']
+                                                . ' / '
+                                                . $s['timeout']
+                                        ) ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($s['attendance_status']) ?></td>
+                                    <td>
+                                        <?= !empty($s['officer_fullname'])
+                                            ? htmlspecialchars($s['officer_fullname'])
+                                            : '-' ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <tr>
-                                <td><?= htmlspecialchars($s['activityname']) ?></td>
-                                <td><?= htmlspecialchars($s['activitydate']) ?></td>
-                                <td><?= htmlspecialchars($s['classification']) ?></td>
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $s['timein']
-                                        . ' / '
-                                        . $s['timeout']
-                                    ) ?>
-                                </td>
-                                <td><?= htmlspecialchars($s['attendance_status']) ?></td>
-                                <td>
-                                    <?= !empty($s['officer_fullname'])
-                                        ? htmlspecialchars($s['officer_fullname'])
-                                        : '-' ?>
+                                <td colspan="6" class="empty-row">
+                                    No activity records available.
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="6" class="empty-row">
-                                No activity records available.
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </section>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
 
-    <footer class="scorecard-footer">
-        <p>Powered by <strong>eSkolar</strong></p>
+        <footer class="scorecard-footer">
+            <p>Powered by <strong>eSkolar</strong></p>
 
-        <span>Integrated Scholar QR Attendance &amp; Digital Scorecard System
-        </span>
-    </footer>
-</main>
+            <span>Integrated Scholar QR Attendance &amp; Digital Scorecard System
+            </span>
+        </footer>
+    </main>
 
 
 </body>

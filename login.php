@@ -41,6 +41,8 @@ session_start();
 //         $error = "Invalid username or password";
 //     }
 // }
+var_dump(getenv("SUPABASE_KEY"));
+exit;
 
 $userobj = new User($api);
 

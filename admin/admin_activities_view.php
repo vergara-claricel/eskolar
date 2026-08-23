@@ -38,8 +38,7 @@ if (isset($_POST['updateAttendanceRecord'])) {
 
     $ar_id = $_POST['ar_id'];
     $activity_id = $actId;
-    $user_id = $_POST['user_id'];
-    $date = date('Y-m-d');
+    $user_id = $_POST['user_id']; 
     $timein = !empty($_POST['timein']) && $_POST['timein'] !== '00:00'
         ? $_POST['timein']
         : null;
@@ -54,7 +53,6 @@ if (isset($_POST['updateAttendanceRecord'])) {
             $ar_id,
             $activity_id,
             $user_id,
-            $date,
             $timein,
             $timeout,
             $scanned_by
