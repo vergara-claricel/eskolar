@@ -3,10 +3,12 @@
 
 # Environment / secrets
 .env
+.vercel
 
 # IDE / editor files
 .vscode/
 .idea/
+
 
 # OS-generated files
 .DS_Store

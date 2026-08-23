@@ -1,40 +1,60 @@
 <?php
+require_once '../esko/classes/supa_login.php';
 session_start();
+
+// if (isset($_POST['login'])) {
+
+//     $username = trim($_POST['username']) ?? '';
+//     $password = trim($_POST['password']) ?? '';
+
+//     $apiKey = "sb_publishable_JVZTWW0Ld8XJ_HQz7LGXkA_iLUkpN7c";
+//     $url = "https://yaksrweqnidfpvceoqzo.supabase.co/rest/v1/users"
+//          . "?username=eq." . urlencode($username)
+//          . "&select=id,role,password";
+
+//     $ch = curl_init($url);
+
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//         "apikey: $apiKey",
+//         "Authorization: Bearer $apiKey"
+//     ]);
+
+//     $response = curl_exec($ch);
+//     curl_close($ch);
+
+//     $users = json_decode($response, true);
+
+//     $user = $users[0] ?? null;
+
+//     if ($user && password_verify($password, $user['password'])) {
+//         $_SESSION["userid"] = $user["id"];
+//         $_SESSION["role"] = $user["role"];
+
+//         // role-based redirect
+//         if ($user["role"] === "admin") {
+//             header("Location: /esko/admin/admin_dashboard.php");
+//         }
+//         exit;
+
+//     } else {
+//         $error = "Invalid username or password";
+//     }
+// }
+
+$userobj = new User($api);
+
 if (isset($_POST['login'])) {
-
-    $username = trim($_POST['username']) ?? '';
-    $password = trim($_POST['password']) ?? '';
-
-    $apiKey = "sb_publishable_JVZTWW0Ld8XJ_HQz7LGXkA_iLUkpN7c";
-    $url = "https://yaksrweqnidfpvceoqzo.supabase.co/rest/v1/users"
-         . "?username=eq." . urlencode($username)
-         . "&select=id,role,password";
-
-    $ch = curl_init($url);
-
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "apikey: $apiKey",
-        "Authorization: Bearer $apiKey"
-    ]);
-
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    $users = json_decode($response, true);
-
-    $user = $users[0] ?? null;
-
-    if ($user && password_verify($password, $user['password'])) {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $user = $userobj->login($username, $password);
+    if ($user) {
         $_SESSION["userid"] = $user["id"];
         $_SESSION["role"] = $user["role"];
-
-        // role-based redirect
         if ($user["role"] === "admin") {
             header("Location: /esko/admin/admin_dashboard.php");
+            exit;
         }
-        exit;
-
     } else {
         $error = "Invalid username or password";
     }
