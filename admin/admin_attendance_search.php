@@ -1,7 +1,7 @@
 <?php
 
 require_once "../test.php";
-require_once "../session_check.php";
+$adminId = $_SESSION['userid'];
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 

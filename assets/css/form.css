@@ -1,5 +1,5 @@
 /* FORM CONTAINER */
-#edituserform {
+#user-form-container {
     max-width: 480px;
     margin: 12px auto;
     background: #ffffff;
@@ -87,4 +87,10 @@
 
 .user-form button[type="submit"]:hover {
     background-color: #1e293b;
+}
+
+.suggested {
+    color: #4C7742;
+    font-weight: 500;
+    font-size: 0.7rem;
 }

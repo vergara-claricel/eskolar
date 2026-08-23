@@ -180,62 +180,99 @@ include "../assets/layout.php";
         <?= htmlspecialchars($error) ?>
     </div>
 <?php endif; ?>
-<h2>Add Scholar</h2>
-<div id="scholarform">
-    <form method="POST" class="scholar-form">
+
+<div class="page-header">
+    <h2>Create Scholar Account</h2>
+</div>
+
+<div id="user-form-container">
+    <form method="POST" class="user-form">
 
         <h4>Personal Details</h4>
-        <div class="name-row">
-            <div>
+
+        <div class="form-row-2">
+            <div class="form-group">
                 <label for="first_name">First Name</label>
-                <input type="text" name="first_name" id="first_name"
+                <input type="text"
+                    name="first_name"
+                    id="first_name"
                     value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>">
             </div>
 
-            <div>
+            <div class="form-group">
                 <label for="last_name">Last Name</label>
-                <input type="text" name="last_name" id="last_name"
+                <input type="text"
+                    name="last_name"
+                    id="last_name"
                     value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>">
             </div>
         </div>
 
-        <label for="barangay">Barangay</label>
-        <select name="barangay">
+        <div class="form-group">
+            <label for="barangay">Barangay</label>
 
-            <?php foreach ($barangays as $b): ?>
-                <option value="<?= $b ?>"
-                    <?= (($_POST['barangay'] ?? '') == $b) ? 'selected' : '' ?>>
-                    <?= $b ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+            <select name="barangay" id="barangay">
+                <?php foreach ($barangays as $b): ?>
+                    <option value="<?= htmlspecialchars($b) ?>"
+                        <?= (($_POST['barangay'] ?? '') == $b) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($b) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
 
         <h4>Contact Details</h4>
-        <br>
-        <label for="phonenumber">Phone Number</label>
-        <input type="number" name="phonenumber" id="phonenumber"
-            value="<?= htmlspecialchars($_POST['phonenumber'] ?? '') ?>">
 
-        <label for="email">Email Address</label>
-        <input type="email" name="email" id="email"
-            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="phonenumber">Phone Number</label>
+                <input type="text"
+                    name="phonenumber"
+                    id="phonenumber"
+                    value="<?= htmlspecialchars($_POST['phonenumber'] ?? '') ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email"
+                    name="email"
+                    id="email"
+                    value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+            </div>
+        </div>
+
 
         <h4>Account Details</h4>
-        <br>
-        <label for="iskolarno">Iskolar No. <span style="color: green">Suggested: <?= htmlspecialchars($_POST['iskolarno'] ?? $nextScholarNo) ?></span></label>
-        <!-- <input type="text" name="iskolarno" id="iskolarno"   maxlength="4"
-       pattern="\d{4}" placeholder="Suggested: <?= $nextScholarNo ?>"> -->
-        <input type="text"
-            name="iskolarno"
-            value="INB-"
-            maxlength="8"
-            pattern="INB-\d{4}">
 
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="iskolarno">
+                    Iskolar No.
+                    <span class="suggested">
+                        Suggested: <?= htmlspecialchars($_POST['iskolarno'] ?? $nextScholarNo) ?>
+                    </span>
+                </label>
 
+                <input type="text"
+                    name="iskolarno"
+                    id="iskolarno"
+                    value="<?= htmlspecialchars($_POST['iskolarno'] ?? 'INB-') ?>"
+                    maxlength="8"
+                    pattern="INB-\d{4}">
+            </div>
 
-        <button type="submit" name="create_scholar">Add Scholar</button>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                    name="password"
+                    id="password">
+            </div>
+        </div>
+
+        <button type="submit" name="create_scholar">
+            Add Scholar
+        </button>
 
     </form>
 </div>

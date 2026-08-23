@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
     <p> Edit officer information and account details.</p>
 </div>
 
-<div id="edituserform">
+<div id="user-form-container">
     <form method="POST" class="user-form">
 
         <input type="hidden"

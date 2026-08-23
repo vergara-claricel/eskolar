@@ -35,6 +35,7 @@ class Officer
         $firstname,
         $lastname,
         $barangay,
+        $role,
         $phonenumber,
         $email,
         $username,
@@ -47,7 +48,8 @@ class Officer
             [
                 "first_name" => $firstname,
                 "last_name"  => $lastname,
-                "username"   => $username
+                "username"   => $username,
+                "role"   => $role
             ]
         );
 
@@ -86,7 +88,7 @@ class Officer
         );
     }
 
-    function createOfficer($firstname, $lastname, $brgy, $phonenumber, $email, $officerno, $password)
+    function createOfficer($firstname, $lastname, $brgy, $role, $phonenumber, $email, $officerno, $password)
     {
         // 1. create user
         $user = $this->api->post("users", [
@@ -94,7 +96,7 @@ class Officer
             "last_name"  => $lastname,
             "username"   => $officerno,
             "password"   => password_hash($password, PASSWORD_DEFAULT),
-            "role"       => "officer",
+            "role"       => $role,
             "is_active"  => true
         ]);
 
@@ -131,7 +133,7 @@ function getAdminName($adminId)
 
 function getRepresentative($barangay){
    $brgy = rawurlencode($barangay);
-   $query = "officer_view?select=first_name,last_name&is_active=eq.true&barangay=eq.$brgy";
+   $query = "officer_view?select=first_name,last_name&is_active=eq.true&role.eq=representative&barangay=eq.$brgy";
     $result =$this->api->get($query);
 
    if (empty($result)) {

@@ -12,11 +12,28 @@ $title = "Officer";
 require_once "../test.php";
 $adminId = $_SESSION['userid'];
 
+$barangays = [
+    "Atilano Ricardo",
+    "Bagumbayan",
+    "Banawang",
+    "Binuangan",
+    "Binukawan",
+    "Ibis",
+    "Ibaba",
+    "Pag-asa",
+    "Parang",
+    "Paysawan",
+    "Quinawan",
+    "San Antonio",
+    "Saysain",
+    "Tabing-Ilog"
+];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $first_name = strtoupper(trim($_POST['first_name']));
     $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
+    $role = $_POST['role'];
     $phone = $_POST['phonenumber'];
     $email = $_POST['email'];
     $officerno = strtoupper(trim($_POST['officerno']));
@@ -24,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
    try { 
 
-        $result = $offobj->createOfficer($first_name, $last_name, $barangay, $phone, $email, $officerno, $password);
+        $result = $offobj->createOfficer($first_name, $last_name, $barangay, $role, $phone, $email, $officerno, $password);
         echo $result ? " created successfully!" : "Failed to add.";
         header("location: /esko/admin/admin_officers.php");
 
@@ -136,59 +153,95 @@ h2 {
 
 </style>
 
-<h2>Create Officer Account</h2>
-<div id="scholarform">
-    <form method="POST" class="scholar-form">
+<div class="page-header">
+    <h2>Create Officer Account</h2>
+</div>
 
-    <h4>Personal Details</h4>
-        <div class="name-row">
-            <div>
-                <label for="first_name">First Name</label>
-                <input type="text" name="first_name" id="first_name">
+<div id="user-form-container">
+    <form method="POST" class="user-form">
+
+        <h4>Personal Details</h4>
+
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="officer_first_name">First Name</label>
+                <input type="text"
+                    name="first_name"
+                    id="officer_first_name">
             </div>
 
-            <div>
-                <label for="last_name">Last Name</label>
-                <input type="text" name="last_name" id="last_name">
+            <div class="form-group">
+                <label for="officer_last_name">Last Name</label>
+                <input type="text"
+                    name="last_name"
+                    id="officer_last_name">
             </div>
         </div>
 
-        <label for="barangay">Barangay</label>
-        <select name="barangay">
-            <option value="Atilano Ricardo">Atilano Ricardo</option>
-            <option value="Bagumbayan">Bagumbayan</option>
-            <option value="Banawang">Banawang</option>
-            <option value="Binuangan">Binuangan</option>
-            <option value="Binukawan">Binukawan</option>
-            <option value="Ibis">Ibis</option>
-            <option value="Ibaba">Ibaba</option>
-            <option value="Pag-asa">Pag-asa</option>
-            <option value="Parang">Parang</option>
-            <option value="Paysawan">Paysawan</option>
-            <option value="Quinawan">Quinawan</option>
-            <option value="San Antonio">San Antonio</option>
-            <option value="Saysain">Saysain</option>
-            <option value="Tabing-Ilog">Tabing-Ilog</option>
-        </select>
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="role">Position</label>
 
-         <h4>Contact Details</h4>
-         <br>
-        <label for="phonenumber">Phone Number</label>
-        <input type="number" name="phonenumber" id="phonenumber">
+                <select name="role" id="role">
+                    <option value="executive">Executive</option>
+                    <option value="representative">Representative</option>
+                </select>
+            </div>
 
-        <label for="email">Email Address</label>
-        <input type="email" name="email" id="email">
+            <div class="form-group">
+                <label for="officer_barangay">Barangay</label>
 
-         <h4>Account Details</h4>
-         <br>
-        <label for="officerno">Officer No. </label>
-        <input type="text" name="officerno" id="officerno">
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
+                <select name="barangay" id="officer_barangay">
+                    <?php foreach ($barangays as $b): ?>
+                        <option value="<?= htmlspecialchars($b) ?>">
+                            <?= htmlspecialchars($b) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
 
 
-        <button type="submit" name="create_officer">Create Officer</button>
+        <h4>Contact Details</h4>
+
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="officer_phone">Phone Number</label>
+                <input type="text"
+                    name="phonenumber"
+                    id="officer_phone">
+            </div>
+
+            <div class="form-group">
+                <label for="officer_email">Email Address</label>
+                <input type="email"
+                    name="email"
+                    id="officer_email">
+            </div>
+        </div>
+
+
+        <h4>Account Details</h4>
+
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="officerno">Officer No.</label>
+                <input type="text"
+                    name="officerno"
+                    id="officerno">
+            </div>
+
+            <div class="form-group">
+                <label for="officer_password">Password</label>
+                <input type="password"
+                    name="password"
+                    id="officer_password">
+            </div>
+        </div>
+
+        <button type="submit" name="create_officer">
+            Create Officer
+        </button>
 
     </form>
 </div>

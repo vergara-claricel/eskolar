@@ -60,7 +60,7 @@ include "../assets/layout.php";
     <p> Edit scholar information and account details.</p>
 </div>
 
-<div id="edituserform">
+<div id="user-form-container">
     <form method="POST" class="user-form">
 
         <input type="hidden" name="user_id" value="<?= $scholar['user_id'] ?>">
