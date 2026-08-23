@@ -47,10 +47,10 @@ if (!empty($activesem)) {
         $totalRows = $actobj->countActivitiesOfActiveSem($activeSemId);
     } else {
         $allacts = $actobj->filterActivities(
+            $activeSemId,
             $search,
             $status,
             $barangay,
-            $activeSemId,
             $limit,
             $offset
         );

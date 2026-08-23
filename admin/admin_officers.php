@@ -30,8 +30,8 @@ include "../assets/layout.php";
         color: #4C7742;
     }
 
-    .officer-header p{
-        font-size:14px;
+    .officer-header p {
+        font-size: 14px;
         color: #666;
 
     }
@@ -52,7 +52,7 @@ include "../assets/layout.php";
         background: #1565c0;
     }
 
-        .modal {
+    .modal {
         display: none;
         position: fixed;
         inset: 0;
@@ -84,8 +84,8 @@ include "../assets/layout.php";
         display: block;
         font-size: 18px;
         padding-bottom: 12px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #e5e5e5;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #e5e5e5;
         color: #d32f2f;
     }
 
@@ -97,30 +97,30 @@ include "../assets/layout.php";
     }
 
     .modal-info {
-    background: #f8f9fa;
-    border: 1px solid #e3e6ea;
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin: 18px 0;
-}
+        background: #f8f9fa;
+        border: 1px solid #e3e6ea;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin: 18px 0;
+    }
 
-.modal-info p {
-    margin: 8px 0;
-    font-size: 14px;
-    color: #444;
-    display: flex;
-    align-items: center;
-}
+    .modal-info p {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #444;
+        display: flex;
+        align-items: center;
+    }
 
-.modal-info p:not(:last-child) {
-    border-bottom: 1px solid #ececec;
-    padding-bottom: 8px;
-}
+    .modal-info p:not(:last-child) {
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 8px;
+    }
 
-.modal-info span {
-    font-weight: 600;
-    color: #222;
-}
+    .modal-info span {
+        font-weight: 600;
+        color: #222;
+    }
 
     /* CLOSE BUTTON */
     .close {
@@ -219,125 +219,156 @@ include "../assets/layout.php";
         background: none;
         border: none;
     }
+
+    .role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.role-rep {
+    background: #e8f1ff;
+    color: #2563eb;
+}
+
+.role-executive {
+    background: #fff3d6;
+    color: #d97706;
+}
 </style>
 
 <div class="officer-header">
-    
-<div class="officer-title">
-    <h2>Officer Accounts</h2>
-    <p>Manage officers user accounts.</p>
-</div>
+
+    <div class="officer-title">
+        <h2>Officer Accounts</h2>
+        <p>Manage officers user accounts.</p>
+    </div>
 
     <a href="admin_officers_create.php" id="nav_addofficer"> &plus; Add Officer</a>
 </div>
 <div class="table-container">
-        <table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Full Name</th>
-            <th>Barangay</th>
-            <th>Contact</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <?php foreach ($officers as $o): ?>
+    <table class="table">
+        <thead>
             <tr>
-                <td><?= $o['username'] ?></td>
-                <td><?= $o['last_name'] .', ' . $o['first_name'] ?></td>
-                <td><?= $o['barangay'] ?></td>
-                <td><?= $o['phonenumber'] ?></td>
-                <td>
-                     <div class="action-group">
-                        <a href="/esko/admin/admin_officers_edit.php?officerId=<?= $o['user_id'] ?>"
+                <th>Role</th>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Barangay</th>
+                <th>Number</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($officers as $o): ?>
+                <tr>
+                    <td>
+                        <?php if ($o['role'] === 'representative'): ?>
+                            <span class="role-badge role-rep">R</span>
+                        <?php elseif ($o['role'] === 'executive'): ?>
+                            <span class="role-badge role-executive">E</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= $o['username'] ?></td>
+                    <td><?= $o['last_name'] . ', ' . $o['first_name'] ?></td>
+                    <td><?= $o['barangay'] ?></td>
+                    <td><?= $o['phonenumber'] ?></td>
+                <td><?= $o['email'] ?></td>
+                    <td>
+                        <div class="action-group">
+                            <a href="/esko/admin/admin_officers_edit.php?officerId=<?= $o['user_id'] ?>"
                                 class="action-icon"
                                 title="Edit Officer Details">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                    <form method="POST" action="/esko/admin/admin_officers_deactivate.php" name="deleteForm">
-                            <input type="hidden"
-                                name="id"
-                                value="<?= $o['user_id'] ?>">
-                            <button type="button"
-                                class="action-icon action-btn officer-action-btn"
-                                data-name="<?= $o['last_name'] . ', ' . $o['first_name'] ?>"
-                                data-barangay="<?= $o['barangay'] ?>"
-                                data-officerno="<?= $o['username'] ?>"
-                                 title="<?= $o['is_active'] ? 'Deactivate User' : 'Reactivate User' ?>">
-                                <i class="fa-solid fa-trash"></i></button>
-                    </form>
-                     </div>
-                </td>
+                            <form method="POST" action="/esko/admin/admin_officers_deactivate.php" name="deleteForm">
+                                <input type="hidden"
+                                    name="id"
+                                    value="<?= $o['user_id'] ?>">
+                                <button type="button"
+                                    class="action-icon action-btn officer-action-btn"
+                                    data-name="<?= $o['last_name'] . ', ' . $o['first_name'] ?>"
+                                    data-barangay="<?= $o['barangay'] ?>"
+                                    data-officerno="<?= $o['username'] ?>"
+                                    title="<?= $o['is_active'] ? 'Deactivate User' : 'Reactivate User' ?>">
+                                    <i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
 
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-<div id="myModal" class="modal">
+    <div id="myModal" class="modal">
 
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <p><strong>Action Confirmation</strong></p>
-        <p>Are you sure you want to delete this account?</p>
-        <p><span id="modalOfficerNo"></span></p>
-        <p><span id="modalName"></span></p>
-        <p><span id="modalBrgy"></span></p>
-        <button id="confirmBtn">Confirm</button>
-        <button id="cancelBtn">Cancel</button>
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p><strong>Action Confirmation</strong></p>
+            <p>Are you sure you want to delete this account?</p>
+            <p><span id="modalOfficerNo"></span></p>
+            <p><span id="modalName"></span></p>
+            <p><span id="modalBrgy"></span></p>
+            <button id="confirmBtn">Confirm</button>
+            <button id="cancelBtn">Cancel</button>
+        </div>
     </div>
-</div>
 
-<script>
-    let currentForm;
-    let modal = document.getElementById("myModal");
-    let modalName = document.getElementById("modalName");
-    let modalBrgy = document.getElementById("modalBrgy");
-    let modalOfficerNo = document.getElementById("modalOfficerNo");
-    let confirmBtn = document.getElementById("confirmBtn");
-    let closeModal = document.getElementById("closeModal");
-    let cancelBtn = document.getElementById("cancelBtn");
+    <script>
+        let currentForm;
+        let modal = document.getElementById("myModal");
+        let modalName = document.getElementById("modalName");
+        let modalBrgy = document.getElementById("modalBrgy");
+        let modalOfficerNo = document.getElementById("modalOfficerNo");
+        let confirmBtn = document.getElementById("confirmBtn");
+        let closeModal = document.getElementById("closeModal");
+        let cancelBtn = document.getElementById("cancelBtn");
 
-    document.addEventListener('click', function(ev) {
-        // if(ev.target.classList.contains('delete-btn')){
-        //      ev.preventDefault();
+        document.addEventListener('click', function(ev) {
+            // if(ev.target.classList.contains('delete-btn')){
+            //      ev.preventDefault();
 
-        // modalName.innerText = ev.target.dataset.name;
-        // modalBrgy.innerText = ev.target.dataset.barangay;
-        // modalOfficerNo.innerText = ev.target.dataset.officerno;
+            // modalName.innerText = ev.target.dataset.name;
+            // modalBrgy.innerText = ev.target.dataset.barangay;
+            // modalOfficerNo.innerText = ev.target.dataset.officerno;
 
-        // currentForm = ev.target.closest("form");
-        // modal.style.display = "block";
-        // } 
+            // currentForm = ev.target.closest("form");
+            // modal.style.display = "block";
+            // } 
 
-        const btn = ev.target.closest('.officer-action-btn');
-        if (btn) {
-            ev.preventDefault();
+            const btn = ev.target.closest('.officer-action-btn');
+            if (btn) {
+                ev.preventDefault();
 
-            modalName.innerText = btn.dataset.name;
-            modalBrgy.innerText = btn.dataset.barangay;
-            modalOfficerNo.innerText = btn.dataset.officer;
+                modalName.innerText = btn.dataset.name;
+                modalBrgy.innerText = btn.dataset.barangay;
+                modalOfficerNo.innerText = btn.dataset.officer;
 
-            currentForm = btn.closest('form');
-            modal.style.display = 'flex';
+                currentForm = btn.closest('form');
+                modal.style.display = 'flex';
+            }
+            // reactivation logic
+        });
+
+        confirmBtn.addEventListener("click", function() {
+            if (currentForm) {
+                currentForm.submit();
+            }
+        });
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
         }
-        // reactivation logic
-    });
 
-    confirmBtn.addEventListener("click", function() {
-        if (currentForm) {
-            currentForm.submit();
+        cancelBtn.onclick = function() {
+            modal.style.display = "none";
         }
-    });
-
-    closeModal.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    cancelBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-</script>
-<?php include "../assets/layout_end.php"; ?>
+    </script>
+    <?php include "../assets/layout_end.php"; ?>

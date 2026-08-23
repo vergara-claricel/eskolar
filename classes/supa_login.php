@@ -20,9 +20,14 @@ class User
         $query = "?username=eq." . urlencode($username)
                . "&select=id,role,password";
         $users = $this->api->get("users", $query);
-        $user = $users[0] ?? null;
 
-        if ($user && password_verify($password, $user['password'])) {
+            echo "<pre>";
+    echo "Username: " . htmlspecialchars($username) . "\n";
+    echo "Users returned:\n";
+    var_dump($users);
+    echo "</pre>";
+        $user = $users[0] ?? null;
+        if ($user && password_verify($password, $user['password']) ) {
             return $user;
         }
         return false;

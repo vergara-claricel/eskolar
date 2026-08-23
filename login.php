@@ -48,6 +48,11 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     $user = $userobj->login($username, $password);
+
+     echo "<pre>";
+    echo "Login result:\n";
+    var_dump($user);
+    echo "</pre>";
     if ($user) {
         $_SESSION["userid"] = $user["id"];
         $_SESSION["role"] = $user["role"];
@@ -56,6 +61,7 @@ if (isset($_POST['login'])) {
             exit;
         }
     } else {
+        
         $error = "Invalid username or password";
     }
 }

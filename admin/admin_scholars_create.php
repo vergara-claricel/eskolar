@@ -65,14 +65,6 @@ include "../assets/layout.php";
         font-family: system-ui, -apple-system, sans-serif;
     }
 
-    h2 {
-        max-width: 480px;
-        margin: 0 auto 8px auto;
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #0f172a;
-    }
-
     /* Low-profile section headers */
     .scholar-form h4 {
         font-size: 0.75rem;
@@ -183,6 +175,7 @@ include "../assets/layout.php";
 
 <div class="page-header">
     <h2>Create Scholar Account</h2>
+    <p>Please fill out all fields.</p>
 </div>
 
 <div id="user-form-container">
@@ -192,26 +185,26 @@ include "../assets/layout.php";
 
         <div class="form-row-2">
             <div class="form-group">
-                <label for="first_name">First Name</label>
+                <label for="first_name">First Name*</label>
                 <input type="text"
                     name="first_name"
                     id="first_name"
-                    value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>">
+                    value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="last_name">Last Name</label>
+                <label for="last_name">Last Name*</label>
                 <input type="text"
                     name="last_name"
                     id="last_name"
-                    value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>">
+                    value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>" required>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="barangay">Barangay</label>
+            <label for="barangay">Barangay*</label>
 
-            <select name="barangay" id="barangay">
+            <select name="barangay" id="barangay" required>
                 <?php foreach ($barangays as $b): ?>
                     <option value="<?= htmlspecialchars($b) ?>"
                         <?= (($_POST['barangay'] ?? '') == $b) ? 'selected' : '' ?>>
@@ -226,19 +219,19 @@ include "../assets/layout.php";
 
         <div class="form-row-2">
             <div class="form-group">
-                <label for="phonenumber">Phone Number</label>
+                <label for="phonenumber">Phone Number*</label>
                 <input type="text"
                     name="phonenumber"
                     id="phonenumber"
-                    value="<?= htmlspecialchars($_POST['phonenumber'] ?? '') ?>">
+                    value="<?= htmlspecialchars($_POST['phonenumber'] ?? '') ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email">Email Address*</label>
                 <input type="email"
                     name="email"
                     id="email"
-                    value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                    value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
             </div>
         </div>
 
@@ -248,7 +241,7 @@ include "../assets/layout.php";
         <div class="form-row-2">
             <div class="form-group">
                 <label for="iskolarno">
-                    Iskolar No.
+                    Iskolar No.*
                     <span class="suggested">
                         Suggested: <?= htmlspecialchars($_POST['iskolarno'] ?? $nextScholarNo) ?>
                     </span>
@@ -259,14 +252,14 @@ include "../assets/layout.php";
                     id="iskolarno"
                     value="<?= htmlspecialchars($_POST['iskolarno'] ?? 'INB-') ?>"
                     maxlength="8"
-                    pattern="INB-\d{4}">
+                    pattern="INB-\d{4}" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Password*</label>
                 <input type="password"
                     name="password"
-                    id="password">
+                    id="password" required>
             </div>
         </div>
 

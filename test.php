@@ -22,6 +22,11 @@ $schoobj = new Scholar($api);
 $archiveobj = new Archive($schoobj, $actobj, $api);
 $adminId = $_SESSION["userid"] ?? null;
 
+if (empty($_SESSION['userid'])) {
+    header("Location: /esko/error.php");
+    exit;
+}
+
 /* SAFE: data only, no output */
 
 $activeSem = $semobj->getActiveSemester();

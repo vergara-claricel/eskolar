@@ -32,83 +32,84 @@ $adminName = $adminName ?? 'Admin';
     <link rel="stylesheet" href="/esko/assets/css/form.css">
     <link rel="stylesheet" href="/esko/assets/css/semester.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    
+
     <style>
-    /* Profile Dropdown Styles */
-    .profile-dropdown {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-    }
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-    .profile-trigger {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
-        background: #f8f9fa;
-        border-radius: 20px;
-        font-weight: 500;
-        color: #333;
-        transition: background 0.2s ease;
-        user-select: none;
-    }
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #333;
+            transition: background 0.2s ease;
+            user-select: none;
+        }
 
-    .profile-trigger:hover {
-        background: #f0f1f2;
-    }
+        .profile-trigger:hover {
+            background: #f0f1f2;
+        }
 
-    .profile-trigger .arrow-icon {
-        font-size: 11px;
-        transition: transform 0.2s ease;
-        color: #6f6f6f;
-    }
+        .profile-trigger .arrow-icon {
+            font-size: 11px;
+            transition: transform 0.2s ease;
+            color: #6f6f6f;
+        }
 
-    /* Dropdown Menu Box */
-    .dropdown-menu {
-        position: absolute;
-        right: 0;
-        top: calc(100% + 8px);
-        background: #ffffff;
-        min-width: 150px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-radius: 10px;
-        border: 1px solid #eef0f2;
-        overflow: hidden;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-        z-index: 1000;
-    }
+        /* Dropdown Menu Box */
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: #ffffff;
+            min-width: 150px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid #eef0f2;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 1000;
+        }
 
-    /* Show dropdown on hover or via toggle */
-    .profile-dropdown:hover .dropdown-menu,
-    .profile-dropdown.open .dropdown-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
+        /* Show dropdown on hover or via toggle */
+        .profile-dropdown:hover .dropdown-menu,
+        .profile-dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
 
-    .profile-dropdown:hover .arrow-icon {
-        transform: rotate(180deg);
-    }
+        .profile-dropdown:hover .arrow-icon {
+            transform: rotate(180deg);
+        }
 
-    .dropdown-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        color: #e63946; /* Destructive red for logout */
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.2s ease;
-    }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: #e63946;
+            /* Destructive red for logout */
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
 
-    .dropdown-item:hover {
-        background: #fff5f5;
-    }
+        .dropdown-item:hover {
+            background: #fff5f5;
+        }
     </style>
 </head>
 
@@ -141,17 +142,21 @@ $adminName = $adminName ?? 'Admin';
             </nav>
         </aside>
 
-        <div class="main">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+        <div class="main">
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <header class="topbar">
                 <span id="currentsem">Current Sem: <?php
-                    if ($activeSem !== null) {
-                        echo htmlspecialchars($activeSem['semester_name']);
-                    } else {
-                        echo "No active semester found.";
-                    }
-                ?></span>
-                
+                                                    if ($activeSem !== null) {
+                                                        echo htmlspecialchars($activeSem['semester_name']);
+                                                    } else {
+                                                        echo "No active semester found.";
+                                                    }
+                                                    ?></span>
+
                 <div class="profile-dropdown" id="profileDropdown">
                     <div class="profile-trigger">
                         <span>👤 <?= htmlspecialchars($adminName) ?: "Admin" ?></span>
@@ -167,13 +172,26 @@ $adminName = $adminName ?? 'Admin';
 
             <div class="main-content">
 
-            <script>
-                document.getElementById('profileDropdown').addEventListener('click', function(e) {
-                    this.classList.toggle('open');
-                    e.stopPropagation();
-                });
-                
-                document.addEventListener('click', function() {
-                    document.getElementById('profileDropdown').classList.remove('open');
-                });
-            </script>
+                <script>
+                    const menuToggle = document.getElementById('menuToggle');
+                    const sidebar = document.querySelector('.sidebar');
+                    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+                    menuToggle.addEventListener('click', function() {
+                        sidebar.classList.toggle('open');
+                        sidebarOverlay.classList.toggle('active');
+                    });
+
+                    sidebarOverlay.addEventListener('click', function() {
+                        sidebar.classList.remove('open');
+                        sidebarOverlay.classList.remove('active');
+                    });
+                    document.getElementById('profileDropdown').addEventListener('click', function(e) {
+                        this.classList.toggle('open');
+                        e.stopPropagation();
+                    });
+
+                    document.addEventListener('click', function() {
+                        document.getElementById('profileDropdown').classList.remove('open');
+                    });
+                </script>

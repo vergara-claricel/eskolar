@@ -373,17 +373,27 @@ include "../assets/layout.php";
         <div class="activities-header">
             <h2>Upcoming Activities</h2>
 
-            <a href="/esko/admin/admin_activities_attendance.php"
+            <!-- <a href="/esko/admin/admin_activities_attendance.php"
                 class="view-link">
                 View all activities →
+            </a> -->
+                <?php if (count($upcomingEvents) > 3): ?>
+
+        <div class="see-more">
+            <a href="/esko/admin/admin_activities.php"
+            class="view-link">
+                See more activities →
             </a>
+        </div>
+
+    <?php endif; ?>
         </div>
 
         <?php if (!empty($upcomingEvents)): ?>
 
             <div class="activities-grid">
 
-                <?php foreach ($upcomingEvents as $ue):
+                <?php foreach (array_slice($upcomingEvents, 0, 3) as $ue):
                     $date = strtotime($ue['activitydate']);
                 ?>
 

@@ -55,20 +55,23 @@ class Activities
     return (int) ($result[0]['count'] ?? 0);
 }
     function filterActivities(
+        $semid,
         $search = '',
         $status = '',
         $barangay = '',
-        $semid,
         $limit = null,
         $offset = null
     ) {
-        $query = "activities_with_status?select=*&semester=eq.$semid";
+        $query = "activities_with_status?select=*";
 
-        $filters = [];
+         $filters = [];
+
+    $filters[] = "semester=eq." . urlencode($semid);
 
         if ($search !== '') {
-            $q = "*$search*";
-            $filters[] = "activityname.ilike.$q";
+            // $q = "*$search*";
+            $search = urlencode($search);
+            $filters[] = "activityname=ilike.$search";
         }
 
         if ($status !== '') {
@@ -99,11 +102,14 @@ class Activities
         if ($offset !== null) {
             $query .= "&offset=$offset";
         }
+        echo "<pre>";
+echo $query;
+echo "</pre>";
         return $this->api->get($query);
     }
 
 
-    function countFilteredActivities($search = '', $status = '', $barangay = '', $semid)
+    function countFilteredActivities($semid, $search = '', $status = '', $barangay = '')
 {
     $query = "activities_with_status?select=count&semester=eq.$semid";
 

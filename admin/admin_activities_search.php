@@ -9,7 +9,7 @@ $semId = $activeSem['sem_id'];
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $barangay = $_GET['barangay'] ?? '';
-$allacts = $actobj->filterActivities($search, $status, $barangay, $semId);
+$allacts = $actobj->filterActivities( $semId, $search, $status, $barangay);
 
 if(empty($allacts)){
     echo"

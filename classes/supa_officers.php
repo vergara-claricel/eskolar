@@ -90,7 +90,30 @@ class Officer
 
     function createOfficer($firstname, $lastname, $brgy, $role, $phonenumber, $email, $officerno, $password)
     {
-        // 1. create user
+        $existing = $this->api->get(
+            "users",
+            "?username=eq." . urlencode($officerno) . "&select=id"
+        );
+
+        if (!empty($existing)) {
+            return [
+                "success" => false,
+                "error"   => "duplicate_officerno"
+            ];
+        }
+
+        $existingRep = $this->api->get(
+            "users",
+            "?role=eq.representative&is_active=eq.true&select=id"
+        );
+
+        if (!empty($existingRep)) {
+            return [
+                "success" => false,
+                "error"   => "duplicate_representative"
+            ];
+        }
+
         $user = $this->api->post("users", [
             "first_name" => $firstname,
             "last_name"  => $lastname,
@@ -103,11 +126,14 @@ class Officer
         $userId = $user[0]['id'] ?? $user['id'] ?? null;
 
         if (!$userId) {
-            return false;
+            return [
+                "success" => false,
+                "error"   => "user_creation_failed"
+            ];
         }
 
         // 2. create officer profile
-        $this->api->post("officers", [
+        $officer = $this->api->post("officers", [
             "user_id"     => $userId,
             "officerno"   => $officerno,
             "barangay"    => $brgy,
@@ -115,31 +141,41 @@ class Officer
             "email"       => $email
         ]);
 
-        return true;
+        if (!$officer) {
+            return [
+                "success" => false,
+                "error"   => "officer_creation_failed"
+            ];
+        }
+
+        return [
+            "success" => true,
+            "user_id" => $userId
+        ];
     }
 
-function getAdminName($adminId)
-{
-    $data = $this->api->get(
-        "users?select=first_name,last_name&is_active=eq.true&id=eq.$adminId"
-    );
+    function getAdminName($adminId)
+    {
+        $data = $this->api->get(
+            "users?select=first_name,last_name&is_active=eq.true&id=eq.$adminId"
+        );
 
-    if (empty($data)) {
-        return null;
+        if (empty($data)) {
+            return null;
+        }
+
+        return $data[0]['first_name'] . ' ' . $data[0]['last_name'];
     }
 
-    return $data[0]['first_name'] . ' ' . $data[0]['last_name'];
-}
+    function getRepresentative($barangay)
+    {
+        $brgy = rawurlencode($barangay);
+        $query = "officer_view?select=first_name,last_name&is_active=eq.true&role.eq=representative&barangay=eq.$brgy";
+        $result = $this->api->get($query);
 
-function getRepresentative($barangay){
-   $brgy = rawurlencode($barangay);
-   $query = "officer_view?select=first_name,last_name&is_active=eq.true&role.eq=representative&barangay=eq.$brgy";
-    $result =$this->api->get($query);
-
-   if (empty($result)) {
-        return null;
+        if (empty($result)) {
+            return null;
+        }
+        return $result[0];
     }
-
-    return $result[0];
-}
 }
