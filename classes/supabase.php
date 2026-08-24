@@ -79,21 +79,53 @@ class Supabase
         return json_decode($response, true);
     }
 
-        public function delete($table, $query = "")
-        {
-            $ch = curl_init("{$this->url}/rest/v1/{$table}{$query}");
+    public function delete($table, $query = "")
+    {
+        $ch = curl_init("{$this->url}/rest/v1/{$table}{$query}");
 
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                "apikey: {$this->key}",
-                "Authorization: Bearer {$this->key}",
-                "Content-Type: application/json"
-            ]);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "apikey: {$this->key}",
+            "Authorization: Bearer {$this->key}",
+            "Content-Type: application/json"
+        ]);
 
-            $response = curl_exec($ch);
-            curl_close($ch);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-            return json_decode($response, true);
+        return json_decode($response, true);
+    }
+
+    function upsert($table, $data, $onConflict)
+    {
+        $url = "{$this->url}/rest/v1/{$table}?on_conflict={$onConflict}";
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "apikey: {$this->key}",
+            "Authorization: Bearer {$this->key}",
+            "Content-Type: application/json",
+            "Prefer: resolution=merge-duplicates,return=representation"
+        ]);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (curl_error($ch)) {
+            echo "CURL ERROR: " . curl_error($ch);
         }
+
+        return [
+            "http_code" => $httpCode,
+            "data" => json_decode($response, true)
+        ];
+    }
 }

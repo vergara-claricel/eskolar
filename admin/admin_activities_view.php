@@ -11,12 +11,12 @@ $actDetails = $actobj->getActivityDetails($actId);
 
 // pagination limit
 $page = max(1, (int)($_GET['page'] ?? 1));
-$limit =5;
+$limit = 5;
 $search = $_GET['search'] ?? '';
 
 $ar = $actobj->getActivityAttendanceReport(
     $actId,
-$actDetails['classification'],
+    $actDetails['classification'],
     $actDetails['barangay'],
     $search,
     $page,
@@ -25,7 +25,7 @@ $actDetails['classification'],
 
 $totalRows = $actobj->countActivityAttendanceReport(
     $actId,
-$actDetails['classification'],
+    $actDetails['classification'],
     $actDetails['barangay'],
     $search
 );
@@ -38,7 +38,7 @@ if (isset($_POST['updateAttendanceRecord'])) {
 
     $ar_id = $_POST['ar_id'];
     $activity_id = $actId;
-    $user_id = $_POST['user_id']; 
+    $user_id = $_POST['user_id'];
     $timein = !empty($_POST['timein']) && $_POST['timein'] !== '00:00'
         ? $_POST['timein']
         : null;
@@ -123,9 +123,9 @@ include "../assets/layout.php";
     <div class="activity-info">
         <!-- classification -->
         <div class="activity-classification">
-            <?= $actDetails['classification'] ?: '-'?>
+            <?= $actDetails['classification'] ?: '-' ?>
             <?php if ($actDetails['classification'] === 'Barangay' && !empty($actDetails['barangay'])): ?>
-                - <?= $actDetails['barangay'] ?: 'N/A'?>
+                - <?= $actDetails['barangay'] ?: 'N/A' ?>
             <?php endif; ?>
         </div>
 
@@ -138,7 +138,7 @@ include "../assets/layout.php";
                 </div>
 
                 <span class="activity-status">
-                    <?= htmlspecialchars($actDetails['computed_status']) ?: 'Not set'?>
+                    <?= htmlspecialchars($actDetails['computed_status']) ?: 'Not set' ?>
                 </span>
             </div>
 
@@ -166,36 +166,36 @@ include "../assets/layout.php";
             <div class="label">Date </div>
             <div class="value">
                 <?= !empty($actDetails['activitydate'])
-            ? date("F j, Y", strtotime($actDetails['activitydate']))
-            : '-' ?>
+                    ? date("F j, Y", strtotime($actDetails['activitydate']))
+                    : '-' ?>
             </div>
 
             <div class="label">TIMEIN CUTOFF</div>
             <div class="value"> <?= (!empty($actDetails['timein_start']) && !empty($actDetails['timein_end']))
-            ? date("g:i A", strtotime($actDetails['timein_start'])) .
-              " - " .
-              date("g:i A", strtotime($actDetails['timein_end']))
-            : 'TBA' ?>
+                                    ? date("g:i A", strtotime($actDetails['timein_start'])) .
+                                    " - " .
+                                    date("g:i A", strtotime($actDetails['timein_end']))
+                                    : 'TBA' ?>
             </div>
 
             <div class="label">Venue</div>
-            <div class="value"><?= htmlspecialchars($actDetails['venue']) ?: 'TBA'?></div>
+            <div class="value"><?= htmlspecialchars($actDetails['venue']) ?: 'TBA' ?></div>
 
 
             <div class="label">TIMEOUT CUTOFF</div>
             <div class="value"> <?= (!empty($actDetails['timeout_start']) && !empty($actDetails['timeout_end']))
-            ? date("g:i A", strtotime($actDetails['timeout_start'])) .
-              " - " .
-              date("g:i A", strtotime($actDetails['timeout_end']))
-            : 'TBA' ?>
+                                    ? date("g:i A", strtotime($actDetails['timeout_start'])) .
+                                    " - " .
+                                    date("g:i A", strtotime($actDetails['timeout_end']))
+                                    : 'TBA' ?>
             </div>
 
             <div class="label">Info</div>
 
-            <div class="value"  style="grid-column: span 2;">
+            <div class="value" style="grid-column: span 2;">
                 <?= !empty($actDetails['info'])
-            ? nl2br(htmlspecialchars($actDetails['info']))
-            : 'No additional information.' ?></div>
+                    ? nl2br(htmlspecialchars($actDetails['info']))
+                    : 'No additional information.' ?></div>
 
         </div>
 
@@ -261,28 +261,28 @@ include "../assets/layout.php";
 
     <div class="pagination">
 
-<?php if ($page > 1): ?>
-<a href="?actId=<?= $actId ?>&page=<?= $page-1 ?>&search=<?= urlencode($search) ?>">
-    Previous
-</a>
-<?php endif; ?>
+        <?php if ($page > 1): ?>
+            <a href="?actId=<?= $actId ?>&page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>">
+                Previous
+            </a>
+        <?php endif; ?>
 
-<?php for($i=1;$i<=$totalPages;$i++): ?>
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
 
-<a href="?actId=<?= $actId ?>&page=<?= $i ?>&search=<?= urlencode($search) ?>"
-   class="<?= $i==$page ? 'active' : '' ?>">
-    <?= $i ?>
-</a>
+            <a href="?actId=<?= $actId ?>&page=<?= $i ?>&search=<?= urlencode($search) ?>"
+                class="<?= $i == $page ? 'active' : '' ?>">
+                <?= $i ?>
+            </a>
 
-<?php endfor; ?>
+        <?php endfor; ?>
 
-<?php if ($page < $totalPages): ?>
-<a href="?actId=<?= $actId ?>&page=<?= $page+1 ?>&search=<?= urlencode($search) ?>">
-    Next
-</a>
-<?php endif; ?>
+        <?php if ($page < $totalPages): ?>
+            <a href="?actId=<?= $actId ?>&page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>">
+                Next
+            </a>
+        <?php endif; ?>
 
-</div>
+    </div>
 
     <!-- REUSABLE EDIT DRAWER -->
     <div id="editDrawer" class="edit-drawer">
@@ -411,29 +411,29 @@ include "../assets/layout.php";
     </div>
 
     <script>
-document.addEventListener('click', function(e) {
-    const btn = e.target.closest('.edit-btn');
-    if (!btn) return;
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.edit-btn');
+            if (!btn) return;
 
-    document.getElementById('editDrawer').classList.add('open');
+            document.getElementById('editDrawer').classList.add('open');
 
-    document.getElementById('ar_id').value = btn.dataset.ar_id;
-    document.getElementById('user_id').value = btn.dataset.user_id;
-    document.getElementById('iskolarno').value = btn.dataset.iskolarno;
-    document.getElementById('fullname').value = btn.dataset.fullname;
+            document.getElementById('ar_id').value = btn.dataset.ar_id;
+            document.getElementById('user_id').value = btn.dataset.user_id;
+            document.getElementById('iskolarno').value = btn.dataset.iskolarno;
+            document.getElementById('fullname').value = btn.dataset.fullname;
 
-    document.getElementById('timein').value =
-        btn.dataset.timein ? btn.dataset.timein.substring(0, 5) : '';
+            document.getElementById('timein').value =
+                btn.dataset.timein ? btn.dataset.timein.substring(0, 5) : '';
 
-    document.getElementById('timeout').value =
-        btn.dataset.timeout ? btn.dataset.timeout.substring(0, 5) : '';
+            document.getElementById('timeout').value =
+                btn.dataset.timeout ? btn.dataset.timeout.substring(0, 5) : '';
 
-    document.getElementById('officer_fullname').value =
-        btn.dataset.officer_fullname;
+            document.getElementById('officer_fullname').value =
+                btn.dataset.officer_fullname;
 
-    document.getElementById('scanned_by').value =
-        btn.dataset.scanned_by;
-});
+            document.getElementById('scanned_by').value =
+                btn.dataset.scanned_by;
+        });
 
         function closeDrawer() {
             document.getElementById('editDrawer').classList.remove('open');
@@ -516,5 +516,6 @@ document.addEventListener('click', function(e) {
         searchInput.addEventListener('keydown', e => {
             if (e.key === 'Enter') e.preventDefault();
         });
+
     </script>
     <?php include "../assets/layout_end.php"; ?>

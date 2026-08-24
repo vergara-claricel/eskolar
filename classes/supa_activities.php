@@ -34,26 +34,26 @@ class Activities
 
     function getActivitiesOfActiveSem($semid, $page, $limit)
     {
-       
+
         $offset = ($page - 1) * $limit;
         return $this->api->get(
             "activities_with_status",
             "?semester=eq.$semid" .
-            "&order=activitydate.desc" .
-            "&limit=$limit" .
-            "&offset=$offset"
+                "&order=activitydate.desc" .
+                "&limit=$limit" .
+                "&offset=$offset"
         );
     }
 
     function countActivitiesOfActiveSem($semid)
-{
-    $result = $this->api->get(
-        "activities_with_status",
-        "?select=count&semester=eq.$semid"
-    );
+    {
+        $result = $this->api->get(
+            "activities_with_status",
+            "?select=count&semester=eq.$semid"
+        );
 
-    return (int) ($result[0]['count'] ?? 0);
-}
+        return (int) ($result[0]['count'] ?? 0);
+    }
     function filterActivities(
         $semid,
         $search = '',
@@ -64,9 +64,9 @@ class Activities
     ) {
         $query = "activities_with_status?select=*";
 
-         $filters = [];
+        $filters = [];
 
-    $filters[] = "semester=eq." . urlencode($semid);
+        $filters[] = "semester=eq." . urlencode($semid);
 
         if ($search !== '') {
             // $q = "*$search*";
@@ -78,17 +78,16 @@ class Activities
             $filters[] = "computed_status=eq.$status";
         }
 
-    if ($barangay === 'Municipal') {
-        $filters[] = "classification=eq.Municipal";
+        if ($barangay === 'Municipal') {
+            $filters[] = "classification=eq.Municipal";
+        } elseif ($barangay === 'Barangay') {
+            $brgy = urlencode($barangay);
 
-    } elseif ($barangay === 'Barangay') {
-        $brgy = urlencode($barangay);
-
-        $filters[] = "classification=eq.Barangay";
-    } else if ($barangay !== ''){
-        $brgy = urlencode($barangay);
-        $filters[] = "barangay=eq.$brgy";
-    }
+            $filters[] = "classification=eq.Barangay";
+        } else if ($barangay !== '') {
+            $brgy = urlencode($barangay);
+            $filters[] = "barangay=eq.$brgy";
+        }
 
         if ($filters) {
             $query .= "&" . implode("&", $filters);
@@ -107,33 +106,33 @@ class Activities
 
 
     function countFilteredActivities($semid, $search = '', $status = '', $barangay = '')
-{
-    $query = "activities_with_status?select=count&semester=eq.$semid";
+    {
+        $query = "activities_with_status?select=count&semester=eq.$semid";
 
-    $filters = [];
+        $filters = [];
 
-    if ($search) {
-        $q = "*$search*";
-        $filters[] = "or=(activityname.ilike.$q,barangay.ilike.$q)";
+        if ($search) {
+            $q = "*$search*";
+            $filters[] = "or=(activityname.ilike.$q,barangay.ilike.$q)";
+        }
+
+        if ($status !== '') {
+            $filters[] = "computed_status=eq.$status";
+        }
+
+        if ($barangay) {
+            $brgy = urlencode($barangay);
+            $filters[] = "barangay=eq.$brgy";
+        }
+
+        if ($filters) {
+            $query .= "&" . implode("&", $filters);
+        }
+
+        $result = $this->api->get($query);
+
+        return (int) ($result[0]['count'] ?? 0);
     }
-
-    if ($status !== '') {
-        $filters[] = "computed_status=eq.$status";
-    }
-
-    if ($barangay) {
-        $brgy = urlencode($barangay);
-        $filters[] = "barangay=eq.$brgy";
-    }
-
-    if ($filters) {
-        $query .= "&" . implode("&", $filters);
-    }
-
-    $result = $this->api->get($query);
-
-    return (int) ($result[0]['count'] ?? 0);
-}
 
     function getActivityDetails($actId)
     {
@@ -182,6 +181,7 @@ class Activities
             $data
         );
     }
+
     function upcomingActivities($semId)
     {
 
@@ -211,7 +211,7 @@ class Activities
 
     function buildActivityAttendanceReport($actId, $classification, $barangay, $search = '')
     {
-        $start = microtime(true);
+        
         $scholars = $this->getEligibleScholars($classification, $barangay);
         $logs = $this->getAttendanceRecords($actId);
 
@@ -250,9 +250,6 @@ class Activities
                     str_contains(strtolower($s['last_name'] ?? ''), $search);
             }));
         }
-    echo "Users query: " .
-     round((microtime(true) - $start) * 1000) .
-     " ms";
         return $result;
     }
 
@@ -264,6 +261,7 @@ class Activities
         $page = 1,
         $limit = 10
     ) {
+        $start = microtime(true);
 
         $result = $this->buildActivityAttendanceReport(
             $actId,
@@ -271,6 +269,11 @@ class Activities
             $barangay,
             $search
         );
+        error_log(
+    "TOTAL REPORT: " .
+    round((microtime(true) - $start) * 1000) .
+    " ms"
+);
 
         $offset = ($page - 1) * $limit;
 
@@ -319,7 +322,6 @@ class Activities
 
         // 2. UPDATE if exists
         if (!empty($check)) {
-
             return $this->api->patch(
                 "attendance_record",
                 "?ar_id=eq.$ar_id",
@@ -332,6 +334,20 @@ class Activities
             "attendance_record",
             $data
         );
+
+        // $data = [
+        //     "activityid" => $activity_id,
+        //     "user_id" => $user_id,
+        //     "timein" => $timein,
+        //     "timeout" => $timeout,
+        //     "scanned_by" => $scanned_by
+        // ];
+
+        // return $this->api->upsert(
+        //     "attendance_record",
+        //     $data,
+        //     "activityid,user_id"
+        // );
     }
     public function deleteActivity($activity_id)
     {
@@ -340,5 +356,4 @@ class Activities
             "?activity_id=eq.$activity_id"
         );
     }
-
 }

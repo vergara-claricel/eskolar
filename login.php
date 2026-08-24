@@ -382,40 +382,203 @@ if (isset($_POST['login'])) {
            MOBILE
         ========================= */
 
-        @media (max-width: 850px) {
+/* =========================
+   MOBILE LOGIN
+========================= */
 
-            .login-page {
-                grid-template-columns: 1fr;
-            }
+@media (max-width: 850px) {
 
-            .branding {
-                display: none;
-            }
+    .login-page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f5f7f4;
+    }
 
-            .login-section {
-                min-height: 100vh;
-                padding: 25px;
-            }
+    /* =========================
+       BRANDING HEADER
+    ========================= */
 
-            .login-wrapper {
-                max-width: 400px;
-            }
-        }
+    .branding {
+        display: block;
+        padding: 28px 24px 24px;
+        min-height: auto;
+        text-align: center;
+        background: #254725;
+    }
 
-        @media (max-width: 420px) {
+    .branding-content {
+        width: 100%;
+        max-width: none;
+        margin: 0 auto;
+    }
 
-            .login-section {
-                padding: 20px;
-            }
+    /* Hide decorative shapes on mobile */
+    .decor-circle,
+    .decor-line {
+        display: none;
+    }
 
-            .login-form {
-                padding: 22px;
-            }
+    /* Main eSkolar logo */
+    .brand-mark {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 12px;
+        border-radius: 12px;
+    }
 
-            .login-header h2 {
-                font-size: 27px;
-            }
-        }
+    /* eSkolar title */
+    .branding h1 {
+        font-size: 34px;
+        line-height: 1;
+        letter-spacing: -1px;
+        margin-bottom: 10px;
+    }
+
+    /* Description */
+    .branding-description {
+        max-width: 420px;
+        margin: 0 auto;
+        color: #cbd8cc;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* =========================
+       PARTNER LOGOS
+    ========================= */
+
+    .partner-logos {
+        justify-content: center;
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .partner-logos img {
+        width: 30px;
+        height: 30px;
+        padding: 2px;
+        border-radius: 50%;
+    }
+
+    /* =========================
+       LOGIN SECTION
+    ========================= */
+
+    .login-section {
+        flex: 1;
+        width: 100%;
+        padding: 28px 20px 25px;
+        background: #f5f7f4;
+        align-items: flex-start;
+    }
+
+    .login-wrapper {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* Login heading */
+    .login-header {
+        margin-bottom: 18px;
+    }
+
+    .login-header h2 {
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* Login card */
+    .login-form {
+        width: 100%;
+        padding: 22px;
+        border-radius: 12px;
+    }
+
+    .input-group {
+        margin-bottom: 16px;
+    }
+
+    .input-group label {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+
+    .input-wrapper input {
+        height: 44px;
+        font-size: 13px;
+    }
+
+    .login-btn {
+        height: 44px;
+        font-size: 13px;
+    }
+
+    .login-footer {
+        margin-top: 16px;
+        font-size: 10px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 420px) {
+
+    .branding {
+        padding: 22px 18px 20px;
+    }
+
+    .brand-mark {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+
+    .branding h1 {
+        font-size: 30px;
+    }
+
+    .branding-description {
+        font-size: 11px;
+        max-width: 340px;
+        line-height: 1.45;
+    }
+
+    .partner-logos {
+        margin-top: 14px;
+        gap: 11px;
+    }
+
+    .partner-logos img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .login-section {
+        padding: 22px 16px;
+    }
+
+    .login-header h2 {
+        font-size: 23px;
+    }
+
+    .login-header p {
+        font-size: 12px;
+    }
+
+    .login-form {
+        padding: 20px 18px;
+    }
+}
 
         /* =========================
    PAGE ANIMATIONS
