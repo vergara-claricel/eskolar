@@ -298,9 +298,6 @@ include "../assets/layout.php";
         border-bottom-color: #4C7742;
     }
 
-    /* =========================
-   SEMESTER ACTIONS
-========================= */
 
     .action-group {
         display: flex;
@@ -411,7 +408,6 @@ endif;
 
         <!-- SEM LIST -->
         <div id="semlist">
-
             <div class="semester-tabs">
                 <button type="button" class="semester-tab active" data-filter="active">
                     Existing
@@ -421,63 +417,65 @@ endif;
                     Archived
                 </button>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Semester Name</th>
-                        <th>Duration</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php foreach ($allsem as $row): ?>
-                        <tr class="semester-row"
-                            data-archived="<?= $row['is_archived'] ? 'true' : 'false' ?>">
-                            <td><?= $row['semester_name'] ?></td>
-                            <td>
-                                <?= (new DateTime($row['semester_start']))->format('M d, Y') ?>
-                                -
-                                <?= (new DateTime($row['semester_end']))->format('M d, Y') ?>
-                            </td>
-                            <td><?= $row['semester_status'] ?></td>
-                            <td>
-                                <!-- <button>Edit</button> -->
-                                <div class="action-group">
-                                    <?php if (!$row['is_archived']): ?>
-                                        <button
-                                            type="button"
-                                            class="action-icon edit-sem"
-                                            title="Edit Semester"
-                                            data-semid="<?= $row['sem_id'] ?>"
-                                            data-semname="<?= htmlspecialchars($row['semester_name']) ?>"
-                                            data-semstart="<?= $row['semester_start'] ?>"
-                                            data-semend="<?= $row['semester_end'] ?>"
-                                            data-semstatus="<?= $row['semester_status'] ?>">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    <?php endif; ?>
-                                    <button type="button"
-                                        class="action-icon archive-sem"
-                                        data-semid="<?= $row['sem_id'] ?>"
-                                        title="<?= $row['is_archived'] ? 'Restore Semester Records' : 'Archive Semester Records' ?>"
-                                        data-action="<?= $row['is_archived'] ? 'restore' : 'archive' ?>"
-                                        data-semname="<?= $row['semester_name'] ?>">
-                                        <i class="fa-solid <?= $row['is_archived'] ? 'fa-rotate-left' : 'fa-box-archive' ?>"></i>
-                                    </button>
-                                    <?php if ($row['is_archived']): ?>
-                                        <a href="admin_sem.php?export=<?= $row['sem_id'] ?>" class="download-btn">
-                                            <i class="fa-solid fa-download"></i>
-                                        </a>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Semester Name</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        <?php foreach ($allsem as $row): ?>
+                            <tr class="semester-row"
+                                data-archived="<?= $row['is_archived'] ? 'true' : 'false' ?>">
+                                <td><?= $row['semester_name'] ?></td>
+                                <td>
+                                    <?= (new DateTime($row['semester_start']))->format('M d, Y') ?>
+                                    -
+                                    <?= (new DateTime($row['semester_end']))->format('M d, Y') ?>
+                                </td>
+                                <td><?= $row['semester_status'] ?></td>
+                                <td>
+                                    <!-- <button>Edit</button> -->
+                                    <div class="action-group">
+                                        <?php if (!$row['is_archived']): ?>
+                                            <button
+                                                type="button"
+                                                class="action-icon edit-sem"
+                                                title="Edit Semester"
+                                                data-semid="<?= $row['sem_id'] ?>"
+                                                data-semname="<?= htmlspecialchars($row['semester_name']) ?>"
+                                                data-semstart="<?= $row['semester_start'] ?>"
+                                                data-semend="<?= $row['semester_end'] ?>"
+                                                data-semstatus="<?= $row['semester_status'] ?>">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                        <button type="button"
+                                            class="action-icon archive-sem"
+                                            data-semid="<?= $row['sem_id'] ?>"
+                                            title="<?= $row['is_archived'] ? 'Restore Semester Records' : 'Archive Semester Records' ?>"
+                                            data-action="<?= $row['is_archived'] ? 'restore' : 'archive' ?>"
+                                            data-semname="<?= $row['semester_name'] ?>">
+                                            <i class="fa-solid <?= $row['is_archived'] ? 'fa-rotate-left' : 'fa-box-archive' ?>"></i>
+                                        </button>
+                                        <?php if ($row['is_archived']): ?>
+                                            <a href="admin_sem.php?export=<?= $row['sem_id'] ?>" class="download-btn">
+                                                <i class="fa-solid fa-download"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

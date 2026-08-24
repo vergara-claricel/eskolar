@@ -199,7 +199,6 @@ include "../assets/layout.php";
 ========================= */
 
 @media (max-width: 480px) {
-
     /* Entire filter section */
     .filter-bar {
         flex-direction: column;

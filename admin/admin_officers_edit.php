@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
     $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phonenumber = $_POST['phonenumber'];
+    $role = $_POST['role'];
     $email = $_POST['email'];
     $officerno = strtoupper(trim($_POST['officerno']));
     $password = $_POST['password'] ?? null;
@@ -30,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
             $first_name,
             $last_name,
             $barangay,
+            $role,
             $phonenumber,
             $email,
             $officerno,
@@ -40,17 +42,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
             header("Location: admin_officers.php?officerId=$officerId");
             echo "<script>alert('Updated!');</script>";
             exit;
-    
         } else {
             echo "Update failed.";
         }
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
-    include "../assets/layout.php";
+include "../assets/layout.php";
 ?>
 
 
@@ -63,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
     <form method="POST" class="user-form">
 
         <input type="hidden"
-               name="officer_id"
-               value="<?= $officer['user_id'] ?>">
+            name="officer_id"
+            value="<?= $officer['user_id'] ?>">
 
         <h4>Personal Details</h4>
 
@@ -73,37 +73,63 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
             <div class="form-group">
                 <label>First Name</label>
                 <input type="text"
-                       name="first_name"
-                       value="<?= htmlspecialchars($officer['first_name']) ?>">
+                    name="first_name"
+                    value="<?= htmlspecialchars($officer['first_name']) ?>">
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text"
-                       name="last_name"
-                       value="<?= htmlspecialchars($officer['last_name']) ?>">
+                    name="last_name"
+                    value="<?= htmlspecialchars($officer['last_name']) ?>">
             </div>
-
         </div>
 
-        <div class="form-group">
-            <label>Barangay</label>
-
-            <select name="barangay">
-                <?php
-                $barangays = [
-                    "Atilano Ricardo","Bagumbayan","Banawang","Binuangan",
-                    "Binukawan","Ibis","Ibaba","Pag-asa","Parang","Paysawan",
-                    "Quinawan","San Antonio","Saysain","Tabing-Ilog"
-                ];
-
-                foreach ($barangays as $b): ?>
-                    <option value="<?= htmlspecialchars($b) ?>"
-                        <?= ($officer['barangay'] == $b) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($b) ?>
+        <div class="form-row-2">
+            <div class="form-group">
+                <label for="role">Position*</label>
+                <select name="role" id="role" required>
+                    <option value="executive"
+                        <?= $officer['role'] === 'executive' ? 'selected' : '' ?>>
+                        Executive
                     </option>
-                <?php endforeach; ?>
-            </select>
+
+                    <option value="representative"
+                        <?= $officer['role'] === 'representative' ? 'selected' : '' ?>>
+                        Representative
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Barangay</label>
+
+                <select name="barangay">
+                    <?php
+                    $barangays = [
+                        "Atilano Ricardo",
+                        "Bagumbayan",
+                        "Banawang",
+                        "Binuangan",
+                        "Binukawan",
+                        "Ibis",
+                        "Ibaba",
+                        "Pag-asa",
+                        "Parang",
+                        "Paysawan",
+                        "Quinawan",
+                        "San Antonio",
+                        "Saysain",
+                        "Tabing-Ilog"
+                    ];
+
+                    foreach ($barangays as $b): ?>
+                        <option value="<?= htmlspecialchars($b) ?>"
+                            <?= ($officer['barangay'] == $b) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($b) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
         <h4>Contact Details</h4>
@@ -113,15 +139,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
             <div class="form-group">
                 <label>Phone Number</label>
                 <input type="text"
-                       name="phonenumber"
-                       value="<?= htmlspecialchars($officer['phonenumber']) ?>">
+                    name="phonenumber"
+                    value="<?= htmlspecialchars($officer['phonenumber']) ?>">
             </div>
 
             <div class="form-group">
                 <label>Email</label>
                 <input type="email"
-                       name="email"
-                       value="<?= htmlspecialchars($officer['email']) ?>">
+                    name="email"
+                    value="<?= htmlspecialchars($officer['email']) ?>">
             </div>
 
         </div>
@@ -133,15 +159,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
             <div class="form-group">
                 <label>Officer No.</label>
                 <input type="text"
-                       name="officerno"
-                       value="<?= htmlspecialchars($officer['username']) ?>">
+                    name="officerno"
+                    value="<?= htmlspecialchars($officer['officerno']) ?>">
             </div>
 
             <div class="form-group">
                 <label>Password</label>
                 <input type="password"
-                       name="password"
-                       placeholder="Leave blank if unchanged">
+                    name="password"
+                    placeholder="Leave blank if unchanged">
             </div>
 
         </div>

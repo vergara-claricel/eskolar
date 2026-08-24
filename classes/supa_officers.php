@@ -38,7 +38,7 @@ class Officer
         $role,
         $phonenumber,
         $email,
-        $username,
+        $officerno,
         $password = null
     ) {
         // 1. update users
@@ -48,7 +48,7 @@ class Officer
             [
                 "first_name" => $firstname,
                 "last_name"  => $lastname,
-                "username"   => $username,
+                "username"   => $officerno,
                 "role"   => $role
             ]
         );
@@ -64,16 +64,16 @@ class Officer
         }
 
         // 2. update officers
-        $this->api->patch(
+        $data = $this->api->patch(
             "officers?user_id=eq.$userid",
             "",
             [
+                "officerno"   => $officerno,
                 "barangay"    => $barangay,
                 "phonenumber" => $phonenumber,
                 "email"       => $email
             ]
         );
-
         return true;
     }
 
@@ -88,71 +88,98 @@ class Officer
         );
     }
 
-    function createOfficer($firstname, $lastname, $brgy, $role, $phonenumber, $email, $officerno, $password)
-    {
-        $existing = $this->api->get(
-            "users",
-            "?username=eq." . urlencode($officerno) . "&select=id"
-        );
+    function createOfficer(
+    $firstname,
+    $lastname,
+    $brgy,
+    $role,
+    $phonenumber,
+    $email,
+    $officerno,
+    $password
+) {
 
-        if (!empty($existing)) {
-            return [
-                "success" => false,
-                "error"   => "duplicate_officerno"
-            ];
-        }
+    $query = "?username=eq." . urlencode($officerno) . "&select=id";
+    $existing = $this->api->get("users", $query);
+    if (!empty($existing)) {
+        return [
+            "success" => false,
+            "error" => "duplicate_officerno"
+        ];
+    }
+
+    if ($role === "representative") {
+        $query = "?role=eq.representative"
+            . "&barangay=eq." . urlencode($brgy)
+            . "&is_active=eq.true"
+            . "&select=user_id";
 
         $existingRep = $this->api->get(
-            "users",
-            "?role=eq.representative&is_active=eq.true&select=id"
+            "officer_view",
+            $query
         );
 
         if (!empty($existingRep)) {
             return [
                 "success" => false,
-                "error"   => "duplicate_representative"
+                "error" => "duplicate_representative"
             ];
         }
+    }
 
-        $user = $this->api->post("users", [
-            "first_name" => $firstname,
-            "last_name"  => $lastname,
-            "username"   => $officerno,
-            "password"   => password_hash($password, PASSWORD_DEFAULT),
-            "role"       => $role,
-            "is_active"  => true
-        ]);
+    $userData = [
+        "first_name" => $firstname,
+        "last_name" => $lastname,
+        "username" => $officerno,
+        "password" => password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        ),
+        "role" => $role,
+        "is_active" => true
+    ];
 
-        $userId = $user[0]['id'] ?? $user['id'] ?? null;
+    $user = $this->api->post(
+        "users",
+        $userData
+    );
 
-        if (!$userId) {
-            return [
-                "success" => false,
-                "error"   => "user_creation_failed"
-            ];
-        }
+    $userId = $user[0]["id"]
+        ?? $user["id"]
+        ?? null;
 
-        // 2. create officer profile
-        $officer = $this->api->post("officers", [
-            "user_id"     => $userId,
-            "officerno"   => $officerno,
-            "barangay"    => $brgy,
-            "phonenumber" => $phonenumber,
-            "email"       => $email
-        ]);
-
-        if (!$officer) {
-            return [
-                "success" => false,
-                "error"   => "officer_creation_failed"
-            ];
-        }
-
+    if (!$userId) {
         return [
-            "success" => true,
-            "user_id" => $userId
+            "success" => false,
+            "error" => "user_creation_failed"
         ];
     }
+
+    $officerData = [
+        "user_id" => $userId,
+        "officerno" => $officerno,
+        "barangay" => $brgy,
+        "phonenumber" => $phonenumber,
+        "email" => $email
+    ];
+
+    $officer = $this->api->post(
+        "officers",
+        $officerData
+    );
+
+    if (!$officer) {
+        return [
+            "success" => false,
+            "error" => "officer_creation_failed"
+        ];
+    }
+
+    return [
+        "success" => true,
+        "user_id" => $userId
+    ];
+}
 
     function getAdminName($adminId)
     {

@@ -380,7 +380,7 @@ include "../assets/layout.php";
                 <?php if (count($upcomingEvents) > 3): ?>
 
         <div class="see-more">
-            <a href="/esko/admin/admin_activities.php"
+            <a href="/esko/admin/admin_activities_attendance.php"
             class="view-link">
                 See more activities →
             </a>

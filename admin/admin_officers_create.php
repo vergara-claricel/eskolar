@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $result = $offobj->createOfficer($first_name, $last_name, $barangay, $role, $phone, $email, $officerno, $password);
         if (!$result['success']) {
-            if ($result['error'] === 'duplicate_officeno') {
+            if ($result['error'] === 'duplicate_officerno') {
                 $error = "Officer number already exists.";
             } else if($result['error'] === 'duplicate_representative'){
                 $error = "Representative already exists.";
