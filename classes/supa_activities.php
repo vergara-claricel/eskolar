@@ -349,11 +349,11 @@ class Activities
         //     "activityid,user_id"
         // );
     }
-    public function deleteActivity($activity_id)
-    {
-        return $this->api->delete(
-            "activities",
-            "?activity_id=eq.$activity_id"
-        );
-    }
+    // public function deleteActivity($activity_id)
+    // {
+    //     return $this->api->delete(
+    //         "activities",
+    //         "?activity_id=eq.$activity_id"
+    //     );
+    // }
 }

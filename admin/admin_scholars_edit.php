@@ -72,14 +72,14 @@ include "../assets/layout.php";
                 <label>First Name</label>
                 <input type="text"
                        name="first_name"
-                       value="<?= htmlspecialchars($scholar['users']['first_name']) ?>">
+                       value="<?= htmlspecialchars($scholar['users']['first_name']) ?>" disabled>
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text"
                        name="last_name"
-                       value="<?= htmlspecialchars($scholar['users']['last_name']) ?>">
+                       value="<?= htmlspecialchars($scholar['users']['last_name']) ?>" disabled>
             </div>
         </div>
 
@@ -116,7 +116,7 @@ include "../assets/layout.php";
                 <label>Email</label>
                 <input type="email"
                        name="email"
-                       value="<?= htmlspecialchars($scholar['email']) ?>">
+                       value="<?= htmlspecialchars($scholar['email']) ?>" disabled>
             </div>
         </div>
 

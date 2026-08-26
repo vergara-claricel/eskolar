@@ -74,14 +74,14 @@ include "../assets/layout.php";
                 <label>First Name</label>
                 <input type="text"
                     name="first_name"
-                    value="<?= htmlspecialchars($officer['first_name']) ?>">
+                    value="<?= htmlspecialchars($officer['first_name']) ?>" disabled> 
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text"
                     name="last_name"
-                    value="<?= htmlspecialchars($officer['last_name']) ?>">
+                    value="<?= htmlspecialchars($officer['last_name']) ?>" disabled>
             </div>
         </div>
 
@@ -147,7 +147,7 @@ include "../assets/layout.php";
                 <label>Email</label>
                 <input type="email"
                     name="email"
-                    value="<?= htmlspecialchars($officer['email']) ?>">
+                    value="<?= htmlspecialchars($officer['email']) ?>" disabled>
             </div>
 
         </div>

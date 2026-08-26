@@ -449,7 +449,7 @@ include "../assets/layout.php";
                                     data-name="<?= $s['last_name'] . ', ' . $s['first_name'] ?>"
                                     data-barangay="<?= $s['barangay'] ?>"
                                     data-iskolarno="<?= $s['username'] ?>">
-                                    <i class="fa-solid <?= $s['is_active'] ? 'fa-trash' : 'fa-rotate-left' ?>"></i>
+                                    <i class="fa-solid <?= $s['is_active'] ? 'fa-user-slash' : 'fa-rotate-left' ?>"></i>
                                 </button>
                             </form>
                         </div>

@@ -356,10 +356,10 @@ include "../assets/layout.php";
                                 class="action-icon"
                                 title="View Activity Information">
                                 <i class="fa-solid fa-eye"></i></a>
-                            <a href="/esko/admin/admin_delete_activity.php?actId=<?= $s['activity_id'] ?>" class="action-icon"
+                            <!-- <a href="/esko/admin/admin_delete_activity.php?actId=<?= $s['activity_id'] ?>" class="action-icon"
                                 onclick="return confirm('Are you sure you want to delete this activity?');"
                                 title="Delete Activity">
-                                <i class="fa-solid fa-trash"></i></a>
+                                <i class="fa-solid fa-trash"></i></a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>

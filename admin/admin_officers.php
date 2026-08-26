@@ -62,6 +62,16 @@ include "../assets/layout.php";
         align-items: center;
     }
 
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.45);
+        justify-content: center;
+        align-items: center;
+    }
+
     /* SHOW WITH JS */
     .modal.show {
         display: flex;
@@ -221,25 +231,25 @@ include "../assets/layout.php";
     }
 
     .role-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 700;
-}
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 700;
+    }
 
-.role-rep {
-    background: #e8f1ff;
-    color: #2563eb;
-}
+    .role-rep {
+        background: #e8f1ff;
+        color: #2563eb;
+    }
 
-.role-executive {
-    background: #fff3d6;
-    color: #d97706;
-}
+    .role-executive {
+        background: #fff3d6;
+        color: #d97706;
+    }
 </style>
 
 <div class="officer-header">
@@ -279,7 +289,7 @@ include "../assets/layout.php";
                     <td><?= $o['last_name'] . ', ' . $o['first_name'] ?></td>
                     <td><?= $o['barangay'] ?></td>
                     <td><?= $o['phonenumber'] ?></td>
-                <td><?= $o['email'] ?></td>
+                    <td><?= $o['email'] ?></td>
                     <td>
                         <div class="action-group">
                             <a href="/esko/admin/admin_officers_edit.php?officerId=<?= $o['user_id'] ?>"
@@ -296,7 +306,7 @@ include "../assets/layout.php";
                                     data-barangay="<?= $o['barangay'] ?>"
                                     data-officerno="<?= $o['username'] ?>"
                                     title="<?= $o['is_active'] ? 'Deactivate User' : 'Reactivate User' ?>">
-                                    <i class="fa-solid fa-trash"></i></button>
+                                    <i class="fa-solid fa-user-slash"></i></button>
                             </form>
                         </div>
                     </td>
@@ -307,17 +317,21 @@ include "../assets/layout.php";
     </table>
 
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <p><strong>Action Confirmation</strong></p>
-            <p>Are you sure you want to delete this account?</p>
-            <p><span id="modalOfficerNo"></span></p>
-            <p><span id="modalName"></span></p>
-            <p><span id="modalBrgy"></span></p>
-            <button id="confirmBtn">Confirm</button>
-            <button id="cancelBtn">Cancel</button>
+            <p>Are you sure you want to deactivate this account? This action will permanently disable:</p>
+            <div class="modal-info">
+                <p><span id="modalOfficerNo"></span></p>
+                <p><span id="modalName"></span></p>
+                <p><span id="modalBrgy"></span></p>
+            </div>
+            <p>Proceed?</p>
+            <div class="modal-buttons">
+                <button id="confirmBtn">Yes</button>
+                <button id="cancelBtn">No</button>
+            </div>
         </div>
     </div>
 
@@ -349,7 +363,7 @@ include "../assets/layout.php";
 
                 modalName.innerText = btn.dataset.name;
                 modalBrgy.innerText = btn.dataset.barangay;
-                modalOfficerNo.innerText = btn.dataset.officer;
+                modalOfficerNo.innerText = btn.dataset.officerno;
 
                 currentForm = btn.closest('form');
                 modal.style.display = 'flex';
