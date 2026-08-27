@@ -5,7 +5,16 @@ require '../vendor/autoload.php';
 use Dompdf\Dompdf;
 
 require_once "../test.php";
-$scholarUserId = $_GET['scholarid'];
+// $scholarUserId = $_GET['scholarid'];
+$token = $_GET['token'] ?? '';
+if (empty($token)) {
+    exit('Invalid scorecard token.');
+}
+$scholarUserId = $schoobj->getScholarIdByToken($token);
+if (empty($scholarUserId)) {
+    exit('Scholar not found.');
+}
+
 $activeSem = $semobj->getActiveSemester();
 $semId = $activeSem['sem_id'];
 $qrPath = $schoobj->generateScorecardQr($scholarUserId);
@@ -22,8 +31,8 @@ if (!file_exists($qrPath)) {
 }
 $svgContent = file_get_contents($qrPath);
 $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($svgContent);
-$scholar_ar = $schoobj->getScholarRecord($scholarUserId, $semId);
-var_dump($scholar_ar);
+$scholar_ar = $schoobj->getScholarRecords($scholarUserId, $semId);
+
 if($scholar_ar !== null){
     $scholarAttended = $scObj->getAttendedEventsPerScholar($scholarUserId, $semId);
     $totalBrgyEvents = $scObj->getTotalBarangayEvents($scholar_info['barangay'], $semId);
@@ -82,8 +91,8 @@ body {
 }
 
 .qr {
-    width: 30mmpx;
-    height: 30mmpx;
+    width: 55px;
+    height: 55px;
 }
 
 .qr-label {

@@ -37,6 +37,8 @@ if($semId != null){
     $totalEvents = $scObj->getTotalEvents($totalBrgyEvents, $totalMunicipalEvents);
     $quotaPercentage = $scObj->computeQuotaPercent($scholarAttended, $totalEvents);
     $passFail = $scObj->attendanceRemark($quotaPercentage);
+    
+    $scholarToken = $scholar_info['verification_token'];
 } else {
     $scholar_info = $schoobj->getScholarInfo($scholarUserId);
 }
@@ -124,7 +126,7 @@ include "../assets/layout.php";
         <h4>Activity Information</h4>
         <p>View and manage the scholar's attendance records.</p>
     </div>
-    <a id="exportSCbtn" href="export_scholar_pdf.php?scholarid=<?= $scholarUserId ?>" target="_blank">
+    <a id="exportSCbtn" href="export_scholar_pdf.php?token=<?= $scholarToken ?>" target="_blank">
         Export PDF
     </a>
 </div>

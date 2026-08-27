@@ -32,13 +32,9 @@ class Officer
 
     function updateOfficer(
         $userid,
-        $firstname,
-        $lastname,
         $barangay,
         $role,
         $phonenumber,
-        $email,
-        $officerno,
         $password = null
     ) {
         // 1. update users
@@ -46,9 +42,6 @@ class Officer
             "users?id=eq.$userid",
             "",
             [
-                "first_name" => $firstname,
-                "last_name"  => $lastname,
-                "username"   => $officerno,
                 "role"   => $role
             ]
         );
@@ -68,10 +61,8 @@ class Officer
             "officers?user_id=eq.$userid",
             "",
             [
-                "officerno"   => $officerno,
                 "barangay"    => $barangay,
                 "phonenumber" => $phonenumber,
-                "email"       => $email
             ]
         );
         return true;

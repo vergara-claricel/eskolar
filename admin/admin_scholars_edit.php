@@ -15,23 +15,15 @@ $scholar = $schoobj->getScholarInfo($scholarId);
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_scholar'])) {
 
     $user_id = $_POST['user_id'];
-    $first_name = strtoupper(trim($_POST['first_name']));
-    $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phonenumber = $_POST['phonenumber'];
-    $email = $_POST['email'];
-    $iskolarno = strtoupper(trim($_POST['iskolarno']));
     $password = $_POST['password'] ?? null;
 
     try {
         $updateScholar = $schoobj->updateScholar(
             $user_id,
-            $first_name,
-            $last_name,
             $barangay,
             $phonenumber,
-            $email,
-            $iskolarno,
             $password
         );
 
@@ -39,15 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_scholar'])) {
             header("Location: admin_scholars_view.php?scholarid=$scholarId");
             echo "<script>alert('Updated!');</script>";
             exit;
-    
         } else {
             echo "Update failed.";
         }
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-
 }
 
 include "../assets/layout.php";
@@ -71,15 +60,13 @@ include "../assets/layout.php";
             <div class="form-group">
                 <label>First Name</label>
                 <input type="text"
-                       name="first_name"
-                       value="<?= htmlspecialchars($scholar['users']['first_name']) ?>" disabled>
+                    value="<?= htmlspecialchars($scholar['users']['first_name']) ?>" readonly>
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text"
-                       name="last_name"
-                       value="<?= htmlspecialchars($scholar['users']['last_name']) ?>" disabled>
+                    value="<?= htmlspecialchars($scholar['users']['last_name']) ?>" readonly>
             </div>
         </div>
 
@@ -88,9 +75,20 @@ include "../assets/layout.php";
             <select name="barangay">
                 <?php
                 $barangays = [
-                    "Atilano Ricardo","Bagumbayan","Banawang","Binuangan",
-                    "Binukawan","Ibis","Ibaba","Pag-asa","Parang","Paysawan",
-                    "Quinawan","San Antonio","Saysain","Tabing-Ilog"
+                    "Atilano Ricardo",
+                    "Bagumbayan",
+                    "Banawang",
+                    "Binuangan",
+                    "Binukawan",
+                    "Ibis",
+                    "Ibaba",
+                    "Pag-asa",
+                    "Parang",
+                    "Paysawan",
+                    "Quinawan",
+                    "San Antonio",
+                    "Saysain",
+                    "Tabing-Ilog"
                 ];
 
                 foreach ($barangays as $b): ?>
@@ -106,17 +104,23 @@ include "../assets/layout.php";
 
         <div class="form-row-2">
             <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text"
-                       name="phonenumber"
-                       value="<?= htmlspecialchars($scholar['phonenumber']) ?>">
+                <label for="phonenumber">Phone Number</label>
+                <div class="phone-input">
+                    <span class="phone-prefix">+63</span>
+                    <input type="text"
+                        name="phonenumber"
+                        id="phonenumber"
+                        value="<?= htmlspecialchars(
+                                    ltrim(preg_replace('/^\+63/', '', $_POST['phonenumber'] ?? $scholar['phonenumber'] ?? ''), ' ')
+                                ) ?>"
+                        required>
+                </div>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
                 <input type="email"
-                       name="email"
-                       value="<?= htmlspecialchars($scholar['email']) ?>" disabled>
+                    value="<?= htmlspecialchars($scholar['email']) ?>" readonly>
             </div>
         </div>
 
@@ -126,15 +130,15 @@ include "../assets/layout.php";
             <div class="form-group">
                 <label>Iskolar No.</label>
                 <input type="text"
-                       name="iskolarno"
-                       value="<?= htmlspecialchars($scholar['username']) ?>">
+                    name="iskolarno"
+                    value="<?= htmlspecialchars($scholar['username']) ?>" readonly>
             </div>
 
             <div class="form-group">
                 <label>Password</label>
                 <input type="password"
-                       name="password"
-                       placeholder="Leave blank if unchanged">
+                    name="password"
+                    placeholder="Leave blank if unchanged">
             </div>
         </div>
 

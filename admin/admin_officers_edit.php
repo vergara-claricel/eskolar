@@ -16,25 +16,17 @@ $officer = $offobj->getOfficerInfo($officerId);
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_officer'])) {
 
     $officer_id = $officerId;
-    $first_name = strtoupper(trim($_POST['first_name']));
-    $last_name = strtoupper(trim($_POST['last_name']));
     $barangay = $_POST['barangay'];
     $phonenumber = $_POST['phonenumber'];
     $role = $_POST['role'];
-    $email = $_POST['email'];
-    $officerno = strtoupper(trim($_POST['officerno']));
     $password = $_POST['password'] ?? null;
 
     try {
         $updateOfficer = $offobj->updateOfficer(
             $officer_id,
-            $first_name,
-            $last_name,
             $barangay,
             $role,
             $phonenumber,
-            $email,
-            $officerno,
             $password
         );
 
@@ -74,14 +66,14 @@ include "../assets/layout.php";
                 <label>First Name</label>
                 <input type="text"
                     name="first_name"
-                    value="<?= htmlspecialchars($officer['first_name']) ?>" disabled> 
+                    value="<?= htmlspecialchars($officer['first_name']) ?>" readonly> 
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text"
                     name="last_name"
-                    value="<?= htmlspecialchars($officer['last_name']) ?>" disabled>
+                    value="<?= htmlspecialchars($officer['last_name']) ?>" readonly>
             </div>
         </div>
 
@@ -135,19 +127,25 @@ include "../assets/layout.php";
         <h4>Contact Details</h4>
 
         <div class="form-row-2">
-
             <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text"
-                    name="phonenumber"
-                    value="<?= htmlspecialchars($officer['phonenumber']) ?>">
+                <label for="phonenumber">Phone Number*</label>
+                <div class="phone-input">
+                    <span class="phone-prefix">+63</span>
+                    <input type="text"
+                        name="phonenumber"
+                        id="phonenumber"
+                        value="<?= htmlspecialchars(
+                                    ltrim(preg_replace('/^\+63/', '', $_POST['phonenumber'] ?? $officer['phonenumber'] ?? ''), ' ')
+                                ) ?>"
+                        required>
+                </div>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
                 <input type="email"
                     name="email"
-                    value="<?= htmlspecialchars($officer['email']) ?>" disabled>
+                    value="<?= htmlspecialchars($officer['email']) ?>" readonly>
             </div>
 
         </div>
@@ -155,12 +153,11 @@ include "../assets/layout.php";
         <h4>Account Details</h4>
 
         <div class="form-row-2">
-
             <div class="form-group">
                 <label>Officer No.</label>
                 <input type="text"
                     name="officerno"
-                    value="<?= htmlspecialchars($officer['officerno']) ?>">
+                    value="<?= htmlspecialchars($officer['officerno']) ?>" readonly>
             </div>
 
             <div class="form-group">
@@ -169,7 +166,6 @@ include "../assets/layout.php";
                     name="password"
                     placeholder="Leave blank if unchanged">
             </div>
-
         </div>
 
         <button type="submit" name="update_officer">

@@ -22,7 +22,10 @@ $schoobj = new Scholar($api);
 $archiveobj = new Archive($schoobj, $actobj, $api);
 $adminId = $_SESSION["userid"] ?? null;
 
-if (empty($_SESSION['userid'])) {
+$currentPage = basename($_SERVER['PHP_SELF']);
+
+if (empty($_SESSION['userid']) && $currentPage !== 'verify.php' &&
+    $currentPage !== 'export_scholar_pdf.php') {
     header("Location: /esko/error.php");
     exit;
 }

@@ -144,7 +144,8 @@ class Scholar
     //     }));
     // }
 
-    function getAllScholarsForArchive(){
+    function getAllScholarsForArchive()
+    {
         $data = $this->api->get(
             "scholar_view?select=*&is_active=eq.true"
         );
@@ -220,7 +221,6 @@ class Scholar
                 "p_semester" => $semId
             ]
         );
-        
     }
 
     function getScholarRecords($user_id, $semId)
@@ -232,11 +232,10 @@ class Scholar
         );
 
         return $data;
-
     }
 
 
-    function updateScholar($user_id, $first_name, $last_name, $barangay, $phonenumber, $email, $iskolarno, $password = null)
+    function updateScholar($user_id, $barangay, $phonenumber, $password = null)
     {
         $res1 = $this->api->patch(
             "scholars?user_id=eq.$user_id",
@@ -244,18 +243,6 @@ class Scholar
             [
                 "barangay" => $barangay,
                 "phonenumber" => $phonenumber,
-                "email" => $email,
-                "username" => $iskolarno
-            ]
-        );
-
-        $res2 = $this->api->patch(
-            "users?id=eq.$user_id",
-            "",
-            [
-                "first_name" => $first_name,
-                "last_name" => $last_name,
-                "username" => $iskolarno
             ]
         );
 
@@ -271,7 +258,7 @@ class Scholar
 
         return [
             "scholars" => $res1,
-            "users" => $res2
+            "users" => $res3
         ];
     }
 
@@ -383,5 +370,22 @@ class Scholar
         $svg = base64_decode(preg_replace('#^data:image/svg\+xml;base64,#i', '', $svg));
         file_put_contents($filePath, $svg);
         return $filePath;
+    }
+
+    function getScholarIdByToken($token)
+    {
+        if (empty($token)) {
+            return null;
+        }
+
+        $res = $this->api->get(
+            "scholars?verification_token=eq." . urlencode($token) . "&select=user_id"
+        );
+
+        if (empty($res)) {
+            return null;
+        }
+
+        return $res[0]['user_id'];
     }
 }
